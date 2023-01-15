@@ -1,0 +1,14 @@
+version: '3'
+services:
+  codeclimate:
+    image: "codeclimate/codeclimate:${TLR_CODECLIMATE_TAG:-latest}"
+    environment:
+      - CODECLIMATE_CODE=${TLR_TOP_SRCDIR}
+    env_file:
+      - './common.env'
+      - './codeclimate.env'
+    volumes:
+      - ..:${TLR_CODE:-/code}
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /tmp/cc:/tmp/cc
+    working_dir: "${TLR_CODE:-/code}"

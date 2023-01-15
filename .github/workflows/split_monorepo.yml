@@ -1,0 +1,79 @@
+name: Monorepo Split
+
+on:
+  push:
+    branches:
+      - master
+    tags:
+      - '[0-9]+.[0-9]+'
+      - '[0-9]+.[0-9]+.[0-9]+'
+  pull_request:
+
+jobs:
+  provide_packages_json:
+    # see json juggling: https://docs.github.com/en/free-pro-team@latest/actions/reference/context-and-expression-syntax-for-github-actions#example-6
+    # see https://stackoverflow.com/a/62953566/1348344
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      # required for matrix of packages set
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.1
+          coverage: none
+
+      - run: composer install --no-progress --ansi
+      - run: composer bin monorepo-builder install --no-progress --ansi
+
+      # get package json list
+      - id: output_data
+        run: echo "matrix=$(vendor-bin/monorepo-builder/vendor/bin/monorepo-builder packages-json)" >> $GITHUB_OUTPUT
+
+    # this step is needed, so the output gets to the next defined job
+    outputs:
+      matrix: ${{ steps.output_data.outputs.matrix }}
+
+  split_monorepo:
+
+    needs: provide_packages_json
+
+    name: ${{ matrix.package }}
+
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        package: ${{fromJson(needs.provide_packages_json.outputs.matrix)}}
+
+    steps:
+      - uses: actions/checkout@v3
+
+      # no tag
+      - name: Split out ${{ matrix.package }} (branch)
+        if: ${{ github.ref_type == 'branch' }}
+        env:
+          PAT: ${{ secrets.MONOREPO_SPLIT_TOKEN }}
+        uses: symplify/github-action-monorepo-split@2.1
+        with:
+          branch: "${{ github.ref_name }}"
+          package_directory: 'packages/${{ matrix.package }}'
+          repository_organization: 'phptailors'
+          repository_name: '${{ matrix.package }}'
+          user_name: "ptomulik"
+          user_email: "ptomulik@meil.pw.edu.pl"
+
+      # with tag
+      - name: Split out ${{ matrix.package }} (tag)
+        if: ${{ github.ref_type == 'tag' }}
+        env:
+          PAT: ${{ secrets.MONOREPO_SPLIT_TOKEN }}
+        uses: symplify/github-action-monorepo-split@2.1
+        with:
+          tag: "${{ github.ref_name }}"
+          package_directory: 'packages/${{ matrix.package }}'
+          repository_organization: 'phptailors'
+          repository_name: '${{ matrix.package }}'
+          user_name: "ptomulik"
+          user_email: "ptomulik@meil.pw.edu.pl"

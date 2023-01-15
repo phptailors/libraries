@@ -1,0 +1,12 @@
+version: '3.2'
+services:
+  php:
+    build:
+      context: contexts/php
+      args:
+        TLR_IMG: "php:${TLR_PHP_TAG:-cli}"
+        TLR_UID: "${TLR_UID:-6789}"
+        TLR_GID: "${TLR_GID:-6789}"
+    volumes:
+      - ..:${TLR_CODE:-/code}
+    user: "${TLR_UID:-6789}:${TLR_GID:-6789}"

@@ -1,0 +1,70 @@
+#!/usr/bin/env php
+<?php declare(strict_types=1);
+
+class TailorsDockerInitializer
+{
+    public function __construct(array $config = [])
+    {
+        $this->dir = ($config['dir'] ?? null) ?: __DIR__;
+        $this->dotenv = ($config['dotenv'] ?? null) ?: $this->dir . '/.env';
+        $this->dotenv_dist = ($config['dotenv_dist'] ?? null) ?: $this->dir . '/.env.dist';
+        $this->substitutions = $config['substitutions'] ?? [];
+    }
+
+    public function run()
+    {
+        $this->updateDotEnv();
+    }
+
+    protected function findDockerCompose()
+    {
+        $fname = 'docker-compose';
+        $local = $this->dir . '/' .$fname;
+        if (file_exists($local) && is_executable($local)) {
+            return './' . $fname;
+        }
+
+        $bin = $this->dir . '/../bin/' . $fname;
+        if (file_exists($bin) && is_executable($bin)) {
+            return '../bin/' . $fname;
+        }
+
+        $upper = $this->dir . '/../' . $fname;
+        if (file_exists($upper) && is_executable($upper)) {
+            return '../' . $fname;
+        }
+        return $fname;
+    }
+
+    protected function updateDotEnv()
+    {
+        $defaults = [
+            '@BINARY@'          => $this->findDockerCompose(),
+            '@PROJECT@'         => 'phptailors-libraries',
+            '@UID@'             => (string)getmyuid(),
+            '@GID@'             => (string)getmygid(),
+            '@USER@'            => 'tailor',
+            '@GROUP@'           => 'tailor',
+            '@HOME@'            => '/home/tailor',
+            '@CODE@'            => '/code',
+            '@PHP_TAG@'         => 'cli-alpine',
+            '@CODECLIMATE_TAG@' => 'latest',
+            '@DOCTUM_TAG@'      => 'latest-php8.1',
+            '@DOCTUM_PORT@'     => '8001',
+            '@SPHINX_TAG@'      => 'latest',
+            '@SPHINX_PORT@'     => '8002',
+            '@DOTENV_FILE@'     => '.env.docker',
+            '@BEHAT_PARAMS@'    => '',
+            '@TOP_SRCDIR@'      => realpath($this->dir . '/..'),
+            '@@'                => '@'
+        ];
+        $substitutions = array_merge($defaults, $this->substitutions);
+        $content = file_get_contents($this->dotenv_dist);
+        $content = strtr($content, $substitutions);
+        file_put_contents($this->dotenv, $content);
+    }
+};
+
+(new TailorsDockerInitializer)->run();
+
+// vim: syntax=php sw=4 ts=4 et:

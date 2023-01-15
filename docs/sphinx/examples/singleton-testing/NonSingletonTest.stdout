@@ -1,0 +1,45 @@
+PHPUnit 9.5.28 by Sebastian Bergmann and contributors.
+
+FFFFFFF                                                             7 / 7 (100%)
+
+Time: 00:00.013, Memory: 6.00 MB
+
+There were 7 failures:
+
+1) NonSingletonTest::testNoGetInstanceIsSingleton
+Failed asserting that 'NoGetInstance' has public static method getInstance().
+
+NonSingletonTest.php:91
+
+2) NonSingletonTest::testPrivateGetInstanceIsSingleton
+Failed asserting that 'PrivateGetInstance' has public static method getInstance().
+
+NonSingletonTest.php:96
+
+3) NonSingletonTest::testNonStaticGetInstanceIsSingleton
+Failed asserting that 'NonStaticGetInstance' has public static method getInstance().
+
+NonSingletonTest.php:101
+
+4) NonSingletonTest::testNoPrivateConstructorIsSingleton
+Failed asserting that 'NoPrivateConstructor' has private method __construct().
+
+NonSingletonTest.php:106
+
+5) NonSingletonTest::testNoPrivateCloneIsSingleton
+Failed asserting that 'NoPrivateClone' is not cloneable.
+
+NonSingletonTest.php:111
+
+6) NonSingletonTest::testNoThrowingWakeupIsSingleton
+Failed asserting that exception of type "Tailors\Lib\Singleton\SingletonException" is thrown
+
+NonSingletonTest.php:116
+
+7) NonSingletonTest::testThrowingWrongExceptionWakeupIsSingleton
+Failed asserting that exception of type "Tailors\Lib\Singleton\SingletonException" is thrown
+
+NonSingletonTest.php:121
+
+FAILURES!
+Tests: 7, Assertions: 36, Failures: 7.

@@ -1,0 +1,114 @@
+name: Unit Tests
+
+on:
+  - pull_request
+  - push
+
+env:
+   # see https://github.com/composer/composer/issues/9368#issuecomment-718112361
+  COMPOSER_ROOT_VERSION: "dev-master"
+
+jobs:
+  provide_packages_json:
+
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.1
+          coverage: none
+      - run: composer install --no-interaction --no-progress --ansi
+      - run: composer bin monorepo-builder install --no-interaction --no-progress --ansi
+
+      # get package json list
+      - id: output_data
+        run: echo "matrix=$(vendor-bin/monorepo-builder/vendor/bin/monorepo-builder packages-json)" >> $GITHUB_OUTPUT
+    outputs:
+      matrix: ${{ steps.output_data.outputs.matrix }}
+
+  monorepo_testing:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - ubuntu-latest
+          - windows-latest
+        php-version:
+          - 8.0
+          - 8.1
+          - 8.2
+        dependencies:
+          - lowest
+          - highest
+
+    name: libraries (${{ matrix.os }}:PHP-${{ matrix.php-version }}:${{ matrix.dependencies }})
+    steps:
+      - uses: actions/checkout@v3
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-version }}
+          coverage: pcov
+
+      - run: composer --version
+
+      - if: matrix.dependencies == 'highest'
+        run: composer update --no-interaction --no-progress --ansi
+
+      - if: matrix.dependencies == 'lowest'
+        run: composer update --no-interaction --no-progress --ansi --prefer-lowest
+
+      - run: vendor/bin/phpunit
+
+      - name: Send code coverage report to Codecov.io
+        uses: codecov/codecov-action@v3
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+
+  after_split_testing:
+    needs: provide_packages_json
+
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        package:
+          ${{ fromJson(needs.provide_packages_json.outputs.matrix) }}
+        os:
+          - ubuntu-latest
+        php-version:
+          - 8.0
+          - 8.1
+          - 8.2
+        dependencies:
+          - highest
+
+    name: ${{ matrix.package }} (${{ matrix.os }}:PHP-${{ matrix.php-version }}:${{ matrix.dependencies }})
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-version }}
+          coverage: none
+
+      - run: composer --version
+
+      - run: composer install --no-interaction --no-progress --ansi
+      - run: composer bin monorepo-builder install --no-interaction --no-progress --ansi
+
+      - run: vendor-bin/monorepo-builder/vendor/bin/monorepo-builder localize-composer-paths --ansi packages/${{ matrix.package }}/composer.json
+
+      - if: matrix.dependencies == 'highest'
+        run: composer update --no-interaction --no-progress --ansi --working-dir packages/${{ matrix.package }}
+
+      - if: matrix.dependencies == 'lowest'
+        run: composer update --no-interaction --no-progress --ansi --working-dir packages/${{ matrix.package }} --prefer-lowest
+
+      - working-directory: packages/${{ matrix.package }}
+        run: composer update --no-interaction --no-progress --ansi
+
+      - working-directory: packages/${{ matrix.package }}
+        run: vendor/bin/phpunit --no-coverage
+

@@ -1,0 +1,35 @@
+version: '3.2'
+services:
+  sphinx:
+    build:
+      context: contexts/default
+      args:
+        TLR_IMG: "korowai/sphinx:${TLR_SPHINX_TAG:-latest}"
+        TLR_UID: "${TLR_UID:-6789}"
+        TLR_GID: "${TLR_GID:-6789}"
+    ports:
+      - "${TLR_SPHINX_PORT:-8002}:8000"
+    volumes:
+      - ../:${TLR_CODE:-/code}
+    user: "${TLR_UID:-6789}:${TLR_GID:-6789}"
+    env_file:
+      - './common.env'
+      - './docs.env'
+      - './sphinx.env'
+
+  doctum:
+    build:
+      context: contexts/default
+      args:
+        TLR_IMG: "phptailors/doctum:${TLR_DOCTUM_TAG:-latest}"
+        TLR_UID: "${TLR_UID:-6789}"
+        TLR_GID: "${TLR_GID:-6789}"
+    env_file:
+      - './common.env'
+      - './docs.env'
+      - './doctum.env'
+    ports:
+      - "${TLR_DOCTUM_PORT:-8001}:8001"
+    volumes:
+      - ../:${TLR_CODE:-/code}
+    user: "${TLR_UID:-6789}:${TLR_GID:-6789}"

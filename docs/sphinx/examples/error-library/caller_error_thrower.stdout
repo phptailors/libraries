@@ -1,0 +1,3 @@
+trigger() called at: caller_error_thrower.php: 21
+trigger_error() called at: caller_error_thrower.php: 13
+error occured at caller_error_thrower.php: 21: (error message)

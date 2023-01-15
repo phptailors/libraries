@@ -1,0 +1,11 @@
+# behat.yml
+
+default:
+  autoload:
+    - "%paths.base%/sphinx/behat"
+  suites:
+    docs:
+      paths:
+        - "%paths.base%/sphinx/behat"
+      contexts:
+        - "Tailors\\Docs\\Behat\\DocExampleContext"

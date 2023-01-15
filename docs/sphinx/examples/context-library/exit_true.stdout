@@ -1,0 +1,8 @@
+enter: 1
+enter: 2
+enter: 3
+enter: 4
+exit: 4 (object)
+exit: 3 (object)
+exit: 2 (null)
+exit: 1 (null)

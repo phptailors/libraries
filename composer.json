@@ -1,0 +1,130 @@
+{
+    "name": "phptailors/libraries",
+    "authors": [
+        {
+            "name": "Paweł Tomulik",
+            "email": "pawel@tomulik.pl"
+        }
+    ],
+    "conflict": {
+        "nikic/php-parser": "< 4.13.2"
+    },
+    "require": {
+        "php": "^8",
+        "phptailors/phpunit-methods": "dev-master"
+    },
+    "autoload": {
+        "exclude-from-classmap": [
+            "packages/context-interface/tests/",
+            "packages/context-library/testing/",
+            "packages/context-library/tests/",
+            "packages/error-interface/testing/",
+            "packages/error-interface/tests/",
+            "packages/error-library/testing/",
+            "packages/error-library/tests/",
+            "packages/singleton-interface/tests/",
+            "packages/singleton-library/testing/",
+            "packages/singleton-library/tests/",
+            "packages/singleton-testing/testing/",
+            "packages/singleton-testing/tests/"
+        ],
+        "files": [
+            "packages/context-library/src/functions.php",
+            "packages/error-library/src/functions.php"
+        ],
+        "psr-4": {
+            "Tailors\\Lib\\Context\\": [
+                "packages/context-interface/src/",
+                "packages/context-library/src/"
+            ],
+            "Tailors\\Lib\\Error\\": [
+                "packages/error-interface/src/",
+                "packages/error-library/src/"
+            ],
+            "Tailors\\Lib\\Singleton\\": [
+                "packages/singleton-interface/src/",
+                "packages/singleton-library/src/"
+            ],
+            "Tailors\\Testing\\Lib\\Singleton\\": "packages/singleton-testing/testing/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tailors\\Docs\\Behat\\": "docs/sphinx/behat/",
+            "Tailors\\Testing\\Lib\\Context\\": "packages/context-library/testing/",
+            "Tailors\\Tests\\Lib\\Context\\": [
+                "packages/context-interface/tests/src/",
+                "packages/context-library/tests/src/"
+            ],
+            "Tailors\\Tests\\Lib\\Error\\": [
+                "packages/error-interface/tests/src/",
+                "packages/error-library/tests/src/"
+            ],
+            "Tailors\\Tests\\Lib\\Singleton\\": [
+                "packages/singleton-interface/tests/src/",
+                "packages/singleton-library/tests/src/"
+            ],
+            "Tailors\\Tests\\Testing\\Lib\\Singleton\\": "packages/singleton-testing/tests/testing/"
+        }
+    },
+    "require-dev": {
+        "bamarni/composer-bin-plugin": "^1.8",
+        "php-mock/php-mock-phpunit": ">=2.4.0",
+        "phptailors/phpunit-inheritance": "dev-master",
+        "phpunit/phpunit": "^9.5.10 || ^10"
+    },
+    "replace": {
+        "phptailors/context-interface": "self.version",
+        "phptailors/context-library": "self.version",
+        "phptailors/error-interface": "self.version",
+        "phptailors/error-library": "self.version",
+        "phptailors/singleton-interface": "self.version",
+        "phptailors/singleton-library": "self.version",
+        "phptailors/singleton-testing": "self.version"
+    },
+    "provide": {
+        "phptailors/context-implementation": "*",
+        "phptailors/error-implementation": "*",
+        "phptailors/singleton-implementation": "*"
+    },
+    "extra": {
+        "bamarni-bin": {
+            "bin-links": false,
+            "target-directory": "vendor-bin",
+            "forward-command": false
+        }
+    },
+    "config": {
+        "allow-plugins": {
+            "bamarni/composer-bin-plugin": true
+        }
+    },
+    "scripts": {
+        "cs": "PHP_CS_FIXER_IGNORE_ENV=1 vendor-bin/php-cs-fixer/vendor/bin/php-cs-fixer fix --diff --dry-run --show-progress=dots --using-cache=no --verbose",
+        "cs-fix": "vendor-bin/php-cs-fixer/vendor/bin/php-cs-fixer fix --diff --show-progress=dots --using-cache=no --verbose",
+        "phpunit": "vendor/bin/phpunit",
+        "psalm": "vendor-bin/psalm/vendor/bin/psalm --show-info=true --stats --no-cache",
+        "doctests": "vendor-bin/behat/vendor/bin/behat -c docs/behat.yml",
+        "codeclimate": "docker/codeclimate run --rm codeclimate analyze",
+        "tests": [
+            "@phpunit",
+            "@psalm",
+            "@cs",
+            "@doctests",
+            "@codeclimate"
+        ],
+        "psysh": "vendor-bin/psysh/vendor/bin/psysh vendor/autoload.php"
+    },
+    "scripts-descriptions": {
+        "cs": "Checks that the code conforms to the coding standard",
+        "cs-fix": "Automatically correct coding standard violations",
+        "phpunit": "Runs unit tests",
+        "psalm": "Runs static analysis",
+        "doctests": "Runs documentation-related tests",
+        "codeclimate": "Runs codeclimate checks",
+        "tests": "Runs all available tests",
+        "psysh": "Runs interactive shell"
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}

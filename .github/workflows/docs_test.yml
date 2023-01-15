@@ -1,0 +1,59 @@
+name: Docs Tests
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/docs_test.yml'
+      - 'README.md'
+      - 'docker/**'
+      - 'docs/**'
+      - 'packages/**'
+      - 'vendor-bin/behat/composer.json'
+  push:
+    paths:
+      - '.github/workflows/docs_test.yml'
+      - 'README.md'
+      - 'docker/**'
+      - 'docs/**'
+      - 'packages/**'
+      - 'vendor-bin/behat/composer.json'
+
+jobs:
+  test-examples:
+    name: Run Examples
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.1
+          coverage: none
+
+      - run: composer update --no-interaction --no-progress --ansi
+      - run: composer bin behat update --no-interaction --no-progress --ansi
+
+      - run: vendor-bin/behat/vendor/bin/behat -c docs/behat.yml
+
+
+  build-docs:
+    name: Build Documentation
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.1
+          coverage: none
+
+      - name: Initialize Docker environment
+        run: php docker/initialize
+
+      - name: Build API docs
+        run: docker/docs run --rm doctum build
+
+      - name: Build user docs
+        run: docker/docs run --rm sphinx build

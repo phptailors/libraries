@@ -1,0 +1,53 @@
+{
+    "name": "phptailors/context-library",
+    "description": "Functionality similar to Python's 'with' clause (context manager)",
+    "type": "library",
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "authors": [
+        {
+            "name": "Paweł Tomulik",
+            "email": "pawel@tomulik.pl"
+        }
+    ],
+    "support": {
+      "issues": "https://github.com/phptailors/libraries/issues",
+      "source": "https://github.com/phptailors/libraries"
+    },
+    "conflict": {
+        "nikic/php-parser": "< 4.13.2"
+    },
+    "require": {
+        "php": "^8",
+        "phptailors/context-interface": "*",
+        "phptailors/singleton-interface": "*",
+        "phptailors/singleton-library": "*"
+    },
+    "provide": {
+        "phptailors/context-implementation": "*"
+    },
+    "require-dev": {
+        "php-mock/php-mock-phpunit": ">=2.4.0",
+        "phptailors/phpunit-inheritance": "dev-master",
+        "phptailors/singleton-testing": "*",
+        "phpunit/phpunit": "^9.5.10 || ^10"
+    },
+    "autoload": {
+      "psr-4" : {
+        "Tailors\\Lib\\Context\\" : "src/"
+      },
+      "files" : [
+        "src/functions.php"
+      ],
+      "exclude-from-classmap": [
+        "/tests/",
+        "/testing/"
+      ]
+    },
+    "autoload-dev": {
+      "psr-4" : {
+        "Tailors\\Testing\\Lib\\Context\\" : "testing/",
+        "Tailors\\Tests\\Lib\\Context\\" : "tests/src/"
+      }
+    }
+}

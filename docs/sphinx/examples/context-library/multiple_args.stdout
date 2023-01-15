@@ -1,0 +1,7 @@
+enter: 1
+enter: 2
+enter: 3
+$args: 1, 2, 3
+exit: 3
+exit: 2
+exit: 1

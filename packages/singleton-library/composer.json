@@ -1,0 +1,44 @@
+{
+    "name": "phptailors/singleton-library",
+    "description": "Reusable singleton implementation",
+    "type": "library",
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "authors": [
+        {
+            "name": "Paweł Tomulik",
+            "email": "pawel@tomulik.pl"
+        }
+    ],
+    "support": {
+      "issues": "https://github.com/phptailors/libraries/issues",
+      "source": "https://github.com/phptailors/libraries"
+    },
+    "conflict": {
+        "nikic/php-parser": "< 4.13.2"
+    },
+    "require": {
+        "php": "^8"
+    },
+    "provide": {
+        "phptailors/singleton-implementation": "*"
+    },
+    "require-dev": {
+        "phptailors/singleton-testing": "*",
+        "phpunit/phpunit": "^9.5.10 || ^10"
+    },
+    "autoload": {
+      "psr-4" : {
+        "Tailors\\Lib\\Singleton\\" : "src/"
+      },
+      "exclude-from-classmap": [
+        "/tests/",
+        "/testing/"
+      ]
+    },
+    "autoload-dev": {
+      "psr-4" : {
+        "Tailors\\Tests\\Lib\\Singleton\\" : "tests/src/"
+      }
+    }
+}

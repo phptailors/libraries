@@ -1,0 +1,5 @@
+before: 0
+MyCounterManager::enterContext()
+in: 1
+MyCounterManager::exitContext()
+after: 0
