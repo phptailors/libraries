@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>4.1. Installation &mdash; PhpTailors Libraries  documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/custom.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script integrity="sha384-vtXRMe3mGCbOeY7l30aIg8H9p3GdeSe4IFlP6G8JMa7o7lXvnz3GFKzPxzJdPfGK" src="../../_static/jquery.js"></script>
+        <script integrity="sha384-lSZeSIVKp9myfKbDQ3GkN/KHjUc+mzg17VKDN4Y2kUeBSJioB9QSM639vM9fuY//" src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="4.4. Custom Error Handlers" href="custom_error_handler.html" />
+    <link rel="prev" title="4. Error Library" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            PhpTailors Libraries
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Table of Contents</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../install.html">1. Installing PhpTailors Libraries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../singleton-library/index.html">2. Singleton Library</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../context-library/index.html">3. Context Library</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">4. Error Library</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">4.1. Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#purpose">4.2. Purpose</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#basic-example">4.3. Basic Example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="custom_error_handler.html">4.4. Custom Error Handlers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="exception_error_handler.html">4.5. Exception Error Handlers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="caller_error_handler.html">4.6. Caller Error Handlers</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">PhpTailors Libraries</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html"><span class="section-number">4. </span>Error Library</a></li>
+      <li class="breadcrumb-item active"><span class="section-number">4.1. </span>Installation</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/packages/error-library/intro.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="installation">
+<h1><span class="section-number">4.1. </span>Installation<a class="headerlink" href="#installation" title="Permalink to this heading"></a></h1>
+<p>The error library is split into two packages</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">phptailors/error-interface</span></code> - interface,</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">phptailors/error-library</span></code> - implementation.</p></li>
+</ul>
+</div></blockquote>
+<p>To install error library as a runtime dependency, type:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span>php<span class="w"> </span>composer.phar<span class="w"> </span>require<span class="w"> </span><span class="s2">&quot;phptailors/error-library:dev-master&quot;</span>
+</pre></div>
+</div>
+</section>
+<section id="purpose">
+<h1><span class="section-number">4.2. </span>Purpose<a class="headerlink" href="#purpose" title="Permalink to this heading"></a></h1>
+<p>The main purpose of Error library is to provide handy utilities to control the
+flow of PHP errors within an application. It is designed to play nicely with
+our <a class="reference internal" href="../context-library/index.html#context-library"><span class="std std-ref">Context Library</span></a>, so one can temporarily redirect
+PHP errors to custom handlers in one location without altering other parts of
+code.</p>
+</section>
+<section id="basic-example">
+<h1><span class="section-number">4.3. </span>Basic Example<a class="headerlink" href="#basic-example" title="Permalink to this heading"></a></h1>
+<p>In the following example we’ll redirect errors from one invocation of a
+problematic function to a no-op error handler. The example uses the
+following functions</p>
+<div class="highlight-php notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="k">use</span> <span class="k">function</span> <span class="nf">Tailors\Lib\Context\with</span><span class="p">;</span>
+<span class="linenos">2</span><span class="k">use</span> <span class="k">function</span> <span class="nf">Tailors\Lib\Error\emptyErrorHandler</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>and the problematic function is</p>
+<div class="highlight-php notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="k">function</span> <span class="nf">trouble</span><span class="p">()</span>
+<span class="linenos">2</span><span class="p">{</span>
+<span class="linenos">3</span>    <span class="nb">trigger_error</span><span class="p">(</span><span class="s1">&#39;you have a problem&#39;</span><span class="p">);</span>
+<span class="linenos">4</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>The function could normally cause some noise. For example, it could call
+default or an application-wide error handler. Invoking it with <code class="docutils literal notranslate"><span class="pre">&#64;</span></code> only
+disables error messages, but the handler is still invoked. We can prevent this
+by temporarily replacing original handler with the empty handler. This is
+easily achieved with <span class="xref std std-ref">Contexts</span> and
+<code class="docutils literal notranslate"><a class="reference external" href="/api/Tailors/Lib/Error/EmptyErrorHandler.html" title="Tailors\Lib\Error\EmptyErrorHandler"><span class="pre">EmptyErrorHandler</span></a></code>.</p>
+<div class="highlight-php notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="nx">with</span><span class="p">(</span><span class="nx">emptyErrorHandler</span><span class="p">())(</span><span class="k">function</span> <span class="p">(</span><span class="nv">$eh</span><span class="p">)</span> <span class="p">{</span>
+<span class="linenos">2</span>    <span class="nx">trouble</span><span class="p">();</span>
+<span class="linenos">3</span><span class="p">});</span>
+</pre></div>
+</div>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="4. Error Library" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="custom_error_handler.html" class="btn btn-neutral float-right" title="4.4. Custom Error Handlers" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Paweł Tomulik.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

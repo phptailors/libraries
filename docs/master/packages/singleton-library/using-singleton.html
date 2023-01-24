@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>2.3. Using Singleton &mdash; PhpTailors Libraries  documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/custom.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script integrity="sha384-vtXRMe3mGCbOeY7l30aIg8H9p3GdeSe4IFlP6G8JMa7o7lXvnz3GFKzPxzJdPfGK" src="../../_static/jquery.js"></script>
+        <script integrity="sha384-lSZeSIVKp9myfKbDQ3GkN/KHjUc+mzg17VKDN4Y2kUeBSJioB9QSM639vM9fuY//" src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="2.4. Testing Singleton" href="testing-singleton.html" />
+    <link rel="prev" title="2.1. Installation" href="intro.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            PhpTailors Libraries
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Table of Contents</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../install.html">1. Installing PhpTailors Libraries</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">2. Singleton Library</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="intro.html">2.1. Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="intro.html#purpose">2.2. Purpose</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">2.3. Using Singleton</a></li>
+<li class="toctree-l2"><a class="reference internal" href="testing-singleton.html">2.4. Testing Singleton</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../context-library/index.html">3. Context Library</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../error-library/index.html">4. Error Library</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">PhpTailors Libraries</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html"><span class="section-number">2. </span>Singleton Library</a></li>
+      <li class="breadcrumb-item active"><span class="section-number">2.3. </span>Using Singleton</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/packages/singleton-library/using-singleton.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="using-singleton">
+<span id="singleton-library-using-singleton"></span><span id="index-0"></span><h1><span class="section-number">2.3. </span>Using Singleton<a class="headerlink" href="#using-singleton" title="Permalink to this heading"></a></h1>
+<p>Just use <code class="docutils literal notranslate"><a class="reference external" href="/api/Tailors/Lib/Singleton/SingletonTrait.html" title="Tailors\Lib\Singleton\SingletonTrait"><span class="pre">SingletonTrait</span></a></code> in your class and the
+class becomes a singleton. It is also recommended to annotate the class that it
+implements <code class="docutils literal notranslate"><a class="reference external" href="/api/Tailors/Lib/Singleton/SingletonInterface.html" title="Tailors\Lib\Singleton\SingletonInterface"><span class="pre">SingletonInterface</span></a></code>. The following
+snippet provides a complete example of trivial singleton, that is an empty
+class that is a singleton.</p>
+<div class="literal-block-wrapper docutils container" id="lib-singleton-trivial-singleton-example">
+<div class="code-block-caption"><span class="caption-text">Trivial Singleton</span><a class="headerlink" href="#lib-singleton-trivial-singleton-example" title="Permalink to this code"></a></div>
+<div class="highlight-php notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="o">&lt;?</span><span class="nx">php</span>
+<span class="linenos"> 2</span>
+<span class="linenos"> 3</span><span class="k">use</span> <span class="nx">Tailors\Lib\Singleton\SingletonInterface</span><span class="p">;</span>
+<span class="linenos"> 4</span><span class="k">use</span> <span class="nx">Tailors\Lib\Singleton\SingletonTrait</span><span class="p">;</span>
+<span class="linenos"> 5</span>
+<span class="linenos"> 6</span><span class="k">final</span> <span class="k">class</span> <span class="nc">TrivialSingleton</span> <span class="k">implements</span> <span class="nx">SingletonInterface</span>
+<span class="linenos"> 7</span><span class="p">{</span>
+<span class="linenos"> 8</span>    <span class="k">use</span> <span class="nx">SingletonTrait</span><span class="p">;</span>
+<span class="linenos"> 9</span><span class="p">}</span>
+<span class="linenos">10</span>
+<span class="linenos">11</span><span class="nv">$object</span> <span class="o">=</span> <span class="nx">TrivialSingleton</span><span class="o">::</span><span class="na">getInstance</span><span class="p">();</span>
+<span class="linenos">12</span>
+<span class="linenos">13</span><span class="c1">// vim: syntax=php sw=4 ts=4 et:</span>
+</pre></div>
+</div>
+</div>
+<p>The <code class="docutils literal notranslate"><a class="reference external" href="/api/Tailors/Lib/Singleton/SingletonTrait.html" title="Tailors\Lib\Singleton\SingletonTrait"><span class="pre">SingletonTrait</span></a></code> provides features that
+shall appear in any typical singleton:</p>
+<ul class="simple">
+<li><p>public static <code class="docutils literal notranslate"><a class="reference external" href="/api/Tailors/Lib/Singleton/SingletonTrait.html#method_getInstance" title="Tailors\Lib\Singleton\SingletonTrait::getInstance()"><span class="pre">getInstance()</span></a></code> method returning the single instance,</p></li>
+<li><p>private <code class="docutils literal notranslate"><a class="reference external" href="/api/Tailors/Lib/Singleton/SingletonTrait.html#method___construct" title="Tailors\Lib\Singleton\SingletonTrait::__construct()"><span class="pre">__construct()</span></a></code> method,</p></li>
+<li><p>private <code class="docutils literal notranslate"><a class="reference external" href="/api/Tailors/Lib/Singleton/SingletonTrait.html#method___clone" title="Tailors\Lib\Singleton\SingletonTrait::__clone()"><span class="pre">__clone()</span></a></code> method,</p></li>
+<li><p>public <code class="docutils literal notranslate"><a class="reference external" href="/api/Tailors/Lib/Singleton/SingletonTrait.html#method___wakeup" title="Tailors\Lib\Singleton\SingletonTrait::__wakeup()"><span class="pre">__wakeup()</span></a></code> method always throws <code class="docutils literal notranslate"><a class="reference external" href="/api/Tailors/Lib/Singleton/SingletonException.html" title="Tailors\Lib\Singleton\SingletonException"><span class="pre">SingletonException</span></a></code>.</p></li>
+</ul>
+<p>In addition:</p>
+<ul class="simple">
+<li><p>a protected method
+<code class="docutils literal notranslate"><a class="reference external" href="/api/Tailors/Lib/Singleton/SingletonTrait.html#method_initializeSingleton" title="Tailors\Lib\Singleton\SingletonTrait::initializeSingleton()"><span class="pre">initializeSingleton()</span></a></code> is
+invoked from the private constructor when the single instance gets created;
+the class that includes the <code class="docutils literal notranslate"><a class="reference external" href="/api/Tailors/Lib/Singleton/SingletonTrait.html" title="Tailors\Lib\Singleton\SingletonTrait"><span class="pre">SingletonTrait</span></a></code>
+may override the method to initialize the single instance on its own. The
+default implementation is just an empty method.</p></li>
+</ul>
+<p>The complete functionality of the <code class="docutils literal notranslate"><a class="reference external" href="/api/Tailors/Lib/Singleton/SingletonTrait.html" title="Tailors\Lib\Singleton\SingletonTrait"><span class="pre">SingletonTrait</span></a></code>
+may be illustrated with the following example</p>
+<div class="literal-block-wrapper docutils container" id="lib-singleton-count-singleton-example">
+<div class="code-block-caption"><span class="caption-text">Usage of Singleton</span><a class="headerlink" href="#lib-singleton-count-singleton-example" title="Permalink to this code"></a></div>
+<div class="highlight-php notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="o">&lt;?</span><span class="nx">php</span>
+<span class="linenos"> 2</span>
+<span class="linenos"> 3</span><span class="k">use</span> <span class="nx">Tailors\Lib\Singleton\SingletonInterface</span><span class="p">;</span>
+<span class="linenos"> 4</span><span class="k">use</span> <span class="nx">Tailors\Lib\Singleton\SingletonTrait</span><span class="p">;</span>
+<span class="linenos"> 5</span>
+<span class="linenos"> 6</span><span class="k">final</span> <span class="k">class</span> <span class="nc">CountSingleton</span> <span class="k">implements</span> <span class="nx">SingletonInterface</span>
+<span class="linenos"> 7</span><span class="p">{</span>
+<span class="linenos"> 8</span>    <span class="k">use</span> <span class="nx">SingletonTrait</span><span class="p">;</span>
+<span class="linenos"> 9</span>
+<span class="linenos">10</span>    <span class="k">static</span> <span class="k">public</span> <span class="nv">$count</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="linenos">11</span>
+<span class="linenos">12</span>    <span class="k">public</span> <span class="k">function</span> <span class="nf">initializeSingleton</span><span class="p">()</span>
+<span class="linenos">13</span>    <span class="p">{</span>
+<span class="linenos">14</span>        <span class="nx">self</span><span class="o">::</span><span class="nv">$count</span> <span class="o">+=</span> <span class="mi">1</span><span class="p">;</span>
+<span class="linenos">15</span>        <span class="k">print</span><span class="p">(</span><span class="s2">&quot;initializeSingleton(): count: &quot;</span><span class="o">.</span><span class="nx">self</span><span class="o">::</span><span class="nv">$count</span><span class="o">.</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">);</span>
+<span class="linenos">16</span>    <span class="p">}</span>
+<span class="linenos">17</span><span class="p">}</span>
+<span class="linenos">18</span>
+<span class="linenos">19</span><span class="k">print</span><span class="p">(</span><span class="s2">&quot;main 1: count: &quot;</span><span class="o">.</span><span class="nx">CountSingleton</span><span class="o">::</span><span class="nv">$count</span><span class="o">.</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">);</span>
+<span class="linenos">20</span><span class="nv">$var1</span> <span class="o">=</span> <span class="nx">CountSingleton</span><span class="o">::</span><span class="na">getInstance</span><span class="p">();</span>
+<span class="linenos">21</span><span class="k">print</span><span class="p">(</span><span class="s2">&quot;main 2: count: &quot;</span><span class="o">.</span><span class="nx">CountSingleton</span><span class="o">::</span><span class="nv">$count</span><span class="o">.</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">);</span>
+<span class="linenos">22</span><span class="nv">$var2</span> <span class="o">=</span> <span class="nx">CountSingleton</span><span class="o">::</span><span class="na">getInstance</span><span class="p">();</span>
+<span class="linenos">23</span><span class="k">print</span><span class="p">(</span><span class="s2">&quot;main 3: count: &quot;</span><span class="o">.</span><span class="nx">CountSingleton</span><span class="o">::</span><span class="nv">$count</span><span class="o">.</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">);</span>
+<span class="linenos">24</span><span class="k">print</span><span class="p">(</span><span class="s2">&quot;main 4: (var1 === var2): &quot;</span><span class="o">.</span><span class="p">(</span><span class="nv">$var1</span> <span class="o">===</span> <span class="nv">$var2</span> <span class="o">?</span> <span class="s1">&#39;true&#39;</span> <span class="o">:</span> <span class="s1">&#39;false&#39;</span><span class="p">)</span><span class="o">.</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">);</span>
+<span class="linenos">25</span>
+<span class="linenos">26</span><span class="c1">// vim: syntax=php sw=4 ts=4 et:</span>
+</pre></div>
+</div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span>main 1: count: 0
+<span class="linenos">2</span>initializeSingleton(): count: 1
+<span class="linenos">3</span>main 2: count: 1
+<span class="linenos">4</span>main 3: count: 1
+<span class="linenos">5</span>main 4: (var1 === var2): true
+</pre></div>
+</div>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="intro.html" class="btn btn-neutral float-left" title="2.1. Installation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="testing-singleton.html" class="btn btn-neutral float-right" title="2.4. Testing Singleton" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Paweł Tomulik.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

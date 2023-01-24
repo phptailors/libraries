@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>3.8. Exception Handling &mdash; PhpTailors Libraries  documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/custom.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script integrity="sha384-vtXRMe3mGCbOeY7l30aIg8H9p3GdeSe4IFlP6G8JMa7o7lXvnz3GFKzPxzJdPfGK" src="../../_static/jquery.js"></script>
+        <script integrity="sha384-lSZeSIVKp9myfKbDQ3GkN/KHjUc+mzg17VKDN4Y2kUeBSJioB9QSM639vM9fuY//" src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="4. Error Library" href="../error-library/index.html" />
+    <link rel="prev" title="3.7. Multiple context arguments" href="multiple_arguments.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            PhpTailors Libraries
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Table of Contents</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../install.html">1. Installing PhpTailors Libraries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../singleton-library/index.html">2. Singleton Library</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">3. Context Library</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="intro.html">3.1. Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="intro.html#basic-usage">3.2. Basic Usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="intro.html#simple-example">3.3. Simple Example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="trivial_value_wrapper.html">3.4. Trivial Value Wrapper</a></li>
+<li class="toctree-l2"><a class="reference internal" href="custom_context_manager.html">3.5. Custom Context Managers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="context_factories.html">3.6. Context Factories</a></li>
+<li class="toctree-l2"><a class="reference internal" href="multiple_arguments.html">3.7. Multiple context arguments</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">3.8. Exception Handling</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#default-behavior">Default behavior</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#handling-exceptions-in-exitcontext">Handling exceptions in exitContext</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../error-library/index.html">4. Error Library</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">PhpTailors Libraries</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html"><span class="section-number">3. </span>Context Library</a></li>
+      <li class="breadcrumb-item active"><span class="section-number">3.8. </span>Exception Handling</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/packages/context-library/exception_handling.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="exception-handling">
+<span id="context-library-exception-handling"></span><span id="index-0"></span><h1><span class="section-number">3.8. </span>Exception Handling<a class="headerlink" href="#exception-handling" title="Permalink to this heading"></a></h1>
+<section id="default-behavior">
+<h2>Default behavior<a class="headerlink" href="#default-behavior" title="Permalink to this heading"></a></h2>
+<p>One of the main benefits of using contexts is their “unroll” feature which
+works even when an exception occurs in a user-provided callback. This means,
+that <code class="docutils literal notranslate"><a class="reference external" href="/api/Tailors/Lib/Context/ContextManagerInterface.html#method_exitContext" title="Tailors\Lib\Context\ContextManagerInterface::exitContext()"><span class="pre">exitContext()</span></a></code> is
+invoked, even if the user’s code execution gets interrupted by an exception. To
+illustrate this, we’ll slightly modify the example from the section named
+<a class="reference internal" href="multiple_arguments.html#context-library-multiple-context-arguments"><span class="std std-ref">Multiple context arguments</span></a>. We’ll use same <code class="docutils literal notranslate"><span class="pre">MyInt</span></code> objects as context
+managers for all context arguments</p>
+<div class="highlight-php notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="k">final</span> <span class="k">class</span> <span class="nc">MyInt</span> <span class="k">implements</span> <span class="nx">ContextManagerInterface</span>
+<span class="linenos"> 2</span><span class="p">{</span>
+<span class="linenos"> 3</span>    <span class="k">public</span> <span class="nv">$value</span><span class="p">;</span>
+<span class="linenos"> 4</span>
+<span class="linenos"> 5</span>    <span class="k">public</span> <span class="k">function</span> <span class="fm">__construct</span><span class="p">(</span><span class="nx">int</span> <span class="nv">$value</span><span class="p">)</span>
+<span class="linenos"> 6</span>    <span class="p">{</span>
+<span class="linenos"> 7</span>        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">value</span> <span class="o">=</span> <span class="nv">$value</span><span class="p">;</span>
+<span class="linenos"> 8</span>    <span class="p">}</span>
+<span class="linenos"> 9</span>
+<span class="linenos">10</span>    <span class="k">public</span> <span class="k">function</span> <span class="nf">enterContext</span><span class="p">()</span>
+<span class="linenos">11</span>    <span class="p">{</span>
+<span class="linenos">12</span>        <span class="k">echo</span> <span class="s2">&quot;enter: &quot;</span> <span class="o">.</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">value</span> <span class="o">.</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">;</span>
+<span class="linenos">13</span>        <span class="k">return</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">value</span><span class="p">;</span>
+<span class="linenos">14</span>    <span class="p">}</span>
+<span class="linenos">15</span>
+<span class="linenos">16</span>    <span class="k">public</span> <span class="k">function</span> <span class="nf">exitContext</span><span class="p">(</span><span class="o">?</span><span class="nx">\Throwable</span> <span class="nv">$exception</span> <span class="o">=</span> <span class="k">null</span><span class="p">)</span> <span class="o">:</span> <span class="nx">bool</span>
+<span class="linenos">17</span>    <span class="p">{</span>
+<span class="linenos">18</span>        <span class="k">echo</span> <span class="s2">&quot;exit: &quot;</span> <span class="o">.</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">value</span> <span class="o">.</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">;</span>
+<span class="linenos">19</span>        <span class="k">return</span> <span class="k">false</span><span class="p">;</span>
+<span class="linenos">20</span>    <span class="p">}</span>
+<span class="linenos">21</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>Instead of doing anything useful, we’ll just throw our custom exception
+<code class="docutils literal notranslate"><span class="pre">MyException</span></code> from the context (later):</p>
+<div class="highlight-php notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="k">final</span> <span class="k">class</span> <span class="nc">MyException</span> <span class="k">extends</span> <span class="nx">Exception</span>
+<span class="linenos">2</span><span class="p">{</span>
+<span class="linenos">3</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>The exception handling and unroll process may be demonstrated with the
+following snippet. We expect all the values 1, 2, and 3 to be printed at enter
+and the same numbers in reversed order printed when context exits. Finally, we
+should also receive <code class="docutils literal notranslate"><span class="pre">MyException</span></code>.</p>
+<div class="highlight-php notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="k">try</span> <span class="p">{</span>
+<span class="linenos">2</span>    <span class="nx">with</span><span class="p">(</span><span class="k">new</span> <span class="nx">MyInt</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="k">new</span> <span class="nx">MyInt</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="k">new</span> <span class="nx">MyInt</span><span class="p">(</span><span class="mi">3</span><span class="p">))(</span><span class="k">function</span> <span class="p">(</span><span class="nx">int</span> <span class="o">...</span><span class="nv">$args</span><span class="p">)</span> <span class="p">{</span>
+<span class="linenos">3</span>        <span class="k">throw</span> <span class="k">new</span> <span class="nx">MyException</span><span class="p">(</span><span class="s1">&#39;my error message&#39;</span><span class="p">);</span>
+<span class="linenos">4</span>    <span class="p">});</span>
+<span class="linenos">5</span><span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">MyException</span> <span class="nv">$e</span><span class="p">)</span> <span class="p">{</span>
+<span class="linenos">6</span>    <span class="nb">fprintf</span><span class="p">(</span><span class="nx">STDERR</span><span class="p">,</span> <span class="s2">&quot;%s</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="nv">$e</span><span class="o">-&gt;</span><span class="na">getMessage</span><span class="p">());</span>
+<span class="linenos">7</span>    <span class="k">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+<span class="linenos">8</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>The outputs from above snippet shall be</p>
+<ul>
+<li><p>stdout:</p>
+<blockquote>
+<div><div class="highlight-none notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span>enter: 1
+<span class="linenos">2</span>enter: 2
+<span class="linenos">3</span>enter: 3
+<span class="linenos">4</span>exit: 3
+<span class="linenos">5</span>exit: 2
+<span class="linenos">6</span>exit: 1
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+<li><p>stderr:</p>
+<blockquote>
+<div><div class="highlight-none notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span>my error message
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+</ul>
+</section>
+<section id="handling-exceptions-in-exitcontext">
+<h2>Handling exceptions in exitContext<a class="headerlink" href="#handling-exceptions-in-exitcontext" title="Permalink to this heading"></a></h2>
+<p>If one of the context managers returns <code class="docutils literal notranslate"><span class="pre">true</span></code> from its
+<code class="docutils literal notranslate"><a class="reference external" href="/api/Tailors/Lib/Context/ContextManagerInterface.html#method_exitContext" title="Tailors\Lib\Context\ContextManagerInterface::exitContext()"><span class="pre">exitContext()</span></a></code>,
+all the remaining context managers will receive <code class="docutils literal notranslate"><span class="pre">null</span></code> as <code class="docutils literal notranslate"><span class="pre">$exception</span></code>
+argument and the exception will be treated as handled (it will not be
+propagated to the context caller). To demonstrate this, let’s consider the
+following modified <code class="docutils literal notranslate"><span class="pre">MyInt</span></code> class</p>
+<div class="highlight-php notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="k">final</span> <span class="k">class</span> <span class="nc">MyInt</span> <span class="k">implements</span> <span class="nx">ContextManagerInterface</span>
+<span class="linenos"> 2</span><span class="p">{</span>
+<span class="linenos"> 3</span>    <span class="k">public</span> <span class="nv">$value</span><span class="p">;</span>
+<span class="linenos"> 4</span>    <span class="k">public</span> <span class="nv">$handle</span><span class="p">;</span>
+<span class="linenos"> 5</span>
+<span class="linenos"> 6</span>    <span class="k">public</span> <span class="k">function</span> <span class="fm">__construct</span><span class="p">(</span><span class="nx">int</span> <span class="nv">$value</span><span class="p">,</span> <span class="nx">bool</span> <span class="nv">$handle</span> <span class="o">=</span> <span class="k">false</span><span class="p">)</span>
+<span class="linenos"> 7</span>    <span class="p">{</span>
+<span class="linenos"> 8</span>        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">value</span> <span class="o">=</span> <span class="nv">$value</span><span class="p">;</span>
+<span class="linenos"> 9</span>        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">handle</span> <span class="o">=</span> <span class="nv">$handle</span><span class="p">;</span>
+<span class="linenos">10</span>    <span class="p">}</span>
+<span class="linenos">11</span>
+<span class="linenos">12</span>    <span class="k">public</span> <span class="k">function</span> <span class="nf">enterContext</span><span class="p">()</span>
+<span class="linenos">13</span>    <span class="p">{</span>
+<span class="linenos">14</span>        <span class="k">echo</span> <span class="s2">&quot;enter: &quot;</span> <span class="o">.</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">value</span> <span class="o">.</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">;</span>
+<span class="linenos">15</span>        <span class="k">return</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">value</span><span class="p">;</span>
+<span class="linenos">16</span>    <span class="p">}</span>
+<span class="linenos">17</span>
+<span class="linenos">18</span>    <span class="k">public</span> <span class="k">function</span> <span class="nf">exitContext</span><span class="p">(</span><span class="o">?</span><span class="nx">\Throwable</span> <span class="nv">$exception</span> <span class="o">=</span> <span class="k">null</span><span class="p">)</span> <span class="o">:</span> <span class="nx">bool</span>
+<span class="linenos">19</span>    <span class="p">{</span>
+<span class="linenos">20</span>        <span class="k">echo</span> <span class="s2">&quot;exit: &quot;</span> <span class="o">.</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">value</span> <span class="o">.</span> <span class="s2">&quot; (&quot;</span> <span class="o">.</span> <span class="nb">strtolower</span><span class="p">(</span><span class="nb">gettype</span><span class="p">(</span><span class="nv">$exception</span><span class="p">))</span> <span class="o">.</span> <span class="s2">&quot;)</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">;</span>
+<span class="linenos">21</span>        <span class="k">return</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">handle</span><span class="p">;</span>
+<span class="linenos">22</span>    <span class="p">}</span>
+<span class="linenos">23</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>The object may be configured to return <code class="docutils literal notranslate"><span class="pre">true</span></code> or <code class="docutils literal notranslate"><span class="pre">false</span></code>. What happens when
+one of the context managers returns <code class="docutils literal notranslate"><span class="pre">true</span></code>, may be explained by the following
+snippet</p>
+<div class="highlight-php notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="nx">with</span><span class="p">(</span><span class="k">new</span> <span class="nx">MyInt</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="k">new</span> <span class="nx">MyInt</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="k">new</span> <span class="nx">MyInt</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="k">true</span><span class="p">),</span> <span class="k">new</span> <span class="nx">MyInt</span><span class="p">(</span><span class="mi">4</span><span class="p">))(</span><span class="k">function</span> <span class="p">(</span><span class="nx">int</span> <span class="o">...</span><span class="nv">$args</span><span class="p">)</span> <span class="p">{</span>
+<span class="linenos">2</span>    <span class="k">throw</span> <span class="k">new</span> <span class="nx">MyException</span><span class="p">(</span><span class="s1">&#39;my error message&#39;</span><span class="p">);</span>
+<span class="linenos">3</span><span class="p">});</span>
+</pre></div>
+</div>
+<p>When unrolling, the objects <code class="docutils literal notranslate"><span class="pre">MyInt(4)</span></code> and <code class="docutils literal notranslate"><span class="pre">MyInt(3,</span> <span class="pre">true)</span></code> receive an
+instance of <code class="docutils literal notranslate"><span class="pre">MyException</span></code> as <code class="docutils literal notranslate"><span class="pre">$exception</span></code>, then <code class="docutils literal notranslate"><span class="pre">MyInt(3,</span> <span class="pre">true)</span></code> returns
+true and the remaining objects <code class="docutils literal notranslate"><span class="pre">MyInt(2)</span></code> and <code class="docutils literal notranslate"><span class="pre">MyInt(1)</span></code> receive <code class="docutils literal notranslate"><span class="pre">null</span></code>
+as <code class="docutils literal notranslate"><span class="pre">$exception</span></code>. The exception thrown from user-provided callback is not
+propagated to the outside. The code from the above snippet runs without an
+exception and outputs the following text</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span>enter: 1
+<span class="linenos">2</span>enter: 2
+<span class="linenos">3</span>enter: 3
+<span class="linenos">4</span>enter: 4
+<span class="linenos">5</span>exit: 4 (object)
+<span class="linenos">6</span>exit: 3 (object)
+<span class="linenos">7</span>exit: 2 (null)
+<span class="linenos">8</span>exit: 1 (null)
+</pre></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="multiple_arguments.html" class="btn btn-neutral float-left" title="3.7. Multiple context arguments" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../error-library/index.html" class="btn btn-neutral float-right" title="4. Error Library" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Paweł Tomulik.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

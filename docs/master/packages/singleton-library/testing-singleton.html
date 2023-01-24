@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>2.4. Testing Singleton &mdash; PhpTailors Libraries  documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/custom.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script integrity="sha384-vtXRMe3mGCbOeY7l30aIg8H9p3GdeSe4IFlP6G8JMa7o7lXvnz3GFKzPxzJdPfGK" src="../../_static/jquery.js"></script>
+        <script integrity="sha384-lSZeSIVKp9myfKbDQ3GkN/KHjUc+mzg17VKDN4Y2kUeBSJioB9QSM639vM9fuY//" src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="3. Context Library" href="../context-library/index.html" />
+    <link rel="prev" title="2.3. Using Singleton" href="using-singleton.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            PhpTailors Libraries
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Table of Contents</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../install.html">1. Installing PhpTailors Libraries</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">2. Singleton Library</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="intro.html">2.1. Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="intro.html#purpose">2.2. Purpose</a></li>
+<li class="toctree-l2"><a class="reference internal" href="using-singleton.html">2.3. Using Singleton</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">2.4. Testing Singleton</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../context-library/index.html">3. Context Library</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../error-library/index.html">4. Error Library</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">PhpTailors Libraries</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html"><span class="section-number">2. </span>Singleton Library</a></li>
+      <li class="breadcrumb-item active"><span class="section-number">2.4. </span>Testing Singleton</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/packages/singleton-library/testing-singleton.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="testing-singleton">
+<span id="singleton-library-testing-singleton"></span><span id="index-0"></span><h1><span class="section-number">2.4. </span>Testing Singleton<a class="headerlink" href="#testing-singleton" title="Permalink to this heading"></a></h1>
+<p>To easily ensure that your class looks like and behaves like a singleton, you
+may use facilities provided by <code class="docutils literal notranslate"><span class="pre">phptailors/singleton-testing</span></code> package:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span>composer<span class="w"> </span>require<span class="w"> </span>--dev<span class="w"> </span><span class="s2">&quot;phptailors/singleton-testing:dev-master&quot;</span>
+</pre></div>
+</div>
+<p>Singleton testing is facilitated by
+<code class="docutils literal notranslate"><a class="reference external" href="/api/Tailors/Testing/Lib/Singleton/AssertIsSingletonTrait.html" title="Tailors\Testing\Lib\Singleton\AssertIsSingletonTrait"><span class="pre">AssertIsSingletonTrait</span></a></code>.
+Its basic usage is as simple, as calling the
+<code class="docutils literal notranslate"><a class="reference external" href="/api/Tailors/Testing/Lib/Singleton/AssertIsSingletonTrait.html#method_assertIsSingleton" title="Tailors\Testing\Lib\Singleton\AssertIsSingletonTrait::assertIsSingleton()"><span class="pre">assertIsSingleton()</span></a></code>
+method. The following example demonstrates how one the <code class="docutils literal notranslate"><span class="pre">TrivialSingleton</span></code>
+developed in <a href="#id1"><span class="problematic" id="id2">`lib.singleton.trivial_singleton.example`_</span></a> can be tested:</p>
+<div class="highlight-php notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="o">&lt;?</span><span class="nx">php</span>
+<span class="linenos"> 2</span>
+<span class="linenos"> 3</span><span class="k">use</span> <span class="nx">Tailors\Lib\Singleton\SingletonTrait</span><span class="p">;</span>
+<span class="linenos"> 4</span><span class="k">use</span> <span class="nx">Tailors\Lib\Singleton\SingletonInterface</span><span class="p">;</span>
+<span class="linenos"> 5</span><span class="k">use</span> <span class="nx">Tailors\Testing\Lib\Singleton\AssertIsSingletonTrait</span><span class="p">;</span>
+<span class="linenos"> 6</span>
+<span class="linenos"> 7</span><span class="k">final</span> <span class="k">class</span> <span class="nc">TrivialSingleton</span> <span class="k">implements</span> <span class="nx">SingletonInterface</span>
+<span class="linenos"> 8</span><span class="p">{</span>
+<span class="linenos"> 9</span>    <span class="k">use</span> <span class="nx">SingletonTrait</span><span class="p">;</span>
+<span class="linenos">10</span><span class="p">}</span>
+<span class="linenos">11</span>
+<span class="linenos">12</span><span class="k">final</span> <span class="k">class</span> <span class="nc">TrivialSingletonTest</span> <span class="k">extends</span> <span class="nx">\PHPUnit\Framework\TestCase</span>
+<span class="linenos">13</span><span class="p">{</span>
+<span class="linenos">14</span>    <span class="k">use</span> <span class="nx">AssertIsSingletonTrait</span><span class="p">;</span>
+<span class="linenos">15</span>
+<span class="linenos">16</span>    <span class="k">public</span> <span class="k">function</span> <span class="nf">testTrivialSingletonClassIsSingleton</span><span class="p">()</span><span class="o">:</span> <span class="nx">void</span>
+<span class="linenos">17</span>    <span class="p">{</span>
+<span class="linenos">18</span>        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">assertIsSingleton</span><span class="p">(</span><span class="nx">TrivialSingleton</span><span class="o">::</span><span class="na">class</span><span class="p">);</span>
+<span class="linenos">19</span>    <span class="p">}</span>
+<span class="linenos">20</span><span class="p">}</span>
+<span class="linenos">21</span>
+<span class="linenos">22</span><span class="c1">// vim: syntax=php sw=4 ts=4 et:</span>
+</pre></div>
+</div>
+<p>Running the above test yields:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span>PHPUnit 9.5.28 by Sebastian Bergmann and contributors.
+<span class="linenos">2</span>
+<span class="linenos">3</span>.                                                                   1 / 1 (100%)
+<span class="linenos">4</span>
+<span class="linenos">5</span>Time: 00:00.010, Memory: 6.00 MB
+<span class="linenos">6</span>
+<span class="linenos">7</span>OK (1 test, 9 assertions)
+</pre></div>
+</div>
+<p>The following example shows the effect of testing non-singleton classes with
+the <code class="docutils literal notranslate"><a class="reference external" href="/api/Tailors/Testing/Lib/Singleton/AssertIsSingletonTrait.html#method_assertIsSingleton" title="Tailors\Testing\Lib\Singleton\AssertIsSingletonTrait::assertIsSingleton()"><span class="pre">assertIsSingleton()</span></a></code>
+method</p>
+<div class="highlight-php notranslate"><div class="highlight"><pre><span></span><span class="linenos">  1</span><span class="o">&lt;?</span><span class="nx">php</span>
+<span class="linenos">  2</span>
+<span class="linenos">  3</span><span class="k">use</span> <span class="nx">Tailors\Testing\Lib\Singleton\AssertIsSingletonTrait</span><span class="p">;</span>
+<span class="linenos">  4</span>
+<span class="linenos">  5</span><span class="k">trait</span> <span class="nx">PrivateConstructorTrait</span>
+<span class="linenos">  6</span><span class="p">{</span>
+<span class="linenos">  7</span>    <span class="k">private</span> <span class="k">function</span> <span class="fm">__construct</span><span class="p">()</span>
+<span class="linenos">  8</span>    <span class="p">{</span>
+<span class="linenos">  9</span>    <span class="p">}</span>
+<span class="linenos"> 10</span><span class="p">}</span>
+<span class="linenos"> 11</span>
+<span class="linenos"> 12</span><span class="k">trait</span> <span class="nx">PublicStaticGetInstanceTrait</span>
+<span class="linenos"> 13</span><span class="p">{</span>
+<span class="linenos"> 14</span>    <span class="k">private</span> <span class="k">static</span> <span class="nv">$instance</span> <span class="o">=</span> <span class="k">null</span><span class="p">;</span>
+<span class="linenos"> 15</span>
+<span class="linenos"> 16</span>    <span class="k">public</span> <span class="k">static</span> <span class="k">function</span> <span class="nf">getInstance</span><span class="p">()</span><span class="o">:</span> <span class="nx">self</span>
+<span class="linenos"> 17</span>    <span class="p">{</span>
+<span class="linenos"> 18</span>        <span class="k">if</span> <span class="p">(</span><span class="nx">self</span><span class="o">::</span><span class="nv">$instance</span> <span class="o">===</span> <span class="k">null</span><span class="p">)</span> <span class="p">{</span>
+<span class="linenos"> 19</span>            <span class="nx">self</span><span class="o">::</span><span class="nv">$instance</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">self</span><span class="p">();</span>
+<span class="linenos"> 20</span>        <span class="p">}</span>
+<span class="linenos"> 21</span>        <span class="k">return</span> <span class="nx">self</span><span class="o">::</span><span class="nv">$instance</span><span class="p">;</span>
+<span class="linenos"> 22</span>    <span class="p">}</span>
+<span class="linenos"> 23</span><span class="p">}</span>
+<span class="linenos"> 24</span>
+<span class="linenos"> 25</span><span class="k">trait</span> <span class="nx">PrivateCloneTrait</span>
+<span class="linenos"> 26</span><span class="p">{</span>
+<span class="linenos"> 27</span>    <span class="k">private</span> <span class="k">function</span> <span class="fm">__clone</span><span class="p">()</span>
+<span class="linenos"> 28</span>    <span class="p">{</span>
+<span class="linenos"> 29</span>    <span class="p">}</span>
+<span class="linenos"> 30</span><span class="p">}</span>
+<span class="linenos"> 31</span>
+<span class="linenos"> 32</span><span class="k">final</span> <span class="k">class</span> <span class="nc">NoGetInstance</span>
+<span class="linenos"> 33</span><span class="p">{</span>
+<span class="linenos"> 34</span>    <span class="k">use</span> <span class="nx">PrivateConstructorTrait</span><span class="p">;</span>
+<span class="linenos"> 35</span><span class="p">}</span>
+<span class="linenos"> 36</span>
+<span class="linenos"> 37</span><span class="k">final</span> <span class="k">class</span> <span class="nc">PrivateGetInstance</span>
+<span class="linenos"> 38</span><span class="p">{</span>
+<span class="linenos"> 39</span>    <span class="k">use</span> <span class="nx">PrivateConstructorTrait</span><span class="p">;</span>
+<span class="linenos"> 40</span>    <span class="k">private</span> <span class="k">static</span> <span class="k">function</span> <span class="nf">getInstance</span><span class="p">()</span><span class="o">:</span> <span class="nx">self</span>
+<span class="linenos"> 41</span>    <span class="p">{</span>
+<span class="linenos"> 42</span>        <span class="k">return</span> <span class="k">new</span> <span class="nx">self</span><span class="p">();</span>
+<span class="linenos"> 43</span>    <span class="p">}</span>
+<span class="linenos"> 44</span><span class="p">}</span>
+<span class="linenos"> 45</span>
+<span class="linenos"> 46</span><span class="k">final</span> <span class="k">class</span> <span class="nc">NonStaticGetInstance</span>
+<span class="linenos"> 47</span><span class="p">{</span>
+<span class="linenos"> 48</span>    <span class="k">use</span> <span class="nx">PrivateConstructorTrait</span><span class="p">;</span>
+<span class="linenos"> 49</span>    <span class="k">public</span> <span class="k">function</span> <span class="nf">getInstance</span><span class="p">()</span><span class="o">:</span> <span class="nx">self</span>
+<span class="linenos"> 50</span>    <span class="p">{</span>
+<span class="linenos"> 51</span>        <span class="k">return</span> <span class="k">new</span> <span class="nx">self</span><span class="p">();</span>
+<span class="linenos"> 52</span>    <span class="p">}</span>
+<span class="linenos"> 53</span><span class="p">}</span>
+<span class="linenos"> 54</span>
+<span class="linenos"> 55</span><span class="k">final</span> <span class="k">class</span> <span class="nc">NoPrivateConstructor</span>
+<span class="linenos"> 56</span><span class="p">{</span>
+<span class="linenos"> 57</span>    <span class="k">use</span> <span class="nx">PublicStaticGetInstanceTrait</span><span class="p">;</span>
+<span class="linenos"> 58</span><span class="p">}</span>
+<span class="linenos"> 59</span>
+<span class="linenos"> 60</span><span class="k">final</span> <span class="k">class</span> <span class="nc">NoPrivateClone</span>
+<span class="linenos"> 61</span><span class="p">{</span>
+<span class="linenos"> 62</span>    <span class="k">use</span> <span class="nx">PrivateConstructorTrait</span><span class="p">;</span>
+<span class="linenos"> 63</span>    <span class="k">use</span> <span class="nx">PublicStaticGetInstanceTrait</span><span class="p">;</span>
+<span class="linenos"> 64</span><span class="p">}</span>
+<span class="linenos"> 65</span>
+<span class="linenos"> 66</span><span class="k">final</span> <span class="k">class</span> <span class="nc">NoThrowingWakeup</span>
+<span class="linenos"> 67</span><span class="p">{</span>
+<span class="linenos"> 68</span>    <span class="k">use</span> <span class="nx">PrivateConstructorTrait</span><span class="p">;</span>
+<span class="linenos"> 69</span>    <span class="k">use</span> <span class="nx">PublicStaticGetInstanceTrait</span><span class="p">;</span>
+<span class="linenos"> 70</span>    <span class="k">use</span> <span class="nx">PrivateCloneTrait</span><span class="p">;</span>
+<span class="linenos"> 71</span><span class="p">}</span>
+<span class="linenos"> 72</span>
+<span class="linenos"> 73</span><span class="k">final</span> <span class="k">class</span> <span class="nc">ThrowingWrongExceptionWakeup</span>
+<span class="linenos"> 74</span><span class="p">{</span>
+<span class="linenos"> 75</span>    <span class="k">use</span> <span class="nx">PrivateConstructorTrait</span><span class="p">;</span>
+<span class="linenos"> 76</span>    <span class="k">use</span> <span class="nx">PublicStaticGetInstanceTrait</span><span class="p">;</span>
+<span class="linenos"> 77</span>    <span class="k">use</span> <span class="nx">PrivateCloneTrait</span><span class="p">;</span>
+<span class="linenos"> 78</span>
+<span class="linenos"> 79</span>    <span class="k">public</span> <span class="k">function</span> <span class="fm">__wakeup</span><span class="p">()</span>
+<span class="linenos"> 80</span>    <span class="p">{</span>
+<span class="linenos"> 81</span>        <span class="k">throw</span> <span class="k">new</span> <span class="nx">\RuntimeException</span><span class="p">();</span>
+<span class="linenos"> 82</span>    <span class="p">}</span>
+<span class="linenos"> 83</span><span class="p">}</span>
+<span class="linenos"> 84</span>
+<span class="linenos"> 85</span><span class="k">final</span> <span class="k">class</span> <span class="nc">NonSingletonTest</span> <span class="k">extends</span> <span class="nx">\PHPUnit\Framework\TestCase</span>
+<span class="linenos"> 86</span><span class="p">{</span>
+<span class="linenos"> 87</span>    <span class="k">use</span> <span class="nx">AssertIsSingletonTrait</span><span class="p">;</span>
+<span class="linenos"> 88</span>
+<span class="linenos"> 89</span>    <span class="k">public</span> <span class="k">function</span> <span class="nf">testNoGetInstanceIsSingleton</span><span class="p">()</span><span class="o">:</span> <span class="nx">void</span>
+<span class="linenos"> 90</span>    <span class="p">{</span>
+<span class="linenos"> 91</span>        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">assertIsSingleton</span><span class="p">(</span><span class="nx">NoGetInstance</span><span class="o">::</span><span class="na">class</span><span class="p">);</span>
+<span class="linenos"> 92</span>    <span class="p">}</span>
+<span class="linenos"> 93</span>
+<span class="linenos"> 94</span>    <span class="k">public</span> <span class="k">function</span> <span class="nf">testPrivateGetInstanceIsSingleton</span><span class="p">()</span><span class="o">:</span> <span class="nx">void</span>
+<span class="linenos"> 95</span>    <span class="p">{</span>
+<span class="linenos"> 96</span>        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">assertIsSingleton</span><span class="p">(</span><span class="nx">PrivateGetInstance</span><span class="o">::</span><span class="na">class</span><span class="p">);</span>
+<span class="linenos"> 97</span>    <span class="p">}</span>
+<span class="linenos"> 98</span>
+<span class="linenos"> 99</span>    <span class="k">public</span> <span class="k">function</span> <span class="nf">testNonStaticGetInstanceIsSingleton</span><span class="p">()</span><span class="o">:</span> <span class="nx">void</span>
+<span class="linenos">100</span>    <span class="p">{</span>
+<span class="linenos">101</span>        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">assertIsSingleton</span><span class="p">(</span><span class="nx">NonStaticGetInstance</span><span class="o">::</span><span class="na">class</span><span class="p">);</span>
+<span class="linenos">102</span>    <span class="p">}</span>
+<span class="linenos">103</span>
+<span class="linenos">104</span>    <span class="k">public</span> <span class="k">function</span> <span class="nf">testNoPrivateConstructorIsSingleton</span><span class="p">()</span><span class="o">:</span> <span class="nx">void</span>
+<span class="linenos">105</span>    <span class="p">{</span>
+<span class="linenos">106</span>        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">assertIsSingleton</span><span class="p">(</span><span class="nx">NoPrivateConstructor</span><span class="o">::</span><span class="na">class</span><span class="p">);</span>
+<span class="linenos">107</span>    <span class="p">}</span>
+<span class="linenos">108</span>
+<span class="linenos">109</span>    <span class="k">public</span> <span class="k">function</span> <span class="nf">testNoPrivateCloneIsSingleton</span><span class="p">()</span><span class="o">:</span> <span class="nx">void</span>
+<span class="linenos">110</span>    <span class="p">{</span>
+<span class="linenos">111</span>        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">assertIsSingleton</span><span class="p">(</span><span class="nx">NoPrivateClone</span><span class="o">::</span><span class="na">class</span><span class="p">);</span>
+<span class="linenos">112</span>    <span class="p">}</span>
+<span class="linenos">113</span>
+<span class="linenos">114</span>    <span class="k">public</span> <span class="k">function</span> <span class="nf">testNoThrowingWakeupIsSingleton</span><span class="p">()</span><span class="o">:</span> <span class="nx">void</span>
+<span class="linenos">115</span>    <span class="p">{</span>
+<span class="linenos">116</span>        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">assertIsSingleton</span><span class="p">(</span><span class="nx">NoThrowingWakeup</span><span class="o">::</span><span class="na">class</span><span class="p">);</span>
+<span class="linenos">117</span>    <span class="p">}</span>
+<span class="linenos">118</span>
+<span class="linenos">119</span>    <span class="k">public</span> <span class="k">function</span> <span class="nf">testThrowingWrongExceptionWakeupIsSingleton</span><span class="p">()</span><span class="o">:</span> <span class="nx">void</span>
+<span class="linenos">120</span>    <span class="p">{</span>
+<span class="linenos">121</span>        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">assertIsSingleton</span><span class="p">(</span><span class="nx">ThrowingWrongExceptionWakeup</span><span class="o">::</span><span class="na">class</span><span class="p">);</span>
+<span class="linenos">122</span>    <span class="p">}</span>
+<span class="linenos">123</span><span class="p">}</span>
+<span class="linenos">124</span>
+<span class="linenos">125</span><span class="c1">// vim: syntax=php sw=4 ts=4 et:</span>
+</pre></div>
+</div>
+<p>Running the above test yields:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span>PHPUnit 9.5.28 by Sebastian Bergmann and contributors.
+<span class="linenos"> 2</span>
+<span class="linenos"> 3</span>FFFFFFF                                                             7 / 7 (100%)
+<span class="linenos"> 4</span>
+<span class="linenos"> 5</span>Time: 00:00.013, Memory: 6.00 MB
+<span class="linenos"> 6</span>
+<span class="linenos"> 7</span>There were 7 failures:
+<span class="linenos"> 8</span>
+<span class="linenos"> 9</span>1) NonSingletonTest::testNoGetInstanceIsSingleton
+<span class="linenos">10</span>Failed asserting that &#39;NoGetInstance&#39; has public static method getInstance().
+<span class="linenos">11</span>
+<span class="linenos">12</span>NonSingletonTest.php:91
+<span class="linenos">13</span>
+<span class="linenos">14</span>2) NonSingletonTest::testPrivateGetInstanceIsSingleton
+<span class="linenos">15</span>Failed asserting that &#39;PrivateGetInstance&#39; has public static method getInstance().
+<span class="linenos">16</span>
+<span class="linenos">17</span>NonSingletonTest.php:96
+<span class="linenos">18</span>
+<span class="linenos">19</span>3) NonSingletonTest::testNonStaticGetInstanceIsSingleton
+<span class="linenos">20</span>Failed asserting that &#39;NonStaticGetInstance&#39; has public static method getInstance().
+<span class="linenos">21</span>
+<span class="linenos">22</span>NonSingletonTest.php:101
+<span class="linenos">23</span>
+<span class="linenos">24</span>4) NonSingletonTest::testNoPrivateConstructorIsSingleton
+<span class="linenos">25</span>Failed asserting that &#39;NoPrivateConstructor&#39; has private method __construct().
+<span class="linenos">26</span>
+<span class="linenos">27</span>NonSingletonTest.php:106
+<span class="linenos">28</span>
+<span class="linenos">29</span>5) NonSingletonTest::testNoPrivateCloneIsSingleton
+<span class="linenos">30</span>Failed asserting that &#39;NoPrivateClone&#39; is not cloneable.
+<span class="linenos">31</span>
+<span class="linenos">32</span>NonSingletonTest.php:111
+<span class="linenos">33</span>
+<span class="linenos">34</span>6) NonSingletonTest::testNoThrowingWakeupIsSingleton
+<span class="linenos">35</span>Failed asserting that exception of type &quot;Tailors\Lib\Singleton\SingletonException&quot; is thrown
+<span class="linenos">36</span>
+<span class="linenos">37</span>NonSingletonTest.php:116
+<span class="linenos">38</span>
+<span class="linenos">39</span>7) NonSingletonTest::testThrowingWrongExceptionWakeupIsSingleton
+<span class="linenos">40</span>Failed asserting that exception of type &quot;Tailors\Lib\Singleton\SingletonException&quot; is thrown
+<span class="linenos">41</span>
+<span class="linenos">42</span>NonSingletonTest.php:121
+<span class="linenos">43</span>
+<span class="linenos">44</span>FAILURES!
+<span class="linenos">45</span>Tests: 7, Assertions: 36, Failures: 7.
+</pre></div>
+</div>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="using-singleton.html" class="btn btn-neutral float-left" title="2.3. Using Singleton" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../context-library/index.html" class="btn btn-neutral float-right" title="3. Context Library" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Paweł Tomulik.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

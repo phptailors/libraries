@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>3.6. Context Factories &mdash; PhpTailors Libraries  documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/custom.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script integrity="sha384-vtXRMe3mGCbOeY7l30aIg8H9p3GdeSe4IFlP6G8JMa7o7lXvnz3GFKzPxzJdPfGK" src="../../_static/jquery.js"></script>
+        <script integrity="sha384-lSZeSIVKp9myfKbDQ3GkN/KHjUc+mzg17VKDN4Y2kUeBSJioB9QSM639vM9fuY//" src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="3.7. Multiple context arguments" href="multiple_arguments.html" />
+    <link rel="prev" title="3.5. Custom Context Managers" href="custom_context_manager.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            PhpTailors Libraries
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Table of Contents</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../install.html">1. Installing PhpTailors Libraries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../singleton-library/index.html">2. Singleton Library</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">3. Context Library</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="intro.html">3.1. Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="intro.html#basic-usage">3.2. Basic Usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="intro.html#simple-example">3.3. Simple Example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="trivial_value_wrapper.html">3.4. Trivial Value Wrapper</a></li>
+<li class="toctree-l2"><a class="reference internal" href="custom_context_manager.html">3.5. Custom Context Managers</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">3.6. Context Factories</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#creating-custom-context-factories">Creating custom Context Factories</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#example-with-custom-managed-context-factory">Example with custom Managed Context Factory</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="multiple_arguments.html">3.7. Multiple context arguments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="exception_handling.html">3.8. Exception Handling</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../error-library/index.html">4. Error Library</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">PhpTailors Libraries</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html"><span class="section-number">3. </span>Context Library</a></li>
+      <li class="breadcrumb-item active"><span class="section-number">3.6. </span>Context Factories</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/packages/context-library/context_factories.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="context-factories">
+<span id="context-library-context-factories"></span><span id="index-0"></span><h1><span class="section-number">3.6. </span>Context Factories<a class="headerlink" href="#context-factories" title="Permalink to this heading"></a></h1>
+<p><a class="reference internal" href="index.html#context-library"><span class="std std-ref">Context Library</span></a> has a concept of <em>Context Factory</em> (a precise name
+should actually be <em>Context Manager Factory</em>). A <em>Context Factory</em> is an object
+which takes a <em>value</em> and returns a new instance of
+<code class="docutils literal notranslate"><a class="reference external" href="/api//Tailors/Lib/Context/ContextManagerInterface.html" title="\Tailors\Lib\Context\ContextManagerInterface"><span class="pre">ContextManagerInterface</span></a></code>, appropriate for
+given <em>value</em>, or <code class="docutils literal notranslate"><span class="pre">null</span></code> if it won’t handle the <em>value</em>. For example, the
+<code class="docutils literal notranslate"><a class="reference external" href="/api/Tailors/Lib/Context/DefaultContextFactory.html" title="Tailors\Lib\Context\DefaultContextFactory"><span class="pre">DefaultContextFactory</span></a></code> creates
+<code class="docutils literal notranslate"><a class="reference external" href="/api/Tailors/Lib/Context/ResourceContextManager.html" title="Tailors\Lib\Context\ResourceContextManager"><span class="pre">ResourceContextManager</span></a></code> for any
+<a class="reference external" href="https://www.php.net/manual/en/language.types.resource.php">PHP resource</a> and <code class="docutils literal notranslate"><a class="reference external" href="/api/Tailors/Lib/Context/TrivialValueWrapper.html" title="Tailors\Lib\Context\TrivialValueWrapper"><span class="pre">TrivialValueWrapper</span></a></code> for any
+other <em>value</em> (except for <em>values</em> that are already instances of
+<code class="docutils literal notranslate"><a class="reference external" href="/api/Tailors/Lib/Context/ContextManagerInterface.html" title="Tailors\Lib\Context\ContextManagerInterface"><span class="pre">ContextManagerInterface</span></a></code>).</p>
+<p><a class="reference internal" href="index.html#context-library"><span class="std std-ref">Context Library</span></a> has a single stack of (custom) <em>Context Factories</em>
+(<code class="docutils literal notranslate"><a class="reference external" href="/api/Tailors/Lib/Context/ContextFactoryStack.html" title="Tailors\Lib\Context\ContextFactoryStack"><span class="pre">ContextFactoryStack</span></a></code>). It’s empty by
+default, so initially only the <code class="docutils literal notranslate"><a class="reference external" href="/api/Tailors/Lib/Context/DefaultContextFactory.html" title="Tailors\Lib\Context\DefaultContextFactory"><span class="pre">DefaultContextFactory</span></a></code>
+is used to generate <em>Context Managers</em>. A custom factory object can be pushed
+to the top of the stack to get precedence over other factories.</p>
+<section id="creating-custom-context-factories">
+<h2>Creating custom Context Factories<a class="headerlink" href="#creating-custom-context-factories" title="Permalink to this heading"></a></h2>
+<p>A simplest way to create new <em>Context Factory</em> is to extend the
+<code class="docutils literal notranslate"><a class="reference external" href="/api/Tailors/Lib/Context/AbstractManagedContextFactory.html" title="Tailors\Lib\Context\AbstractManagedContextFactory"><span class="pre">AbstractManagedContextFactory</span></a></code>. The new
+context factory must implement the
+<code class="docutils literal notranslate"><a class="reference external" href="/api/Tailors/Lib/Context/ContextFactoryInterface.html#method_getContextManager" title="Tailors\Lib\Context\ContextFactoryInterface::getContextManager()"><span class="pre">getContextManager()</span></a></code>
+method. The <code class="docutils literal notranslate"><a class="reference external" href="/api/Tailors/Lib/Context/AbstractManagedContextFactory.html" title="Tailors\Lib\Context\AbstractManagedContextFactory"><span class="pre">AbstractManagedContextFactory</span></a></code> is
+either a <em>Context Factory</em> and <em>Context Manager</em>. When an instance of
+<code class="docutils literal notranslate"><a class="reference external" href="/api/Tailors/Lib/Context/AbstractManagedContextFactory.html" title="Tailors\Lib\Context\AbstractManagedContextFactory"><span class="pre">AbstractManagedContextFactory</span></a></code> is passed
+to <code class="docutils literal notranslate"><a class="reference external" href="/api/Tailors/Lib/Context.html#function_with" title="Tailors\Lib\Context\with()"><span class="pre">with()</span></a></code>, it gets pushed to the top of
+<code class="docutils literal notranslate"><a class="reference external" href="/api/Tailors/Lib/Context/ContextFactoryStack.html" title="Tailors\Lib\Context\ContextFactoryStack"><span class="pre">ContextFactoryStack</span></a></code> when entering context
+and popped when exiting (so the new <em>Context Factory</em> works for all nested
+contexts).</p>
+</section>
+<section id="example-with-custom-managed-context-factory">
+<h2>Example with custom Managed Context Factory<a class="headerlink" href="#example-with-custom-managed-context-factory" title="Permalink to this heading"></a></h2>
+<p>In the following example we’ll wrap an integer value with an object named
+<code class="docutils literal notranslate"><span class="pre">MyCounter</span></code>. Then, we’ll create a dedicated <em>Context Manager</em>, named
+<code class="docutils literal notranslate"><span class="pre">MyCounterManger</span></code>, to increment the counter when entering a context and
+decrement when exiting. Finally, we’ll provide <em>Context Factory</em> named
+<code class="docutils literal notranslate"><span class="pre">MyContextFactory</span></code> to recognize <code class="docutils literal notranslate"><span class="pre">MyCounter</span></code> objects and wrap them with
+<code class="docutils literal notranslate"><span class="pre">MyCounterManager</span></code>.</p>
+<p>For the purpose of example we need the following symbols to be imported</p>
+<div class="highlight-php notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="k">use</span> <span class="k">function</span> <span class="nf">Tailors\Lib\Context\with</span><span class="p">;</span>
+<span class="linenos">2</span><span class="k">use</span> <span class="nx">Tailors\Lib\Context\AbstractManagedContextFactory</span><span class="p">;</span>
+<span class="linenos">3</span><span class="k">use</span> <span class="nx">Tailors\Lib\Context\ContextManagerInterface</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>Our counter class will be as simple as</p>
+<div class="highlight-php notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="k">final</span> <span class="k">class</span> <span class="nc">MyCounter</span>
+<span class="linenos">2</span><span class="p">{</span>
+<span class="linenos">3</span>    <span class="k">public</span> <span class="nv">$value</span><span class="p">;</span>
+<span class="linenos">4</span>
+<span class="linenos">5</span>    <span class="k">public</span> <span class="k">function</span> <span class="fm">__construct</span><span class="p">(</span><span class="nx">int</span> <span class="nv">$value</span><span class="p">)</span>
+<span class="linenos">6</span>    <span class="p">{</span>
+<span class="linenos">7</span>        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">value</span> <span class="o">=</span> <span class="nv">$value</span><span class="p">;</span>
+<span class="linenos">8</span>    <span class="p">}</span>
+<span class="linenos">9</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>The counter manager shall just increment/decrement counter’s value and print
+short messages when entering/exiting a context.</p>
+<div class="highlight-php notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="k">final</span> <span class="k">class</span> <span class="nc">MyCounterManager</span> <span class="k">implements</span> <span class="nx">ContextManagerInterface</span>
+<span class="linenos"> 2</span><span class="p">{</span>
+<span class="linenos"> 3</span>    <span class="k">public</span> <span class="nv">$counter</span><span class="p">;</span>
+<span class="linenos"> 4</span>
+<span class="linenos"> 5</span>    <span class="k">public</span> <span class="k">function</span> <span class="fm">__construct</span><span class="p">(</span><span class="nx">MyCounter</span> <span class="nv">$counter</span><span class="p">)</span>
+<span class="linenos"> 6</span>    <span class="p">{</span>
+<span class="linenos"> 7</span>        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">counter</span> <span class="o">=</span> <span class="nv">$counter</span><span class="p">;</span>
+<span class="linenos"> 8</span>    <span class="p">}</span>
+<span class="linenos"> 9</span>
+<span class="linenos">10</span>    <span class="k">public</span> <span class="k">function</span> <span class="nf">enterContext</span><span class="p">()</span>
+<span class="linenos">11</span>    <span class="p">{</span>
+<span class="linenos">12</span>        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">counter</span><span class="o">-&gt;</span><span class="na">value</span> <span class="o">++</span><span class="p">;</span>
+<span class="linenos">13</span>        <span class="k">print</span><span class="p">(</span><span class="s2">&quot;MyCounterManager::enterContext()</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">);</span>
+<span class="linenos">14</span>        <span class="k">return</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">counter</span><span class="p">;</span>
+<span class="linenos">15</span>    <span class="p">}</span>
+<span class="linenos">16</span>
+<span class="linenos">17</span>    <span class="k">public</span> <span class="k">function</span> <span class="nf">exitContext</span><span class="p">(</span><span class="o">?</span><span class="nx">\Throwable</span> <span class="nv">$exception</span> <span class="o">=</span> <span class="k">null</span><span class="p">)</span> <span class="o">:</span> <span class="nx">bool</span>
+<span class="linenos">18</span>    <span class="p">{</span>
+<span class="linenos">19</span>        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">counter</span><span class="o">-&gt;</span><span class="na">value</span> <span class="o">--</span><span class="p">;</span>
+<span class="linenos">20</span>        <span class="k">print</span><span class="p">(</span><span class="s2">&quot;MyCounterManager::exitContext()</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">);</span>
+<span class="linenos">21</span>        <span class="k">return</span> <span class="k">false</span><span class="p">;</span>
+<span class="linenos">22</span>    <span class="p">}</span>
+<span class="linenos">23</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>Finally, comes the <em>Context Factory</em>.</p>
+<div class="highlight-php notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="k">final</span> <span class="k">class</span> <span class="nc">MyContextFactory</span> <span class="k">extends</span> <span class="nx">AbstractManagedContextFactory</span>
+<span class="linenos"> 2</span><span class="p">{</span>
+<span class="linenos"> 3</span>    <span class="k">public</span> <span class="k">function</span> <span class="nf">getContextManager</span><span class="p">(</span><span class="nv">$arg</span><span class="p">)</span> <span class="o">:</span> <span class="o">?</span><span class="nx">ContextManagerInterface</span>
+<span class="linenos"> 4</span>    <span class="p">{</span>
+<span class="linenos"> 5</span>        <span class="k">if</span><span class="p">(</span><span class="nv">$arg</span> <span class="nx">instanceof</span> <span class="nx">MyCounter</span><span class="p">)</span> <span class="p">{</span>
+<span class="linenos"> 6</span>            <span class="k">return</span> <span class="k">new</span> <span class="nx">MyCounterManager</span><span class="p">(</span><span class="nv">$arg</span><span class="p">);</span>
+<span class="linenos"> 7</span>        <span class="p">}</span>
+<span class="linenos"> 8</span>        <span class="k">return</span> <span class="k">null</span><span class="p">;</span>
+<span class="linenos"> 9</span>    <span class="p">}</span>
+<span class="linenos">10</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>We can now push an instance of <code class="docutils literal notranslate"><span class="pre">MyContextFactory</span></code> to the factory stack. To
+push it temporarily, we’ll create two nested contexts (outer and inner),
+pass an instance of <code class="docutils literal notranslate"><span class="pre">MyContextFactory</span></code> to the outer context and do actual job
+in the inner context.</p>
+<div class="highlight-php notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="nx">with</span><span class="p">(</span><span class="k">new</span> <span class="nx">MyContextFactory</span><span class="p">(),</span> <span class="k">new</span> <span class="nx">MyCounter</span><span class="p">(</span><span class="mi">0</span><span class="p">))(</span><span class="k">function</span> <span class="p">(</span><span class="nv">$cf</span><span class="p">,</span> <span class="nv">$cnt</span><span class="p">)</span> <span class="p">{</span>
+<span class="linenos">2</span>    <span class="k">echo</span> <span class="s2">&quot;before: &quot;</span> <span class="o">.</span> <span class="nv">$cnt</span><span class="o">-&gt;</span><span class="na">value</span> <span class="o">.</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">;</span>
+<span class="linenos">3</span>    <span class="nx">with</span><span class="p">(</span><span class="nv">$cnt</span><span class="p">)(</span><span class="k">function</span> <span class="p">(</span><span class="nv">$cnt</span><span class="p">)</span> <span class="p">{</span>
+<span class="linenos">4</span>        <span class="k">echo</span> <span class="s2">&quot;in: &quot;</span> <span class="o">.</span> <span class="nv">$cnt</span><span class="o">-&gt;</span><span class="na">value</span> <span class="o">.</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">;</span>
+<span class="linenos">5</span>    <span class="p">});</span>
+<span class="linenos">6</span>    <span class="k">echo</span> <span class="s2">&quot;after: &quot;</span> <span class="o">.</span> <span class="nv">$cnt</span><span class="o">-&gt;</span><span class="na">value</span> <span class="o">.</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">;</span>
+<span class="linenos">7</span><span class="p">});</span>
+</pre></div>
+</div>
+<p>It must be clear, that <code class="docutils literal notranslate"><span class="pre">MyContextFactory</span></code> is inactive in the outer
+<code class="docutils literal notranslate"><span class="pre">with()</span></code> (line 1). It only works when entering/exiting inner contexts (line 3
+in the above snippet).</p>
+<p>Following is the output from our example</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span>before: 0
+<span class="linenos">2</span>MyCounterManager::enterContext()
+<span class="linenos">3</span>in: 1
+<span class="linenos">4</span>MyCounterManager::exitContext()
+<span class="linenos">5</span>after: 0
+</pre></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="custom_context_manager.html" class="btn btn-neutral float-left" title="3.5. Custom Context Managers" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="multiple_arguments.html" class="btn btn-neutral float-right" title="3.7. Multiple context arguments" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Paweł Tomulik.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

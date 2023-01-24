@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>3.4. Trivial Value Wrapper &mdash; PhpTailors Libraries  documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/custom.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script integrity="sha384-vtXRMe3mGCbOeY7l30aIg8H9p3GdeSe4IFlP6G8JMa7o7lXvnz3GFKzPxzJdPfGK" src="../../_static/jquery.js"></script>
+        <script integrity="sha384-lSZeSIVKp9myfKbDQ3GkN/KHjUc+mzg17VKDN4Y2kUeBSJioB9QSM639vM9fuY//" src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="3.5. Custom Context Managers" href="custom_context_manager.html" />
+    <link rel="prev" title="3.1. Installation" href="intro.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            PhpTailors Libraries
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Table of Contents</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../install.html">1. Installing PhpTailors Libraries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../singleton-library/index.html">2. Singleton Library</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">3. Context Library</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="intro.html">3.1. Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="intro.html#basic-usage">3.2. Basic Usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="intro.html#simple-example">3.3. Simple Example</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">3.4. Trivial Value Wrapper</a></li>
+<li class="toctree-l2"><a class="reference internal" href="custom_context_manager.html">3.5. Custom Context Managers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="context_factories.html">3.6. Context Factories</a></li>
+<li class="toctree-l2"><a class="reference internal" href="multiple_arguments.html">3.7. Multiple context arguments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="exception_handling.html">3.8. Exception Handling</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../error-library/index.html">4. Error Library</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">PhpTailors Libraries</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html"><span class="section-number">3. </span>Context Library</a></li>
+      <li class="breadcrumb-item active"><span class="section-number">3.4. </span>Trivial Value Wrapper</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/packages/context-library/trivial_value_wrapper.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="trivial-value-wrapper">
+<span id="context-library-trivial-value-wrapper"></span><span id="index-0"></span><h1><span class="section-number">3.4. </span>Trivial Value Wrapper<a class="headerlink" href="#trivial-value-wrapper" title="Permalink to this heading"></a></h1>
+<p>The <code class="docutils literal notranslate"><a class="reference external" href="/api/Tailors/Lib/Context/TrivialValueWrapper.html" title="Tailors\Lib\Context\TrivialValueWrapper"><span class="pre">TrivialValueWrapper</span></a></code> class is a dummy
+context manager, which only passes value to user-provided callback. This is
+also a default context manager used for types/values not recognized by the
+context library. The following two examples are actually equivalent.</p>
+<ul>
+<li><p>explicitly used <code class="docutils literal notranslate"><a class="reference external" href="/api/Tailors/Lib/Context/TrivialValueWrapper.html" title="Tailors\Lib\Context\TrivialValueWrapper"><span class="pre">TrivialValueWrapper</span></a></code>:</p>
+<blockquote>
+<div><div class="highlight-php notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="nx">with</span><span class="p">(</span><span class="k">new</span> <span class="nx">TrivialValueWrapper</span><span class="p">(</span><span class="s1">&#39;argument value&#39;</span><span class="p">))(</span><span class="k">function</span> <span class="p">(</span><span class="nx">string</span> <span class="nv">$value</span><span class="p">)</span> <span class="p">{</span>
+<span class="linenos">2</span>    <span class="k">echo</span> <span class="nv">$value</span> <span class="o">.</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">;</span>
+<span class="linenos">3</span><span class="p">});</span>
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+<li><p><code class="docutils literal notranslate"><a class="reference external" href="/api/Tailors/Lib/Context/TrivialValueWrapper.html" title="Tailors\Lib\Context\TrivialValueWrapper"><span class="pre">TrivialValueWrapper</span></a></code> used internally as a
+fallback</p>
+<blockquote>
+<div><div class="highlight-php notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="nx">with</span><span class="p">(</span><span class="s1">&#39;argument value&#39;</span><span class="p">)(</span><span class="k">function</span> <span class="p">(</span><span class="nx">string</span> <span class="nv">$value</span><span class="p">)</span> <span class="p">{</span>
+<span class="linenos">2</span>    <span class="k">echo</span> <span class="nv">$value</span> <span class="o">.</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">;</span>
+<span class="linenos">3</span><span class="p">});</span>
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+</ul>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="intro.html" class="btn btn-neutral float-left" title="3.1. Installation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="custom_context_manager.html" class="btn btn-neutral float-right" title="3.5. Custom Context Managers" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Paweł Tomulik.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

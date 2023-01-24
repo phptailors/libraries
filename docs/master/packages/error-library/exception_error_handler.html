@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>4.5. Exception Error Handlers &mdash; PhpTailors Libraries  documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/custom.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script integrity="sha384-vtXRMe3mGCbOeY7l30aIg8H9p3GdeSe4IFlP6G8JMa7o7lXvnz3GFKzPxzJdPfGK" src="../../_static/jquery.js"></script>
+        <script integrity="sha384-lSZeSIVKp9myfKbDQ3GkN/KHjUc+mzg17VKDN4Y2kUeBSJioB9QSM639vM9fuY//" src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="4.6. Caller Error Handlers" href="caller_error_handler.html" />
+    <link rel="prev" title="4.4. Custom Error Handlers" href="custom_error_handler.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            PhpTailors Libraries
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Table of Contents</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../install.html">1. Installing PhpTailors Libraries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../singleton-library/index.html">2. Singleton Library</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../context-library/index.html">3. Context Library</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">4. Error Library</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="intro.html">4.1. Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="intro.html#purpose">4.2. Purpose</a></li>
+<li class="toctree-l2"><a class="reference internal" href="intro.html#basic-example">4.3. Basic Example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="custom_error_handler.html">4.4. Custom Error Handlers</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">4.5. Exception Error Handlers</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#a-simple-example-with-exceptionerrorhandler">A simple example with ExceptionErrorHandler</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="caller_error_handler.html">4.6. Caller Error Handlers</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">PhpTailors Libraries</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html"><span class="section-number">4. </span>Error Library</a></li>
+      <li class="breadcrumb-item active"><span class="section-number">4.5. </span>Exception Error Handlers</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/packages/error-library/exception_error_handler.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="exception-error-handlers">
+<span id="error-library-exception-error-handlers"></span><span id="index-0"></span><h1><span class="section-number">4.5. </span>Exception Error Handlers<a class="headerlink" href="#exception-error-handlers" title="Permalink to this heading"></a></h1>
+<p><a class="reference internal" href="#error-library-exception-error-handlers"><span class="std std-ref">Exception Error Handlers</span></a> are error handlers that throw predefined
+exceptions in response to PHP errors. <a class="reference internal" href="index.html#error-library"><span class="std std-ref">Error Library</span></a> provides
+<code class="docutils literal notranslate"><a class="reference external" href="/api/Tailors/Lib/Error/ExceptionErrorHandler.html" title="Tailors\Lib\Error\ExceptionErrorHandler"><span class="pre">ExceptionErrorHandler</span></a></code> class to easily create
+exception-throwing error handlers.</p>
+<section id="a-simple-example-with-exceptionerrorhandler">
+<h2>A simple example with ExceptionErrorHandler<a class="headerlink" href="#a-simple-example-with-exceptionerrorhandler" title="Permalink to this heading"></a></h2>
+<p>In this example we’ll set up a context to throw <code class="docutils literal notranslate"><a class="reference external" href="https://www.php.net/manual/en/class.\errorexception.php" title="\ErrorException"><span class="pre">\ErrorException</span></a></code> in
+response to PHP errors of severity <code class="docutils literal notranslate"><span class="pre">E_USER_ERROR</span></code>. We’ll use following two
+functions</p>
+<div class="highlight-php notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="k">use</span> <span class="k">function</span> <span class="nf">Tailors\Lib\Context\with</span><span class="p">;</span>
+<span class="linenos">2</span><span class="k">use</span> <span class="k">function</span> <span class="nf">Tailors\Lib\Error\exceptionErrorHandler</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><a class="reference external" href="/api/Tailors/Lib/Error.html#function_exceptionErrorHandler" title="Tailors\Lib\Error\exceptionErrorHandler()"><span class="pre">exceptionErrorHandler()</span></a></code> returns new error handler
+which throws a predefined exception. This handler may be enabled for a context
+by passing it as an argument to <code class="docutils literal notranslate"><a class="reference external" href="/api/Tailors/Lib/Context.html#function_with" title="Tailors\Lib\Context\with()"><span class="pre">with()</span></a></code>. All the
+necessary code is shown in the following snippet</p>
+<div class="highlight-php notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="k">try</span> <span class="p">{</span>
+<span class="linenos">2</span>    <span class="nx">with</span><span class="p">(</span><span class="nx">exceptionErrorHandler</span><span class="p">(</span><span class="nx">\ErrorException</span><span class="o">::</span><span class="na">class</span><span class="p">))(</span><span class="k">function</span> <span class="p">(</span><span class="nv">$eh</span><span class="p">)</span> <span class="p">{</span>
+<span class="linenos">3</span>        <span class="o">@</span><span class="nb">trigger_error</span><span class="p">(</span><span class="s1">&#39;boom!&#39;</span><span class="p">,</span> <span class="nx">E_USER_ERROR</span><span class="p">);</span>
+<span class="linenos">4</span>    <span class="p">});</span>
+<span class="linenos">5</span><span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">\ErrorException</span> <span class="nv">$e</span><span class="p">)</span> <span class="p">{</span>
+<span class="linenos">6</span>    <span class="nb">fprintf</span><span class="p">(</span><span class="nx">STDERR</span><span class="p">,</span> <span class="s2">&quot;%s:%d:ErrorException:%s</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="nb">basename</span><span class="p">(</span><span class="nv">$e</span><span class="o">-&gt;</span><span class="na">getFile</span><span class="p">()),</span> <span class="nv">$e</span><span class="o">-&gt;</span><span class="na">getLine</span><span class="p">(),</span> <span class="nv">$e</span><span class="o">-&gt;</span><span class="na">getMessage</span><span class="p">());</span>
+<span class="linenos">7</span>    <span class="k">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+<span class="linenos">8</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>The output from our example is like</p>
+<ul>
+<li><p>stderr</p>
+<blockquote>
+<div><div class="highlight-none notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span>simple_exception_thrower.php:11:ErrorException:boom!
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="custom_error_handler.html" class="btn btn-neutral float-left" title="4.4. Custom Error Handlers" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="caller_error_handler.html" class="btn btn-neutral float-right" title="4.6. Caller Error Handlers" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Paweł Tomulik.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
