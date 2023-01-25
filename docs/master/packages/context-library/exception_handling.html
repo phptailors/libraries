@@ -103,14 +103,14 @@ illustrate this, we’ll slightly modify the example from the section named
 managers for all context arguments</p>
 <div class="highlight-php notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="k">final</span> <span class="k">class</span> <span class="nc">MyInt</span> <span class="k">implements</span> <span class="nx">ContextManagerInterface</span>
 <span class="linenos"> 2</span><span class="p">{</span>
-<span class="linenos"> 3</span>    <span class="k">public</span> <span class="nv">$value</span><span class="p">;</span>
+<span class="linenos"> 3</span>    <span class="k">public</span> <span class="nx">int</span> <span class="nv">$value</span><span class="p">;</span>
 <span class="linenos"> 4</span>
 <span class="linenos"> 5</span>    <span class="k">public</span> <span class="k">function</span> <span class="fm">__construct</span><span class="p">(</span><span class="nx">int</span> <span class="nv">$value</span><span class="p">)</span>
 <span class="linenos"> 6</span>    <span class="p">{</span>
 <span class="linenos"> 7</span>        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">value</span> <span class="o">=</span> <span class="nv">$value</span><span class="p">;</span>
 <span class="linenos"> 8</span>    <span class="p">}</span>
 <span class="linenos"> 9</span>
-<span class="linenos">10</span>    <span class="k">public</span> <span class="k">function</span> <span class="nf">enterContext</span><span class="p">()</span>
+<span class="linenos">10</span>    <span class="k">public</span> <span class="k">function</span> <span class="nf">enterContext</span><span class="p">()</span><span class="o">:</span> <span class="nx">int</span>
 <span class="linenos">11</span>    <span class="p">{</span>
 <span class="linenos">12</span>        <span class="k">echo</span> <span class="s2">&quot;enter: &quot;</span> <span class="o">.</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">value</span> <span class="o">.</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">;</span>
 <span class="linenos">13</span>        <span class="k">return</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">value</span><span class="p">;</span>
@@ -178,8 +178,8 @@ propagated to the context caller). To demonstrate this, let’s consider the
 following modified <code class="docutils literal notranslate"><span class="pre">MyInt</span></code> class</p>
 <div class="highlight-php notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="k">final</span> <span class="k">class</span> <span class="nc">MyInt</span> <span class="k">implements</span> <span class="nx">ContextManagerInterface</span>
 <span class="linenos"> 2</span><span class="p">{</span>
-<span class="linenos"> 3</span>    <span class="k">public</span> <span class="nv">$value</span><span class="p">;</span>
-<span class="linenos"> 4</span>    <span class="k">public</span> <span class="nv">$handle</span><span class="p">;</span>
+<span class="linenos"> 3</span>    <span class="k">public</span> <span class="nx">int</span> <span class="nv">$value</span><span class="p">;</span>
+<span class="linenos"> 4</span>    <span class="k">public</span> <span class="nx">bool</span> <span class="nv">$handle</span><span class="p">;</span>
 <span class="linenos"> 5</span>
 <span class="linenos"> 6</span>    <span class="k">public</span> <span class="k">function</span> <span class="fm">__construct</span><span class="p">(</span><span class="nx">int</span> <span class="nv">$value</span><span class="p">,</span> <span class="nx">bool</span> <span class="nv">$handle</span> <span class="o">=</span> <span class="k">false</span><span class="p">)</span>
 <span class="linenos"> 7</span>    <span class="p">{</span>
@@ -187,7 +187,7 @@ following modified <code class="docutils literal notranslate"><span class="pre">
 <span class="linenos"> 9</span>        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">handle</span> <span class="o">=</span> <span class="nv">$handle</span><span class="p">;</span>
 <span class="linenos">10</span>    <span class="p">}</span>
 <span class="linenos">11</span>
-<span class="linenos">12</span>    <span class="k">public</span> <span class="k">function</span> <span class="nf">enterContext</span><span class="p">()</span>
+<span class="linenos">12</span>    <span class="k">public</span> <span class="k">function</span> <span class="nf">enterContext</span><span class="p">()</span><span class="o">:</span> <span class="nx">int</span>
 <span class="linenos">13</span>    <span class="p">{</span>
 <span class="linenos">14</span>        <span class="k">echo</span> <span class="s2">&quot;enter: &quot;</span> <span class="o">.</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">value</span> <span class="o">.</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">;</span>
 <span class="linenos">15</span>        <span class="k">return</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">value</span><span class="p">;</span>

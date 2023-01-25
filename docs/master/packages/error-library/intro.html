@@ -112,7 +112,7 @@ code.</p>
 problematic function to a no-op error handler. The example uses the
 following functions</p>
 <div class="highlight-php notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="k">use</span> <span class="k">function</span> <span class="nf">Tailors\Lib\Context\with</span><span class="p">;</span>
-<span class="linenos">2</span><span class="k">use</span> <span class="k">function</span> <span class="nf">Tailors\Lib\Error\emptyErrorHandler</span><span class="p">;</span>
+<span class="linenos">2</span><span class="k">use</span> <span class="k">function</span> <span class="nf">Tailors\Lib\Error\empty_error_handler</span><span class="p">;</span>
 </pre></div>
 </div>
 <p>and the problematic function is</p>
@@ -128,7 +128,7 @@ disables error messages, but the handler is still invoked. We can prevent this
 by temporarily replacing original handler with the empty handler. This is
 easily achieved with <span class="xref std std-ref">Contexts</span> and
 <code class="docutils literal notranslate"><a class="reference external" href="/api/Tailors/Lib/Error/EmptyErrorHandler.html" title="Tailors\Lib\Error\EmptyErrorHandler"><span class="pre">EmptyErrorHandler</span></a></code>.</p>
-<div class="highlight-php notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="nx">with</span><span class="p">(</span><span class="nx">emptyErrorHandler</span><span class="p">())(</span><span class="k">function</span> <span class="p">(</span><span class="nv">$eh</span><span class="p">)</span> <span class="p">{</span>
+<div class="highlight-php notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="nx">with</span><span class="p">(</span><span class="nx">empty_error_handler</span><span class="p">())(</span><span class="k">function</span> <span class="p">(</span><span class="nv">$eh</span><span class="p">)</span> <span class="p">{</span>
 <span class="linenos">2</span>    <span class="nx">trouble</span><span class="p">();</span>
 <span class="linenos">3</span><span class="p">});</span>
 </pre></div>

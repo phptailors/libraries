@@ -99,15 +99,15 @@ exception-throwing error handlers.</p>
 response to PHP errors of severity <code class="docutils literal notranslate"><span class="pre">E_USER_ERROR</span></code>. We’ll use following two
 functions</p>
 <div class="highlight-php notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="k">use</span> <span class="k">function</span> <span class="nf">Tailors\Lib\Context\with</span><span class="p">;</span>
-<span class="linenos">2</span><span class="k">use</span> <span class="k">function</span> <span class="nf">Tailors\Lib\Error\exceptionErrorHandler</span><span class="p">;</span>
+<span class="linenos">2</span><span class="k">use</span> <span class="k">function</span> <span class="nf">Tailors\Lib\Error\exception_error_handler</span><span class="p">;</span>
 </pre></div>
 </div>
-<p>The <code class="docutils literal notranslate"><a class="reference external" href="/api/Tailors/Lib/Error.html#function_exceptionErrorHandler" title="Tailors\Lib\Error\exceptionErrorHandler()"><span class="pre">exceptionErrorHandler()</span></a></code> returns new error handler
+<p>The <code class="docutils literal notranslate"><a class="reference external" href="/api/Tailors/Lib/Error.html#function_exception_error_handler" title="Tailors\Lib\Error\exception_error_handler()"><span class="pre">exception_error_handler()</span></a></code> returns new error handler
 which throws a predefined exception. This handler may be enabled for a context
 by passing it as an argument to <code class="docutils literal notranslate"><a class="reference external" href="/api/Tailors/Lib/Context.html#function_with" title="Tailors\Lib\Context\with()"><span class="pre">with()</span></a></code>. All the
 necessary code is shown in the following snippet</p>
 <div class="highlight-php notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="k">try</span> <span class="p">{</span>
-<span class="linenos">2</span>    <span class="nx">with</span><span class="p">(</span><span class="nx">exceptionErrorHandler</span><span class="p">(</span><span class="nx">\ErrorException</span><span class="o">::</span><span class="na">class</span><span class="p">))(</span><span class="k">function</span> <span class="p">(</span><span class="nv">$eh</span><span class="p">)</span> <span class="p">{</span>
+<span class="linenos">2</span>    <span class="nx">with</span><span class="p">(</span><span class="nx">exception_error_handler</span><span class="p">(</span><span class="nx">\ErrorException</span><span class="o">::</span><span class="na">class</span><span class="p">))(</span><span class="k">function</span> <span class="p">(</span><span class="nv">$eh</span><span class="p">)</span> <span class="p">{</span>
 <span class="linenos">3</span>        <span class="o">@</span><span class="nb">trigger_error</span><span class="p">(</span><span class="s1">&#39;boom!&#39;</span><span class="p">,</span> <span class="nx">E_USER_ERROR</span><span class="p">);</span>
 <span class="linenos">4</span>    <span class="p">});</span>
 <span class="linenos">5</span><span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">\ErrorException</span> <span class="nv">$e</span><span class="p">)</span> <span class="p">{</span>

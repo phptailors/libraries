@@ -100,7 +100,7 @@ function’s caller or its caller’s caller, and so on.</p>
 <h2>Simple example with Caller Error Handler<a class="headerlink" href="#simple-example-with-caller-error-handler" title="Permalink to this heading"></a></h2>
 <p>The example uses the following symbols</p>
 <div class="highlight-php notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="k">use</span> <span class="k">function</span> <span class="nf">Tailors\Lib\Context\with</span><span class="p">;</span>
-<span class="linenos">2</span><span class="k">use</span> <span class="k">function</span> <span class="nf">Tailors\Lib\Error\callerErrorHandler</span><span class="p">;</span>
+<span class="linenos">2</span><span class="k">use</span> <span class="k">function</span> <span class="nf">Tailors\Lib\Error\caller_error_handler</span><span class="p">;</span>
 </pre></div>
 </div>
 <p>Our error handler will just output <code class="docutils literal notranslate"><span class="pre">$file</span></code> and <code class="docutils literal notranslate"><span class="pre">$line</span></code> it received from
@@ -117,7 +117,7 @@ caller for this error. This may be easily done with the
 <code class="docutils literal notranslate"><a class="reference external" href="/api/Tailors/Lib/Error/CallerErrorHandler.html" title="Tailors\Lib\Error\CallerErrorHandler"><span class="pre">CallerErrorHandler</span></a></code> class.</p>
 <div class="highlight-php notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="k">function</span> <span class="nf">trigger</span><span class="p">()</span>
 <span class="linenos">2</span><span class="p">{</span>
-<span class="linenos">3</span>    <span class="nx">with</span><span class="p">(</span><span class="nx">callerErrorHandler</span><span class="p">(</span><span class="nx">handler</span><span class="o">::</span><span class="na">class</span><span class="p">))(</span><span class="k">function</span> <span class="p">(</span><span class="nv">$eh</span><span class="p">)</span> <span class="p">{</span>
+<span class="linenos">3</span>    <span class="nx">with</span><span class="p">(</span><span class="nx">caller_error_handler</span><span class="p">(</span><span class="nx">handler</span><span class="o">::</span><span class="na">class</span><span class="p">))(</span><span class="k">function</span> <span class="p">(</span><span class="nv">$eh</span><span class="p">)</span> <span class="p">{</span>
 <span class="linenos">4</span>        <span class="nb">printf</span><span class="p">(</span><span class="s2">&quot;trigger_error() called at: %s: %d</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="nb">basename</span><span class="p">(</span><span class="no">__file__</span><span class="p">),</span> <span class="no">__line__</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
 <span class="linenos">5</span>        <span class="o">@</span><span class="nb">trigger_error</span><span class="p">(</span><span class="s2">&quot;error message&quot;</span><span class="p">);</span>
 <span class="linenos">6</span>    <span class="p">});</span>
@@ -143,7 +143,7 @@ error occured at caller_error_handler.php: 28: (error message)
 <h2>Exception-throwing Caller Error Handler<a class="headerlink" href="#exception-throwing-caller-error-handler" title="Permalink to this heading"></a></h2>
 <p>The example uses the following symbols</p>
 <div class="highlight-php notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="k">use</span> <span class="k">function</span> <span class="nf">Tailors\Lib\Context\with</span><span class="p">;</span>
-<span class="linenos">2</span><span class="k">use</span> <span class="k">function</span> <span class="nf">Tailors\Lib\Error\callerExceptionErrorHandler</span><span class="p">;</span>
+<span class="linenos">2</span><span class="k">use</span> <span class="k">function</span> <span class="nf">Tailors\Lib\Error\caller_exception_error_handler</span><span class="p">;</span>
 </pre></div>
 </div>
 <p>We’re now going to implement a function which triggers an error, but blames its
@@ -151,7 +151,7 @@ caller for this error. This may be easily done with the
 <code class="docutils literal notranslate"><a class="reference external" href="/api/Tailors/Lib/Error/CallerExceptionErrorHandler.html" title="Tailors\Lib\Error\CallerExceptionErrorHandler"><span class="pre">CallerExceptionErrorHandler</span></a></code> class.</p>
 <div class="highlight-php notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="k">function</span> <span class="nf">trigger</span><span class="p">()</span>
 <span class="linenos">2</span><span class="p">{</span>
-<span class="linenos">3</span>    <span class="nx">with</span><span class="p">(</span><span class="nx">callerExceptionErrorHandler</span><span class="p">(</span><span class="nx">\ErrorException</span><span class="o">::</span><span class="na">class</span><span class="p">))(</span><span class="k">function</span> <span class="p">(</span><span class="nv">$eh</span><span class="p">)</span> <span class="p">{</span>
+<span class="linenos">3</span>    <span class="nx">with</span><span class="p">(</span><span class="nx">caller_exception_error_handler</span><span class="p">(</span><span class="nx">\ErrorException</span><span class="o">::</span><span class="na">class</span><span class="p">))(</span><span class="k">function</span> <span class="p">(</span><span class="nv">$eh</span><span class="p">)</span> <span class="p">{</span>
 <span class="linenos">4</span>        <span class="nb">printf</span><span class="p">(</span><span class="s2">&quot;trigger_error() called at: %s: %d</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="nb">basename</span><span class="p">(</span><span class="no">__file__</span><span class="p">),</span> <span class="no">__line__</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
 <span class="linenos">5</span>        <span class="o">@</span><span class="nb">trigger_error</span><span class="p">(</span><span class="s2">&quot;error message&quot;</span><span class="p">);</span>
 <span class="linenos">6</span>    <span class="p">});</span>

@@ -138,7 +138,7 @@ decrement when exiting. Finally, we’ll provide <em>Context Factory</em> named
 <p>Our counter class will be as simple as</p>
 <div class="highlight-php notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="k">final</span> <span class="k">class</span> <span class="nc">MyCounter</span>
 <span class="linenos">2</span><span class="p">{</span>
-<span class="linenos">3</span>    <span class="k">public</span> <span class="nv">$value</span><span class="p">;</span>
+<span class="linenos">3</span>    <span class="k">public</span> <span class="nx">int</span> <span class="nv">$value</span><span class="p">;</span>
 <span class="linenos">4</span>
 <span class="linenos">5</span>    <span class="k">public</span> <span class="k">function</span> <span class="fm">__construct</span><span class="p">(</span><span class="nx">int</span> <span class="nv">$value</span><span class="p">)</span>
 <span class="linenos">6</span>    <span class="p">{</span>
@@ -151,14 +151,14 @@ decrement when exiting. Finally, we’ll provide <em>Context Factory</em> named
 short messages when entering/exiting a context.</p>
 <div class="highlight-php notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="k">final</span> <span class="k">class</span> <span class="nc">MyCounterManager</span> <span class="k">implements</span> <span class="nx">ContextManagerInterface</span>
 <span class="linenos"> 2</span><span class="p">{</span>
-<span class="linenos"> 3</span>    <span class="k">public</span> <span class="nv">$counter</span><span class="p">;</span>
+<span class="linenos"> 3</span>    <span class="k">public</span> <span class="nx">MyCounter</span> <span class="nv">$counter</span><span class="p">;</span>
 <span class="linenos"> 4</span>
 <span class="linenos"> 5</span>    <span class="k">public</span> <span class="k">function</span> <span class="fm">__construct</span><span class="p">(</span><span class="nx">MyCounter</span> <span class="nv">$counter</span><span class="p">)</span>
 <span class="linenos"> 6</span>    <span class="p">{</span>
 <span class="linenos"> 7</span>        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">counter</span> <span class="o">=</span> <span class="nv">$counter</span><span class="p">;</span>
 <span class="linenos"> 8</span>    <span class="p">}</span>
 <span class="linenos"> 9</span>
-<span class="linenos">10</span>    <span class="k">public</span> <span class="k">function</span> <span class="nf">enterContext</span><span class="p">()</span>
+<span class="linenos">10</span>    <span class="k">public</span> <span class="k">function</span> <span class="nf">enterContext</span><span class="p">()</span><span class="o">:</span> <span class="nx">MyCounter</span>
 <span class="linenos">11</span>    <span class="p">{</span>
 <span class="linenos">12</span>        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">counter</span><span class="o">-&gt;</span><span class="na">value</span> <span class="o">++</span><span class="p">;</span>
 <span class="linenos">13</span>        <span class="k">print</span><span class="p">(</span><span class="s2">&quot;MyCounterManager::enterContext()</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">);</span>
