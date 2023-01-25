@@ -2,7 +2,7 @@
 /* [code] */
 /* [use] */
 use function Tailors\Lib\Context\with;
-use function Tailors\Lib\Error\callerErrorHandler;
+use function Tailors\Lib\Error\caller_error_handler;
 /* [/use] */
 
 /* [handler] */
@@ -16,7 +16,7 @@ function handler(int $severity, string $message, string $file, int $line) : bool
 /* [trigger] */
 function trigger()
 {
-    with(callerErrorHandler(handler::class))(function ($eh) {
+    with(caller_error_handler(handler::class))(function ($eh) {
         printf("trigger_error() called at: %s: %d\n", basename(__file__), __line__ + 1);
         @trigger_error("error message");
     });

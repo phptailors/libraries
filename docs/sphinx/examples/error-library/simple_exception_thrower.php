@@ -2,12 +2,12 @@
 /* [code] */
 /* [use] */
 use function Tailors\Lib\Context\with;
-use function Tailors\Lib\Error\exceptionErrorHandler;
+use function Tailors\Lib\Error\exception_error_handler;
 /* [/use] */
 
 /* [try-catch] */
 try {
-    with(exceptionErrorHandler(\ErrorException::class))(function ($eh) {
+    with(exception_error_handler(\ErrorException::class))(function ($eh) {
         @trigger_error('boom!', E_USER_ERROR);
     });
 } catch (\ErrorException $e) {

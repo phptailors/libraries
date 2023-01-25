@@ -43,6 +43,10 @@ return $config
         // needed for psalm
         'phpdoc_to_comment' => false,
         'no_superfluous_phpdoc_tags' => false,
+        'ordered_imports' => [
+            'imports_order' => ['const', 'class', 'function'],
+            'sort_algorithm' => 'alpha',
+        ]
     ])
 ;
 // vim: syntax=php sw=4 ts=4 et:

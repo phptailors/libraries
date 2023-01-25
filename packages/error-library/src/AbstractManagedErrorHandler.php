@@ -16,8 +16,6 @@ abstract class AbstractManagedErrorHandler extends AbstractErrorHandler implemen
 {
     use ContextManagerTrait;
 
-    // see: https://github.com/vimeo/psalm/issues/4210
-
     /**
      * Actual error handler function.
      *

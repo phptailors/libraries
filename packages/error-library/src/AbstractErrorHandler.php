@@ -31,7 +31,7 @@ abstract class AbstractErrorHandler implements ErrorHandlerInterface
      * Returns the integer defining error types that are captured by the error
      * handler.
      */
-    public function getErrorTypes(): int
+    final public function getErrorTypes(): int
     {
         return $this->errorTypes;
     }

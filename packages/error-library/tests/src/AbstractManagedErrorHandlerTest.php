@@ -6,9 +6,13 @@ namespace Tailors\Tests\Lib\Error;
 
 use PHPUnit\Framework\TestCase;
 use Tailors\Lib\Context\ContextManagerInterface;
+use Tailors\Lib\Error\AbstractErrorHandler;
 use Tailors\Lib\Error\AbstractManagedErrorHandler;
+use Tailors\Lib\Error\ContextManagerTrait;
 use Tailors\Lib\Error\ErrorHandlerInterface;
+use Tailors\PHPUnit\ExtendsClassTrait;
 use Tailors\PHPUnit\ImplementsInterfaceTrait;
+use Tailors\PHPUnit\UsesTraitTrait;
 
 /**
  * @author Paweł Tomulik <pawel@tomulik.pl>
@@ -21,6 +25,16 @@ final class AbstractManagedErrorHandlerTest extends TestCase
 {
     use \phpmock\phpunit\PHPMock;
     use ImplementsInterfaceTrait;
+    use ExtendsClassTrait;
+    use UsesTraitTrait;
+
+    /**
+     * @psalm-suppress MissingThrowsDocblock
+     */
+    public function testExtendsAbstractErrorHandler(): void
+    {
+        $this->assertExtendsClass(AbstractErrorHandler::class, AbstractManagedErrorHandler::class);
+    }
 
     /**
      * @psalm-suppress MissingThrowsDocblock
@@ -36,6 +50,14 @@ final class AbstractManagedErrorHandlerTest extends TestCase
     public function testImplementsContextManagerInterface(): void
     {
         $this->assertImplementsInterface(ContextManagerInterface::class, AbstractManagedErrorHandler::class);
+    }
+
+    /**
+     * @psalm-suppress MissingThrowsDocblock
+     */
+    public function testUsesContextManagerTrait(): void
+    {
+        $this->assertUsesTrait(ContextManagerTrait::class, AbstractManagedErrorHandler::class);
     }
 
     /**

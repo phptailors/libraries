@@ -5,10 +5,9 @@ namespace Tailors\Tests\Lib\Context;
 
 use PHPUnit\Framework\TestCase;
 use Tailors\Lib\Context\TrivialValueWrapper;
+use Tailors\Lib\Context\WithContextExecutor;
 
 use function Tailors\Lib\Context\with;
-
-use Tailors\Lib\Context\WithContextExecutor;
 
 /**
  * @author Paweł Tomulik <pawel@tomulik.pl>

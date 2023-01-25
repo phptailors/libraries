@@ -14,6 +14,8 @@ use Tailors\Testing\Lib\Context\GetContextFunctionMockTrait;
  * @author Paweł Tomulik <pawel@tomulik.pl>
  *
  * @covers \Tailors\Lib\Context\ResourceContextManager
+ * @covers \Tailors\Testing\Lib\Context\ExpectFunctionOnceWillReturnTrait
+ * @covers \Tailors\Testing\Lib\Context\GetContextFunctionMockTrait
  *
  * @internal
  */

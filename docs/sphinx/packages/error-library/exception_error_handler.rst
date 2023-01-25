@@ -24,7 +24,7 @@ functions
    :start-after: [use]
    :end-before: [/use]
 
-The :func:`Tailors\\Lib\\Error\\exceptionErrorHandler` returns new error handler
+The :func:`Tailors\\Lib\\Error\\exception_error_handler` returns new error handler
 which throws a predefined exception. This handler may be enabled for a context
 by passing it as an argument to :func:`Tailors\\Lib\\Context\\with`. All the
 necessary code is shown in the following snippet

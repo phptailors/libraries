@@ -5,12 +5,11 @@ declare(strict_types=1);
 namespace Tailors\Tests\Lib\Error;
 
 use PHPUnit\Framework\TestCase;
-
-use function Tailors\Lib\Context\with;
-
 use Tailors\Lib\Error\AbstractManagedErrorHandler;
 use Tailors\Lib\Error\ExceptionErrorHandler;
 use Tailors\PHPUnit\ExtendsClassTrait;
+
+use function Tailors\Lib\Context\with;
 
 /**
  * @author Paweł Tomulik <pawel@tomulik.pl>

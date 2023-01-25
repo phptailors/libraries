@@ -2,7 +2,7 @@
 /* [code] */
 /* [use] */
 use function Tailors\Lib\Context\with;
-use function Tailors\Lib\Error\errorHandler;
+use function Tailors\Lib\Error\error_handler;
 /* [/use] */
 
 /* [watch] */
@@ -18,7 +18,7 @@ function watch(int $severity, string $message, string $file, int $line) : bool
 /* [/watch] */
 
 /* [test] */
-with(errorHandler(watch::class))(function ($eh) {
+with(error_handler(watch::class))(function ($eh) {
     @trigger_error('the weather is nice', E_USER_NOTICE);
     @trigger_error('rain is coming', E_USER_WARNING);
 });

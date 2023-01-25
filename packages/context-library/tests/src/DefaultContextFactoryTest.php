@@ -19,6 +19,8 @@ use Tailors\Testing\Lib\Singleton\AssertIsSingletonTrait;
  * @author Paweł Tomulik <pawel@tomulik.pl>
  *
  * @covers \Tailors\Lib\Context\DefaultContextFactory
+ * @covers \Tailors\Testing\Lib\Context\ExpectFunctionOnceWillReturnTrait
+ * @covers \Tailors\Testing\Lib\Context\GetContextFunctionMockTrait
  *
  * @internal
  */

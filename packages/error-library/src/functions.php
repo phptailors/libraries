@@ -7,7 +7,7 @@ namespace Tailors\Lib\Error;
 /**
  * A shortcut to EmptyErrorHandler::getInstance().
  */
-function emptyErrorHandler(): EmptyErrorHandler
+function empty_error_handler(): EmptyErrorHandler
 {
     return EmptyErrorHandler::getInstance();
 }
@@ -21,7 +21,7 @@ function emptyErrorHandler(): EmptyErrorHandler
  *
  * @psalm-param callable(int,string,string,int):bool $errorHandler
  */
-function errorHandler(callable $errorHandler, int $errorTypes = E_ALL | E_STRICT): ErrorHandler
+function error_handler(callable $errorHandler, int $errorTypes = E_ALL | E_STRICT): ErrorHandler
 {
     return new ErrorHandler($errorHandler, $errorTypes);
 }
@@ -47,7 +47,7 @@ function errorHandler(callable $errorHandler, int $errorTypes = E_ALL | E_STRICT
  *
  * @psalm-param string|callable(int,string,string,int):\Exception $arg
  */
-function exceptionErrorHandler(string|callable $arg = null, int $errorTypes = E_ALL | E_STRICT): ExceptionErrorHandler
+function exception_error_handler(string|callable $arg = null, int $errorTypes = E_ALL | E_STRICT): ExceptionErrorHandler
 {
     $exceptionGenerator = ExceptionErrorHandler::makeExceptionGenerator($arg);
 
@@ -63,7 +63,7 @@ function exceptionErrorHandler(string|callable $arg = null, int $errorTypes = E_
  *
  * @psalm-param callable(int,string,string,int):bool $errorHandler
  */
-function callerErrorHandler(
+function caller_error_handler(
     callable $errorHandler,
     int $distance = 1,
     int $errorTypes = E_ALL | E_STRICT
@@ -93,7 +93,7 @@ function callerErrorHandler(
  *
  * @psalm-param string|callable(int,string,string,int):\Exception $arg
  */
-function callerExceptionErrorHandler(
+function caller_exception_error_handler(
     string|callable $arg = null,
     int $distance = 1,
     int $errorTypes = E_ALL | E_STRICT

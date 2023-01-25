@@ -8,14 +8,14 @@ use function Tailors\Lib\Context\with;
 /* [MyValueWrapper] */
 final class MyValueWrapper implements ContextManagerInterface
 {
-    protected $value;
+    protected string $value;
 
     public function __construct(string $value)
     {
         $this->value = $value;
     }
 
-    public function enterContext()
+    public function enterContext(): string
     {
         echo "MyValueWrapper::enter()\n";
         return $this->value;

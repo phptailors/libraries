@@ -6,24 +6,16 @@ namespace Tailors\Tests\Lib\Error;
 
 use PHPUnit\Framework\TestCase;
 use Tailors\Lib\Error\CallerErrorHandler;
-
-use function Tailors\Lib\Error\callerErrorHandler;
-
 use Tailors\Lib\Error\CallerExceptionErrorHandler;
-
-use function Tailors\Lib\Error\callerExceptionErrorHandler;
-
 use Tailors\Lib\Error\EmptyErrorHandler;
-
-use function Tailors\Lib\Error\emptyErrorHandler;
-
 use Tailors\Lib\Error\ErrorHandler;
-
-use function Tailors\Lib\Error\errorHandler;
-
 use Tailors\Lib\Error\ExceptionErrorHandler;
 
-use function Tailors\Lib\Error\exceptionErrorHandler;
+use function Tailors\Lib\Error\caller_error_handler;
+use function Tailors\Lib\Error\caller_exception_error_handler;
+use function Tailors\Lib\Error\empty_error_handler;
+use function Tailors\Lib\Error\error_handler;
+use function Tailors\Lib\Error\exception_error_handler;
 
 /**
  * @author Paweł Tomulik <pawel@tomulik.pl>
@@ -35,17 +27,17 @@ use function Tailors\Lib\Error\exceptionErrorHandler;
 final class FunctionsTest extends TestCase
 {
     /**
-     * @covers \Tailors\Lib\Error\emptyErrorHandler
+     * @covers \Tailors\Lib\Error\empty_error_handler
      *
      * @psalm-suppress MissingThrowsDocblock
      */
     public function testEmptyErrorHandler(): void
     {
-        $this->assertInstanceof(EmptyErrorHandler::class, emptyErrorHandler());
+        $this->assertInstanceof(EmptyErrorHandler::class, empty_error_handler());
     }
 
     /**
-     * @covers \Tailors\Lib\Error\errorHandler
+     * @covers \Tailors\Lib\Error\error_handler
      *
      * @psalm-suppress MissingThrowsDocblock
      */
@@ -54,14 +46,14 @@ final class FunctionsTest extends TestCase
         $func = function (): bool {
             return true;
         };
-        $handler = errorHandler($func);
+        $handler = error_handler($func);
         $this->assertInstanceof(ErrorHandler::class, $handler);
         $this->assertSame($func, $handler->getErrorHandler());
         $this->assertEquals(E_ALL | E_STRICT, $handler->getErrorTypes());
     }
 
     /**
-     * @covers \Tailors\Lib\Error\errorHandler
+     * @covers \Tailors\Lib\Error\error_handler
      *
      * @psalm-suppress MissingThrowsDocblock
      */
@@ -70,20 +62,20 @@ final class FunctionsTest extends TestCase
         $func = function (): bool {
             return true;
         };
-        $handler = errorHandler($func, E_USER_ERROR);
+        $handler = error_handler($func, E_USER_ERROR);
         $this->assertInstanceof(ErrorHandler::class, $handler);
         $this->assertSame($func, $handler->getErrorHandler());
         $this->assertEquals(E_USER_ERROR, $handler->getErrorTypes());
     }
 
     /**
-     * @covers \Tailors\Lib\Error\exceptionErrorHandler
+     * @covers \Tailors\Lib\Error\exception_error_handler
      *
      * @psalm-suppress MissingThrowsDocblock
      */
     public function testExceptionErrorHandlerWithoutArgs(): void
     {
-        $handler = exceptionErrorHandler();
+        $handler = exception_error_handler();
         $this->assertInstanceof(ExceptionErrorHandler::class, $handler);
         $this->assertEquals(E_ALL | E_STRICT, $handler->getErrorTypes());
 
@@ -109,13 +101,13 @@ final class FunctionsTest extends TestCase
     }
 
     /**
-     * @covers \Tailors\Lib\Error\exceptionErrorHandler
+     * @covers \Tailors\Lib\Error\exception_error_handler
      *
      * @psalm-suppress MissingThrowsDocblock
      */
     public function testExceptionErrorHandlerWithClass(): void
     {
-        $handler = exceptionErrorHandler(ExceptionA98DB973::class);
+        $handler = exception_error_handler(ExceptionA98DB973::class);
         $this->assertInstanceof(ExceptionErrorHandler::class, $handler);
         $this->assertEquals(E_ALL | E_STRICT, $handler->getErrorTypes());
 
@@ -141,13 +133,13 @@ final class FunctionsTest extends TestCase
     }
 
     /**
-     * @covers \Tailors\Lib\Error\exceptionErrorHandler
+     * @covers \Tailors\Lib\Error\exception_error_handler
      *
      * @psalm-suppress MissingThrowsDocblock
      */
     public function testExceptionErrorHandlerWithClassAndErrorTypes(): void
     {
-        $handler = exceptionErrorHandler(ExceptionA98DB973::class, E_USER_NOTICE);
+        $handler = exception_error_handler(ExceptionA98DB973::class, E_USER_NOTICE);
         $this->assertInstanceof(ExceptionErrorHandler::class, $handler);
         $this->assertEquals(E_USER_NOTICE, $handler->getErrorTypes());
 
@@ -173,7 +165,7 @@ final class FunctionsTest extends TestCase
     }
 
     /**
-     * @covers \Tailors\Lib\Error\exceptionErrorHandler
+     * @covers \Tailors\Lib\Error\exception_error_handler
      *
      * @psalm-suppress MissingThrowsDocblock
      */
@@ -182,7 +174,7 @@ final class FunctionsTest extends TestCase
         $func = function (int $severity, string $message, string $file, int $line): ExceptionA98DB973 {
             return new ExceptionA98DB973($message, 0, $severity, $file, $line);
         };
-        $handler = exceptionErrorHandler($func);
+        $handler = exception_error_handler($func);
         $this->assertInstanceOf(ExceptionErrorHandler::class, $handler);
         $this->assertSame($func, $handler->getExceptionGenerator());
         $this->assertEquals(E_ALL | E_STRICT, $handler->getErrorTypes());
@@ -202,7 +194,7 @@ final class FunctionsTest extends TestCase
     }
 
     /**
-     * @covers \Tailors\Lib\Error\exceptionErrorHandler
+     * @covers \Tailors\Lib\Error\exception_error_handler
      *
      * @psalm-suppress MissingThrowsDocblock
      */
@@ -211,7 +203,7 @@ final class FunctionsTest extends TestCase
         $func = function (int $severity, string $message, string $file, int $line): ExceptionA98DB973 {
             return new ExceptionA98DB973($message, 0, $severity, $file, $line);
         };
-        $handler = exceptionErrorHandler($func, E_USER_NOTICE);
+        $handler = exception_error_handler($func, E_USER_NOTICE);
         $this->assertInstanceOf(ExceptionErrorHandler::class, $handler);
         $this->assertSame($func, $handler->getExceptionGenerator());
         $this->assertEquals(E_USER_NOTICE, $handler->getErrorTypes());
@@ -231,7 +223,7 @@ final class FunctionsTest extends TestCase
     }
 
     /**
-     * @covers \Tailors\Lib\Error\callerErrorHandler
+     * @covers \Tailors\Lib\Error\caller_error_handler
      *
      * @psalm-suppress MissingThrowsDocblock
      */
@@ -242,7 +234,7 @@ final class FunctionsTest extends TestCase
         };
 
         $caller_line = __LINE__ + 1;
-        $handler = callerErrorHandler($func);
+        $handler = caller_error_handler($func);
 
         $this->assertInstanceOf(CallerErrorHandler::class, $handler);
         $this->assertEquals(E_ALL | E_STRICT, $handler->getErrorTypes());
@@ -252,7 +244,7 @@ final class FunctionsTest extends TestCase
     }
 
     /**
-     * @covers \Tailors\Lib\Error\callerErrorHandler
+     * @covers \Tailors\Lib\Error\caller_error_handler
      *
      * @psalm-suppress MissingThrowsDocblock
      */
@@ -263,7 +255,7 @@ final class FunctionsTest extends TestCase
         };
 
         $caller_line = __LINE__ + 1;
-        $handler = callerErrorHandler($func, 0);
+        $handler = caller_error_handler($func, 0);
 
         $this->assertInstanceOf(CallerErrorHandler::class, $handler);
         $this->assertEquals(E_ALL | E_STRICT, $handler->getErrorTypes());
@@ -273,7 +265,7 @@ final class FunctionsTest extends TestCase
     }
 
     /**
-     * @covers \Tailors\Lib\Error\callerErrorHandler
+     * @covers \Tailors\Lib\Error\caller_error_handler
      *
      * @psalm-suppress MissingThrowsDocblock
      */
@@ -284,7 +276,7 @@ final class FunctionsTest extends TestCase
         };
 
         $caller_line = __LINE__ + 1;
-        $handler = callerErrorHandler($func, 0, E_USER_ERROR);
+        $handler = caller_error_handler($func, 0, E_USER_ERROR);
 
         $this->assertInstanceOf(CallerErrorHandler::class, $handler);
         $this->assertEquals(E_USER_ERROR, $handler->getErrorTypes());
@@ -294,7 +286,7 @@ final class FunctionsTest extends TestCase
     }
 
     /**
-     * @covers \Tailors\Lib\Error\callerExceptionErrorHandler
+     * @covers \Tailors\Lib\Error\caller_exception_error_handler
      *
      * @psalm-suppress MissingThrowsDocblock
      */
@@ -305,7 +297,7 @@ final class FunctionsTest extends TestCase
         };
 
         $caller_line = __LINE__ + 1;
-        $handler = callerExceptionErrorHandler($generator);
+        $handler = caller_exception_error_handler($generator);
 
         $this->assertInstanceOf(CallerExceptionErrorHandler::class, $handler);
         $this->assertSame($generator, $handler->getExceptionGenerator());
@@ -315,7 +307,7 @@ final class FunctionsTest extends TestCase
     }
 
     /**
-     * @covers \Tailors\Lib\Error\callerExceptionErrorHandler
+     * @covers \Tailors\Lib\Error\caller_exception_error_handler
      *
      * @psalm-suppress MissingThrowsDocblock
      */
@@ -326,7 +318,7 @@ final class FunctionsTest extends TestCase
         };
 
         $caller_line = __LINE__ + 1;
-        $handler = callerExceptionErrorHandler($generator, 0);
+        $handler = caller_exception_error_handler($generator, 0);
 
         $this->assertInstanceOf(CallerExceptionErrorHandler::class, $handler);
         $this->assertSame($generator, $handler->getExceptionGenerator());
@@ -336,7 +328,7 @@ final class FunctionsTest extends TestCase
     }
 
     /**
-     * @covers \Tailors\Lib\Error\callerExceptionErrorHandler
+     * @covers \Tailors\Lib\Error\caller_exception_error_handler
      *
      * @psalm-suppress MissingThrowsDocblock
      */
@@ -347,7 +339,7 @@ final class FunctionsTest extends TestCase
         };
 
         $caller_line = __LINE__ + 1;
-        $handler = callerExceptionErrorHandler($generator, 0, 123);
+        $handler = caller_exception_error_handler($generator, 0, 123);
 
         $this->assertInstanceOf(CallerExceptionErrorHandler::class, $handler);
         $this->assertSame($generator, $handler->getExceptionGenerator());
@@ -357,14 +349,14 @@ final class FunctionsTest extends TestCase
     }
 
     /**
-     * @covers \Tailors\Lib\Error\callerExceptionErrorHandler
+     * @covers \Tailors\Lib\Error\caller_exception_error_handler
      *
      * @psalm-suppress MissingThrowsDocblock
      */
     public function testCallerExceptionErrorHandlerWithClass(): void
     {
         $caller_line = __LINE__ + 1;
-        $handler = callerExceptionErrorHandler(ExceptionA98DB973::class);
+        $handler = caller_exception_error_handler(ExceptionA98DB973::class);
 
         $generator = $handler->getExceptionGenerator();
 
@@ -385,14 +377,14 @@ final class FunctionsTest extends TestCase
     }
 
     /**
-     * @covers \Tailors\Lib\Error\callerExceptionErrorHandler
+     * @covers \Tailors\Lib\Error\caller_exception_error_handler
      *
      * @psalm-suppress MissingThrowsDocblock
      */
     public function testCallerExceptionErrorHandlerWithClassAndDistance(): void
     {
         $caller_line = __LINE__ + 1;
-        $handler = callerExceptionErrorHandler(ExceptionA98DB973::class, 0);
+        $handler = caller_exception_error_handler(ExceptionA98DB973::class, 0);
 
         $generator = $handler->getExceptionGenerator();
 
@@ -413,14 +405,14 @@ final class FunctionsTest extends TestCase
     }
 
     /**
-     * @covers \Tailors\Lib\Error\callerExceptionErrorHandler
+     * @covers \Tailors\Lib\Error\caller_exception_error_handler
      *
      * @psalm-suppress MissingThrowsDocblock
      */
     public function testCallerExceptionErrorHandlerWithClassDistanceAndErrorTypes(): void
     {
         $caller_line = __LINE__ + 1;
-        $handler = callerExceptionErrorHandler(\ErrorException::class, 0, E_USER_NOTICE);
+        $handler = caller_exception_error_handler(\ErrorException::class, 0, E_USER_NOTICE);
 
         $this->assertInstanceof(CallerExceptionErrorHandler::class, $handler);
         $this->assertEquals(E_USER_NOTICE, $handler->getErrorTypes());
@@ -442,14 +434,14 @@ final class FunctionsTest extends TestCase
     }
 
     /**
-     * @covers \Tailors\Lib\Error\callerExceptionErrorHandler
+     * @covers \Tailors\Lib\Error\caller_exception_error_handler
      *
      * @psalm-suppress MissingThrowsDocblock
      */
     public function testCallerExceptionErrorHandlerWithNullAndDistance(): void
     {
         $caller_line = __LINE__ + 1;
-        $handler = callerExceptionErrorHandler(null, 0);
+        $handler = caller_exception_error_handler(null, 0);
 
         $generator = $handler->getExceptionGenerator();
 

@@ -8,8 +8,8 @@ use function Tailors\Lib\Context\with;
 /* [MyInt] */
 final class MyInt implements ContextManagerInterface
 {
-    public $value;
-    public $handle;
+    public int $value;
+    public bool $handle;
 
     public function __construct(int $value, bool $handle = false)
     {
@@ -17,7 +17,7 @@ final class MyInt implements ContextManagerInterface
         $this->handle = $handle;
     }
 
-    public function enterContext()
+    public function enterContext(): int
     {
         echo "enter: " . $this->value . "\n";
         return $this->value;

@@ -9,7 +9,7 @@ use Tailors\Lib\Context\ContextManagerInterface;
 /* [MyCounter] */
 final class MyCounter
 {
-    public $value;
+    public int $value;
 
     public function __construct(int $value)
     {
@@ -21,14 +21,14 @@ final class MyCounter
 /* [MyCounterManager] */
 final class MyCounterManager implements ContextManagerInterface
 {
-    public $counter;
+    public MyCounter $counter;
 
     public function __construct(MyCounter $counter)
     {
         $this->counter = $counter;
     }
 
-    public function enterContext()
+    public function enterContext(): MyCounter
     {
         $this->counter->value ++;
         print("MyCounterManager::enterContext()\n");

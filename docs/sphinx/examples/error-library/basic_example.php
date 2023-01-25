@@ -2,7 +2,7 @@
 /* [code] */
 /* [use] */
 use function Tailors\Lib\Context\with;
-use function Tailors\Lib\Error\emptyErrorHandler;
+use function Tailors\Lib\Error\empty_error_handler;
 /* [/use] */
 
 /* [trouble] */
@@ -13,7 +13,7 @@ function trouble()
 /* [/trouble] */
 
 /* [test] */
-with(emptyErrorHandler())(function ($eh) {
+with(empty_error_handler())(function ($eh) {
     trouble();
 });
 /* [/test] */
