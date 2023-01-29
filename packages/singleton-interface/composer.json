@@ -18,7 +18,7 @@
         "nikic/php-parser": "< 4.13.2"
     },
     "require": {
-        "php": "^8"
+        "php": "^8.1"
     },
     "require-dev": {
         "phptailors/phpunit-inheritance": "dev-master",
@@ -34,7 +34,7 @@
     },
     "autoload-dev": {
       "psr-4" : {
-        "Tailors\\Tests\\Lib\\Singleton\\" : "tests/src/"
+        "Tailors\\Lib\\Singleton\\" : "tests/src/"
       }
     }
 }

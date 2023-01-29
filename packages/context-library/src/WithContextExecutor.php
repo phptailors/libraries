@@ -1,5 +1,4 @@
-<?php
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 namespace Tailors\Lib\Context;
 
@@ -13,7 +12,7 @@ final class WithContextExecutor implements ExecutorInterface
      *
      * @psalm-readonly
      */
-    private array $context;
+    private readonly array $context;
 
     /**
      * Initializes the object.

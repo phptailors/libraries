@@ -20,6 +20,7 @@ $config = new PhpCsFixer\Config();
 
 return $config
     ->setFinder($finder)
+    ->registerCustomFixers(new PhpCsFixerCustomFixers\Fixers())
     ->setRiskyAllowed(true)
     ->setRules([
         '@PSR2' => true,
@@ -46,7 +47,8 @@ return $config
         'ordered_imports' => [
             'imports_order' => ['const', 'class', 'function'],
             'sort_algorithm' => 'alpha',
-        ]
+        ],
+        PhpCsFixerCustomFixers\Fixer\DeclareAfterOpeningTagFixer::name() => true,
     ])
 ;
 // vim: syntax=php sw=4 ts=4 et:

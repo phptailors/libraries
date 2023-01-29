@@ -1,15 +1,9 @@
-<?php
+<?php declare(strict_types=1);
 
-declare(strict_types=1);
-
-namespace Tailors\Tests\Lib\Error;
+namespace Tailors\Lib\Error;
 
 use PHPUnit\Framework\TestCase;
 use Tailors\Lib\Context\ContextManagerInterface;
-use Tailors\Lib\Error\AbstractErrorHandler;
-use Tailors\Lib\Error\AbstractManagedErrorHandler;
-use Tailors\Lib\Error\ContextManagerTrait;
-use Tailors\Lib\Error\ErrorHandlerInterface;
 use Tailors\PHPUnit\ExtendsClassTrait;
 use Tailors\PHPUnit\ImplementsInterfaceTrait;
 use Tailors\PHPUnit\UsesTraitTrait;

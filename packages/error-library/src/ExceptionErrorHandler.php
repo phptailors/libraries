@@ -1,13 +1,11 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 namespace Tailors\Lib\Error;
 
 /**
  * An error handler which raises custom exception.
  *
- * @psalm-type ExceptionGenerator callable(int,string,string,int):\Exception
+ * @psalm-type ExceptionGenerator (callable(int,string,string,int):\Exception)
  */
 class ExceptionErrorHandler extends AbstractManagedErrorHandler
 {
@@ -18,7 +16,7 @@ class ExceptionErrorHandler extends AbstractManagedErrorHandler
      *
      * @psalm-readonly
      */
-    protected mixed $exceptionGenerator;
+    protected readonly mixed $exceptionGenerator;
 
     /**
      * Initializes the object.

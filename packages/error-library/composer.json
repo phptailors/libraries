@@ -18,7 +18,7 @@
         "nikic/php-parser": "< 4.13.2"
     },
     "require": {
-        "php": "^8",
+        "php": "^8.1",
         "phptailors/error-interface": "*",
         "phptailors/context-library": "*"
     },
@@ -45,7 +45,7 @@
     },
     "autoload-dev": {
       "psr-4" : {
-        "Tailors\\Tests\\Lib\\Error\\" : "tests/src/"
+        "Tailors\\Lib\\Error\\" : "tests/src/"
       }
     }
 }

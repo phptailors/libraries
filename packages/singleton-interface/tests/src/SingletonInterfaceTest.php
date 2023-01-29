@@ -1,11 +1,8 @@
-<?php
+<?php declare(strict_types=1);
 
-declare(strict_types=1);
-
-namespace Tailors\Tests\Lib\Singleton;
+namespace Tailors\Lib\Singleton;
 
 use PHPUnit\Framework\TestCase;
-use Tailors\Lib\Singleton\SingletonInterface;
 use Tailors\PHPUnit\ImplementsInterfaceTrait;
 
 // SingletonInterface does not enforce singleton behaviour.
@@ -18,7 +15,7 @@ final class SingletonS29XX implements SingletonInterface
 /**
  * @author Paweł Tomulik <pawel@tomulik.pl>
  *
- * @covers \Tailors\Tests\Lib\Singleton\SingletonInterfaceTrait
+ * @covers \Tailors\Lib\Singleton\SingletonInterfaceTrait
  *
  * @internal
  */

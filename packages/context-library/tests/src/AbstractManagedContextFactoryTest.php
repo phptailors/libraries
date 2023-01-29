@@ -1,13 +1,8 @@
-<?php
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
-namespace Tailors\Tests\Lib\Context;
+namespace Tailors\Lib\Context;
 
 use PHPUnit\Framework\TestCase;
-use Tailors\Lib\Context\AbstractManagedContextFactory;
-use Tailors\Lib\Context\ContextFactoryInterface;
-use Tailors\Lib\Context\ContextFactoryStack;
-use Tailors\Lib\Context\ContextManagerInterface;
 use Tailors\PHPUnit\ImplementsInterfaceTrait;
 
 /**

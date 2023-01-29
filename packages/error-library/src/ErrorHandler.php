@@ -1,13 +1,11 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 namespace Tailors\Lib\Error;
 
 /**
  * Context-managed error handler that calls user-provided function.
  *
- * @psalm-type ErrorHandlerFunction callable(int,string,string,int):bool
+ * @psalm-type ErrorHandlerFunction (callable(int,string,string,int):bool)
  */
 class ErrorHandler extends AbstractManagedErrorHandler
 {

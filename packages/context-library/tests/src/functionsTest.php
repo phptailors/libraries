@@ -1,13 +1,8 @@
-<?php
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
-namespace Tailors\Tests\Lib\Context;
+namespace Tailors\Lib\Context;
 
 use PHPUnit\Framework\TestCase;
-use Tailors\Lib\Context\TrivialValueWrapper;
-use Tailors\Lib\Context\WithContextExecutor;
-
-use function Tailors\Lib\Context\with;
 
 /**
  * @author Paweł Tomulik <pawel@tomulik.pl>

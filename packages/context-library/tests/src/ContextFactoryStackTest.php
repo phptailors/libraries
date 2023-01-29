@@ -1,13 +1,8 @@
-<?php
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
-namespace Tailors\Tests\Lib\Context;
+namespace Tailors\Lib\Context;
 
 use PHPUnit\Framework\TestCase;
-use Tailors\Lib\Context\ContextFactoryInterface;
-use Tailors\Lib\Context\ContextFactoryStack;
-use Tailors\Lib\Context\ContextFactoryStackInterface;
-use Tailors\Lib\Context\ContextManagerInterface;
 use Tailors\Lib\Singleton\SingletonInterface;
 use Tailors\PHPUnit\ImplementsInterfaceTrait;
 
@@ -149,8 +144,12 @@ final class ContextFactoryStackTest extends TestCase
 
         $f0->expects($this->exactly(3))
             ->method('getContextManager')
-            ->withConsecutive(['foo'], ['foo'], ['baz'])
-            ->willReturn($cm0)
+            ->will(
+                $this->returnValueMap([
+                    ['foo', $cm0],
+                    ['baz', $cm0],
+                ])
+            )
         ;
         $f1->expects($this->once())
             ->method('getContextManager')

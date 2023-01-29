@@ -18,7 +18,7 @@
         "nikic/php-parser": "< 4.13.2"
     },
     "require": {
-        "php": "^8",
+        "php": "^8.1",
         "phptailors/context-interface": "*",
         "phptailors/singleton-interface": "*",
         "phptailors/singleton-library": "*"
@@ -47,7 +47,7 @@
     "autoload-dev": {
       "psr-4" : {
         "Tailors\\Testing\\Lib\\Context\\" : "testing/",
-        "Tailors\\Tests\\Lib\\Context\\" : "tests/src/"
+        "Tailors\\Lib\\Context\\" : "tests/src/"
       }
     }
 }

@@ -1,12 +1,8 @@
-<?php
+<?php declare(strict_types=1);
 
-declare(strict_types=1);
-
-namespace Tailors\Tests\Lib\Error;
+namespace Tailors\Lib\Error;
 
 use PHPUnit\Framework\TestCase;
-use Tailors\Lib\Error\CallerExceptionErrorHandler;
-use Tailors\Lib\Error\ExceptionErrorHandler;
 use Tailors\PHPUnit\ExtendsClassTrait;
 
 use function Tailors\Lib\Context\with;
@@ -18,7 +14,7 @@ use function Tailors\Lib\Context\with;
  *
  * @internal
  *
- * @psalm-type ExceptionGenerator callable(int,string,string,int):\Exception
+ * @psalm-type ExceptionGenerator (callable(int,string,string,int):\Exception)
  */
 final class CallerExceptionErrorHandlerTest extends TestCase
 {

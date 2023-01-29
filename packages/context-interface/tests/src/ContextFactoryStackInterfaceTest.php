@@ -1,11 +1,8 @@
-<?php
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
-namespace Tailors\Tests\Lib\Context;
+namespace Tailors\Lib\Context;
 
 use PHPUnit\Framework\TestCase;
-use Tailors\Lib\Context\ContextFactoryInterface;
-use Tailors\Lib\Context\ContextFactoryStackInterface;
 use Tailors\PHPUnit\ImplementsInterfaceTrait;
 
 final class ContextFactoryStackL9LBE implements ContextFactoryStackInterface
@@ -16,7 +13,7 @@ final class ContextFactoryStackL9LBE implements ContextFactoryStackInterface
 /**
  * @author Paweł Tomulik <pawel@tomulik.pl>
  *
- * @covers \Tailors\Tests\Lib\Context\ContextFactoryStackInterfaceTrait
+ * @covers \Tailors\Lib\Context\ContextFactoryStackInterfaceTrait
  *
  * @internal
  */

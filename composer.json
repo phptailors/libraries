@@ -10,11 +10,14 @@
         "nikic/php-parser": "< 4.13.2"
     },
     "require": {
-        "php": "^8",
-        "phptailors/phpunit-methods": "dev-master"
+        "php": "^8.1",
+        "phptailors/phpunit-methods": "dev-master",
+        "psr/container": "^2.0"
     },
     "autoload": {
         "exclude-from-classmap": [
+            "packages/collections-interface/tests/",
+            "packages/collections-library/tests/",
             "packages/context-interface/tests/",
             "packages/context-library/testing/",
             "packages/context-library/tests/",
@@ -33,6 +36,10 @@
             "packages/error-library/src/functions.php"
         ],
         "psr-4": {
+            "Tailors\\Lib\\Collections\\": [
+                "packages/collections-interface/src/",
+                "packages/collections-library/src/"
+            ],
             "Tailors\\Lib\\Context\\": [
                 "packages/context-interface/src/",
                 "packages/context-library/src/"
@@ -51,29 +58,36 @@
     "autoload-dev": {
         "psr-4": {
             "Tailors\\Docs\\Behat\\": "docs/sphinx/behat/",
-            "Tailors\\Testing\\Lib\\Context\\": "packages/context-library/testing/",
-            "Tailors\\Tests\\Lib\\Context\\": [
+            "Tailors\\Lib\\Collections\\": [
+                "packages/collections-interface/tests/src/",
+                "packages/collections-library/tests/src/"
+            ],
+            "Tailors\\Lib\\Context\\": [
                 "packages/context-interface/tests/src/",
                 "packages/context-library/tests/src/"
             ],
-            "Tailors\\Tests\\Lib\\Error\\": [
+            "Tailors\\Lib\\Error\\": [
                 "packages/error-interface/tests/src/",
                 "packages/error-library/tests/src/"
             ],
-            "Tailors\\Tests\\Lib\\Singleton\\": [
+            "Tailors\\Lib\\Singleton\\": [
                 "packages/singleton-interface/tests/src/",
                 "packages/singleton-library/tests/src/"
             ],
+            "Tailors\\Testing\\Lib\\Context\\": "packages/context-library/testing/",
             "Tailors\\Tests\\Testing\\Lib\\Singleton\\": "packages/singleton-testing/tests/testing/"
         }
     },
     "require-dev": {
         "bamarni/composer-bin-plugin": "^1.8",
         "php-mock/php-mock-phpunit": ">=2.4.0",
+        "phptailors/phpunit-arrays": "dev-master",
         "phptailors/phpunit-inheritance": "dev-master",
         "phpunit/phpunit": "^9.5.10 || ^10"
     },
     "replace": {
+        "phptailors/collections-interface": "self.version",
+        "phptailors/collections-library": "self.version",
         "phptailors/context-interface": "self.version",
         "phptailors/context-library": "self.version",
         "phptailors/error-interface": "self.version",
@@ -83,6 +97,7 @@
         "phptailors/singleton-testing": "self.version"
     },
     "provide": {
+        "phptailors/collections-implementation": "*",
         "phptailors/context-implementation": "*",
         "phptailors/error-implementation": "*",
         "phptailors/singleton-implementation": "*"
@@ -101,7 +116,7 @@
     },
     "scripts": {
         "cs": "PHP_CS_FIXER_IGNORE_ENV=1 vendor-bin/php-cs-fixer/vendor/bin/php-cs-fixer fix --diff --dry-run --show-progress=dots --using-cache=no --verbose",
-        "cs-fix": "vendor-bin/php-cs-fixer/vendor/bin/php-cs-fixer fix --diff --show-progress=dots --using-cache=no --verbose",
+        "cs-fix": "PHP_CS_FIXER_IGNORE_ENV=1 vendor-bin/php-cs-fixer/vendor/bin/php-cs-fixer fix --diff --show-progress=dots --using-cache=no --verbose",
         "phpunit": "vendor/bin/phpunit",
         "psalm": "vendor-bin/psalm/vendor/bin/psalm --show-info=true --stats --no-cache",
         "doctests": "vendor-bin/behat/vendor/bin/behat -c docs/behat.yml",

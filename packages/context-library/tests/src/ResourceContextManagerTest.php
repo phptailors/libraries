@@ -1,11 +1,8 @@
-<?php
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
-namespace Tailors\Tests\Lib\Context;
+namespace Tailors\Lib\Context;
 
 use PHPUnit\Framework\TestCase;
-use Tailors\Lib\Context\ContextManagerInterface;
-use Tailors\Lib\Context\ResourceContextManager;
 use Tailors\PHPUnit\ImplementsInterfaceTrait;
 use Tailors\Testing\Lib\Context\ExpectFunctionOnceWillReturnTrait;
 use Tailors\Testing\Lib\Context\GetContextFunctionMockTrait;

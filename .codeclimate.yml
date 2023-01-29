@@ -14,6 +14,7 @@ exclude_patterns:
   - "**/tests/"
   - "**/behat/"
   - "**/vendor/"
+
 plugins:
   phpcodesniffer:
     enabled: true

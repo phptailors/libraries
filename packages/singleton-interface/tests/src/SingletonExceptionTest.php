@@ -1,11 +1,8 @@
-<?php
+<?php declare(strict_types=1);
 
-declare(strict_types=1);
-
-namespace Tailors\Tests\Lib\Singleton;
+namespace Tailors\Lib\Singleton;
 
 use PHPUnit\Framework\TestCase;
-use Tailors\Lib\Singleton\SingletonException;
 use Tailors\PHPUnit\ExtendsClassTrait;
 
 /**

@@ -1,8 +1,6 @@
-<?php
+<?php declare(strict_types=1);
 
-declare(strict_types=1);
-
-namespace Tailors\Tests\Lib\Error;
+namespace Tailors\Lib\Error;
 
 /**
  * Dummy exception for testing purposes (classes from /Tests/* aren not

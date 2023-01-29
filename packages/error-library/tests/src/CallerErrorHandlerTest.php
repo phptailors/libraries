@@ -1,12 +1,8 @@
-<?php
+<?php declare(strict_types=1);
 
-declare(strict_types=1);
-
-namespace Tailors\Tests\Lib\Error;
+namespace Tailors\Lib\Error;
 
 use PHPUnit\Framework\TestCase;
-use Tailors\Lib\Error\CallerErrorHandler;
-use Tailors\Lib\Error\ErrorHandler;
 use Tailors\PHPUnit\ExtendsClassTrait;
 
 use function Tailors\Lib\Context\with;
@@ -18,7 +14,7 @@ use function Tailors\Lib\Context\with;
  *
  * @internal
  *
- * @psalm-type ErrorHandlerFunction callable(int,string,string,int):bool
+ * @psalm-type ErrorHandlerFunction (callable(int,string,string,int):bool)
  */
 final class CallerErrorHandlerTest extends TestCase
 {

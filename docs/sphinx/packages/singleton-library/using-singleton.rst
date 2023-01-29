@@ -16,7 +16,7 @@ class that is a singleton.
 
 .. literalinclude:: ../../examples/singleton-library/trivial_singleton.php
    :linenos:
-   :caption: Trivial Singleton
+   :caption: Trivial Singleton example
    :name: lib.singleton.trivial_singleton.example
 
 The :class:`Tailors\\Lib\\Singleton\\SingletonTrait` provides features that

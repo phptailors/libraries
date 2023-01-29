@@ -1,21 +1,8 @@
-<?php
+<?php declare(strict_types=1);
 
-declare(strict_types=1);
-
-namespace Tailors\Tests\Lib\Error;
+namespace Tailors\Lib\Error;
 
 use PHPUnit\Framework\TestCase;
-use Tailors\Lib\Error\CallerErrorHandler;
-use Tailors\Lib\Error\CallerExceptionErrorHandler;
-use Tailors\Lib\Error\EmptyErrorHandler;
-use Tailors\Lib\Error\ErrorHandler;
-use Tailors\Lib\Error\ExceptionErrorHandler;
-
-use function Tailors\Lib\Error\caller_error_handler;
-use function Tailors\Lib\Error\caller_exception_error_handler;
-use function Tailors\Lib\Error\empty_error_handler;
-use function Tailors\Lib\Error\error_handler;
-use function Tailors\Lib\Error\exception_error_handler;
 
 /**
  * @author Paweł Tomulik <pawel@tomulik.pl>
