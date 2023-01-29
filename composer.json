@@ -11,7 +11,8 @@
     },
     "require": {
         "php": "^8",
-        "phptailors/phpunit-methods": "dev-master"
+        "phptailors/phpunit-methods": "dev-master",
+        "psr/container": "^2.0"
     },
     "autoload": {
         "exclude-from-classmap": [
@@ -22,6 +23,8 @@
             "packages/error-interface/tests/",
             "packages/error-library/testing/",
             "packages/error-library/tests/",
+            "packages/injector-interface/tests/",
+            "packages/injector-library/tests/",
             "packages/singleton-interface/tests/",
             "packages/singleton-library/testing/",
             "packages/singleton-library/tests/",
@@ -40,6 +43,10 @@
             "Tailors\\Lib\\Error\\": [
                 "packages/error-interface/src/",
                 "packages/error-library/src/"
+            ],
+            "Tailors\\Lib\\Injector\\": [
+                "packages/injector-interface/src/",
+                "packages/injector-library/src/"
             ],
             "Tailors\\Lib\\Singleton\\": [
                 "packages/singleton-interface/src/",
@@ -60,6 +67,10 @@
                 "packages/error-interface/tests/src/",
                 "packages/error-library/tests/src/"
             ],
+            "Tailors\\Tests\\Lib\\Injector\\": [
+                "packages/injector-interface/tests/src/",
+                "packages/injector-library/tests/src/"
+            ],
             "Tailors\\Tests\\Lib\\Singleton\\": [
                 "packages/singleton-interface/tests/src/",
                 "packages/singleton-library/tests/src/"
@@ -78,6 +89,8 @@
         "phptailors/context-library": "self.version",
         "phptailors/error-interface": "self.version",
         "phptailors/error-library": "self.version",
+        "phptailors/injector-interface": "self.version",
+        "phptailors/injector-library": "self.version",
         "phptailors/singleton-interface": "self.version",
         "phptailors/singleton-library": "self.version",
         "phptailors/singleton-testing": "self.version"
@@ -85,7 +98,9 @@
     "provide": {
         "phptailors/context-implementation": "*",
         "phptailors/error-implementation": "*",
-        "phptailors/singleton-implementation": "*"
+        "phptailors/injector-implementation": "*",
+        "phptailors/singleton-implementation": "*",
+        "psr/container-implementation": "^2.0"
     },
     "extra": {
         "bamarni-bin": {
