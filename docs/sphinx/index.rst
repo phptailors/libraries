@@ -18,6 +18,7 @@ the PhpTailorsLibraries_ project.
    packages/singleton-library/index
    packages/context-library/index
    packages/error-library/index
+   packages/injector-library/index
 
 ******************
 Indices and tables

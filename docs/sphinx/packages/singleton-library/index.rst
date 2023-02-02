@@ -2,7 +2,7 @@
    single: Singleton
    single: Lib; Singleton
 
-.. _basiclib:
+.. _singleton-library:
 
 *****************
 Singleton Library
