@@ -7,23 +7,26 @@
 Basic Concepts
 ==============
 
-Main responsibility of injector is to provide appropriate objects or values to
-clients. In context of PHP, an object or function can be considered a client.
-Diving into details, we quickly conclude, that technically, the process of
-injecting is actually a process of assigning values/instances to:
+An injector is responsible for providing appropriate objects or values to
+clients (mostly to objects or functions in PHP). More precisely, injection is
+just a process of assigning appropriate values to:
 
     - function or method parameters,
     - class or object properties,
     - other variables (static).
 
-Here we'll introduce a bit of informal terminology that shall help
-understand our approach to dependency injection and the philosophy of
-:ref:`Injector Library <injector-library>`.
+A **container** or **provider** is an object that keeps rules that define the
+injection plan. These rules are sometimes referred to as **bindings** (binding
+recipes to targets).
 
-The term **bindings** will be used to denote a configuration entry, that
+The term **binding** will be used to denote a configuration entry, that
 specifies a way of providing an instance or a value to a client. In most cases
-the binding will have a form of a Closure_ responsible for creation or
-retrieval of a required value.
+the binding will have a form of a Closure_ responsible for creation of an
+object or retrieval of a requested value.
+
+There are several ways that clients typically use to specify their
+requirements. Probably, the most popular, is type hinting function and method
+parameters. So, for example, every time
 
 .. _Closure: https://www.php.net/manual/en/class.closure.php
 

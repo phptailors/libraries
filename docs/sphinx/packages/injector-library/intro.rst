@@ -8,7 +8,7 @@ The injector is split into two packages:
     - ``phptailors/injector-interface`` - interface,
     - ``phptailors/injector-library`` - implementation.
 
-To install the injector implementation as a runtime dependency, type:
+To install injector implementation as a runtime dependency, type:
 
 .. code-block:: shell
 
@@ -19,7 +19,7 @@ To install the injector implementation as a runtime dependency, type:
 Purpose
 =======
 
-To facilitate implementations of applications based on `Dependency Injection`_
+To facilitate development of applications that use `Dependency Injection`_
 design pattern.
 
 
@@ -47,11 +47,7 @@ are implemented, only their names and API. So, client should operate on
 **interfaces**. The **injector**, sometimes also called an assembler,
 container, provider or factory, introduces services to the client.
 
-There are two main aspects of typical injector: configuration and injection.
-The configuration is a process of defining **bindings**, i.e. providing the
-plan of resolving dependencies (finding appropriate implementations of
-interfaces) required by clients. There is a couple of dependency injection
-libraries for PHP, including
+There is a couple of dependency injection libraries for PHP, including
 
     - `Symfony Service Container`_,
     - `Laravel Service Container`_,
