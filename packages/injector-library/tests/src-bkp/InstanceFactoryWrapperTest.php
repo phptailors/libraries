@@ -1,6 +1,4 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 namespace Tailors\Tests\Lib\Injector;
 
@@ -35,6 +33,7 @@ final class InstanceFactoryWrapperTest extends TestCase
     public function testInstanceFactoryWrapper(): void
     {
         $resolver = $this->createStub(ResolverInterface::class);
+
         /** @psalm-suppress UnusedClosureParam */
         $callback = fn (ResolverInterface $resolver): int => 123;
         $factory = new InstanceFactoryWrapper($callback, false);

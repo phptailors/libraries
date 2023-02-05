@@ -19,8 +19,7 @@ To install injector implementation as a runtime dependency, type:
 Purpose
 =======
 
-To facilitate development of applications that use `Dependency Injection`_
-design pattern.
+To facilitate development of applications that use `Dependency Injection`_.
 
 
 .. _injector-library.introduction:
@@ -28,7 +27,7 @@ design pattern.
 Introduction
 ============
 
-According to its definition, `Dependency Injection`_ is a design pattern
+According to wiki definition, `Dependency Injection`_ is a design pattern
 in which an object or function receives other objects of functions that it
 depends on. As a form of inversion of control, dependency injection aims to
 separate the concerns of constructing objects and using them, leading to
@@ -44,7 +43,7 @@ Dependency injection involves four roles:
 A **service** is any class which contains useful functionality. A **client** is
 any class which uses services. Client should not know how their dependencies
 are implemented, only their names and API. So, client should operate on
-**interfaces**. The **injector**, sometimes also called an assembler,
+**interfaces**. An **injector**, sometimes also called an assembler,
 container, provider or factory, introduces services to the client.
 
 There is a couple of dependency injection libraries for PHP, including
@@ -53,8 +52,7 @@ There is a couple of dependency injection libraries for PHP, including
     - `Laravel Service Container`_,
     - `PHP-DI`_.
 
-Here, we provide yet another library for similar purpose, but having some
-specific features.
+Here, we provide yet another, having some specific features.
 
 
 .. _Dependency Injection: https://en.wikipedia.org/wiki/Dependency_injection

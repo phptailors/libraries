@@ -1,5 +1,4 @@
-<?php
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 namespace Tailors\Lib\Context;
 
@@ -105,20 +104,20 @@ final class ResourceContextManager implements ContextManagerInterface
         'sockets i/o vector'           => null,
         // 'stream' => ['dir' => '\\closedir', 'STDIO' => '\fclose'],
         // 'stream' => '\\pclose',
-        'socket'                       => '\\fclose',
-        'sybase-db link'               => '\\sybase_close',
-        'sybase-db link persistent'    => null,
-        'sybase-db result'             => '\\sybase_free_result',
-        'sybase-ct link'               => '\\sybase_close',
-        'sybase-ct link persistent'    => null,
-        'sybase-ct result'             => '\\sybase_free_result',
-        'sysvsem'                      => '\\sem_release',
-        'sysvshm'                      => '\\shm_detach',
-        'wddx'                         => '\\wddx_packet_end',
-        'xml'                          => '\\xml_parser_free',
-        'zlib'                         => '\\gzclose',
-        'zlib.deflate'                 => null,
-        'zlib.inflate'                 => null,
+        'socket'                    => '\\fclose',
+        'sybase-db link'            => '\\sybase_close',
+        'sybase-db link persistent' => null,
+        'sybase-db result'          => '\\sybase_free_result',
+        'sybase-ct link'            => '\\sybase_close',
+        'sybase-ct link persistent' => null,
+        'sybase-ct result'          => '\\sybase_free_result',
+        'sysvsem'                   => '\\sem_release',
+        'sysvshm'                   => '\\shm_detach',
+        'wddx'                      => '\\wddx_packet_end',
+        'xml'                       => '\\xml_parser_free',
+        'zlib'                      => '\\gzclose',
+        'zlib.deflate'              => null,
+        'zlib.inflate'              => null,
     ];
 
     /**

@@ -1,26 +1,22 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 namespace Tailors\Lib\Injector;
 
 interface ResolverInterface
 {
     /**
-     * Resolve the given type from the container.
+     * Resolve the dependency specified by **$abstract**.
      *
      * @param string $abstract
-     *                           Class, interface or alias name to be resolved. If parameters are
-     *                           required for the resolution (for example if a non-trivial
-     *                           constructor has to be called to create requested instance), they'll
-     *                           be resolved recursivelly. To prevent automatic resolution,
-     *                           parameters may be provided via **$parameters**.
+     *                           A class or interface name, or an alias to be
+     *                           resolved
      * @param array  $parameters
-     *                           If provided, will be passed to constructor of resolve $abstract or
-     *                           to callable. If missing, the required parameters will be
-     *                           automatically resolved using container.
+     *                           Optional parameters passed to user-defined bind
+     *                           callback
      *
      * @return mixed
+     *
+     * @psalm-param list<mixed> $parameters
      */
     public function resolve(string $abstract, array $parameters = null): mixed;
 }
