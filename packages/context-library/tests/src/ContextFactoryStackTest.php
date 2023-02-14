@@ -148,8 +148,12 @@ final class ContextFactoryStackTest extends TestCase
 
         $f0->expects($this->exactly(3))
             ->method('getContextManager')
-            ->withConsecutive(['foo'], ['foo'], ['baz'])
-            ->willReturn($cm0)
+            ->will(
+                $this->returnValueMap([
+                    ['foo', $cm0],
+                    ['baz', $cm0],
+                ])
+            )
         ;
         $f1->expects($this->once())
             ->method('getContextManager')

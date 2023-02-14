@@ -27,6 +27,7 @@
     },
     "require-dev": {
         "phptailors/phpunit-inheritance": "dev-master",
+        "phptailors/phpunit-arrays": "dev-master",
         "phpunit/phpunit": "^9.5.10 || ^10"
     },
     "autoload": {
