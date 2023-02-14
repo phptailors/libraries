@@ -42,91 +42,29 @@ namespace Tailors\Lib\Injector;
  * @author Paweł Tomulik <pawel@tomulik.pl>
  *
  * @internal
+ *
  * @psalm-internal Tailors\Lib\Injector
  *
- * @psalm-template KeyType of array-key
- * @psalm-template ValueType
+ * @psalm-template TKey
+ * @psalm-template TValue
  *
- * @template-extends \ArrayObject<KeyType,ValueType>
+ * @template-extends AbstractNormalizedKeyArray<TKey,TValue>
  */
-final class NSArray extends \ArrayObject
+final class NSArray extends AbstractNormalizedKeyArray
 {
     /**
-     * @psalm-param iterable<KeyType,ValueType> $data
-     */
-    public function __construct(iterable|object $data = [], int $flags = 0)
-    {
-        if (!is_iterable($data)) {
-            $data = (array)$data;
-        }
-        parent::__construct(iterator_to_array(self::normalizeKeys($data, $flags)));
-    }
-
-    public function offsetExists(mixed $offset): bool
-    {
-        return parent::offsetExists(self::normalizeKey($offset));
-    }
-
-    public function offsetGet(mixed $offset): mixed
-    {
-        return parent::offsetGet(self::normalizeKey($offset));
-    }
-
-    public function offsetIsSet(mixed $offset): bool
-    {
-        $offset = self::normalizeKey($offset);
-        return parent::offsetExists($offset) && isset(parent::offsetGet($offset));
-    }
-
-    /**
-     * @psalm-param KeyType $offset
-     * @psalm-param ValueType $value
-     */
-    public function offsetSet(mixed $offset, mixed $value): void
-    {
-        parent::offsetSet(self::normalizeKey($offset), $value);
-    }
-
-    public function offsetUnset(mixed $offset): void
-    {
-        parent::offsetUnset(self::normalizeKey($offset));
-    }
-
-    public function exchangeArray(iterable|object $array): array
-    {
-        if (!is_iterable($array)) {
-            $array = (array)$array;
-        }
-        return parent::exchangeArray(iterator_to_array(self::normalizeKeys($array)));
-    }
-
-    /**
-     * @psalm-template K of array-key
+     * @psalm-template K
      *
      * @psalm-param K $key
      *
      * @psalm-return (K is string ? lowercase-string : K)
      */
-    private static function normalizeKey(mixed $key): mixed
+    protected static function normalizeKey(mixed $key): mixed
     {
         if (!is_string($key)) {
             return $key;
         }
 
         return strtolower(ltrim($key, '\\'));
-    }
-
-    /**
-     * @psalm-template K of array-key
-     * @psalm-template T
-     *
-     * @psalm-param iterable<K,T> $iterable
-     * @psalm-return \Generator<K,T>
-     */
-    private static function normalizeKeys(iterable $iterable): \Generator
-    {
-        foreach ($iterable as $key => $value) {
-            yield self::normalizeKey($key) => $value;
-        }
     }
 }

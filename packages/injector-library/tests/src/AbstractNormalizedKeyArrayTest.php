@@ -4,21 +4,46 @@ namespace Tailors\Tests\Lib\Injector;
 
 use PHPUnit\Framework\TestCase;
 use Tailors\Lib\Injector\AbstractNormalizedKeyArray;
-use Tailors\Lib\Injector\NSArray;
 use Tailors\PHPUnit\ExtendsClassTrait;
 use Tailors\PHPUnit\KsortedArrayIdenticalToTrait;
 
 /**
- * @author Paweł Tomulik <pawel@tomulik.pl>
+ * @psalm-template TKey
+ * @psalm-template TValue
  *
- * @covers \Tailors\Lib\Injector\NSArray
+ * @template-extends AbstractNormalizedKeyArray<TKey,TValue>
+ * @psalm-suppress InternalClass
+ * @psalm-suppress InternalMethod
+ */
+final class LowerCaseArrayYP8NW extends AbstractNormalizedKeyArray
+{
+    /**
+     * @psalm-template K
+     *
+     * @psalm-param K $key
+     *
+     * @psalm-return (K is string ? lowercase-string : K)
+     */
+    protected static function normalizeKey(mixed $key): mixed
+    {
+        if (!is_string($key)) {
+            return $key;
+        }
+
+        return strtolower($key);
+    }
+}
+
+/**
+ * @covers \Tailors\Lib\Injector\AbstractNormalizedKeyArray
+ * @covers \Tailors\Tests\Lib\Injector\LowerCaseArrayYP8NW
  *
  * @internal
  *
  * @psalm-suppress InternalClass
  * @psalm-suppress InternalMethod
  */
-final class NSArrayTest extends TestCase
+final class AbstractNormalizedKeyArrayTest extends TestCase
 {
     use ExtendsClassTrait;
     use KsortedArrayIdenticalToTrait;
@@ -28,7 +53,7 @@ final class NSArrayTest extends TestCase
      */
     public function testExtendsArrayObject(): void
     {
-        $this->assertExtendsClass(AbstractNormalizedKeyArray::class, NSArray::class);
+        $this->assertExtendsClass(\ArrayObject::class, AbstractNormalizedKeyArray::class);
     }
 
     /**
@@ -62,7 +87,7 @@ final class NSArrayTest extends TestCase
                         '\\Foo\\Bar' => 'FOO BAR',
                     ],
                 ],
-                ['foo\\bar' => 'FOO BAR'],
+                ['\\foo\\bar' => 'FOO BAR'],
                 0,
             ],
             // #4
@@ -75,9 +100,9 @@ final class NSArrayTest extends TestCase
                     ],
                 ],
                 [
-                    'foo\\bar' => 'FOO BAR',
-                    'baz\\gez' => 'BAZ GEZ',
-                    123        => '123',
+                    '\\foo\\bar' => 'FOO BAR',
+                    '\\baz\\gez' => 'BAZ GEZ',
+                    123          => '123',
                 ],
                 0,
             ],
@@ -91,9 +116,9 @@ final class NSArrayTest extends TestCase
                     ]),
                 ],
                 [
-                    'foo\\bar' => 'FOO BAR',
-                    'baz\\gez' => 'BAZ GEZ',
-                    123        => '123',
+                    '\\foo\\bar' => 'FOO BAR',
+                    '\\baz\\gez' => 'BAZ GEZ',
+                    123          => '123',
                 ],
                 0,
             ],
@@ -109,12 +134,12 @@ final class NSArrayTest extends TestCase
     /**
      * @dataProvider provConstructor
      *
-     * @psalm-suppress MissingThrowsDocblock
      * @psalm-param list{0?:array|object,1?:int} $args
+     * @psalm-suppress MissingThrowsDocblock
      */
     public function testConstructor(array $args, array $expectArray, int $expectFlags): void
     {
-        $array = new NSArray(...$args);
+        $array = new LowerCaseArrayYP8NW(...$args);
         $this->assertKsortedArrayIdenticalTo($expectArray, $array->getArrayCopy());
         $this->assertSame($expectFlags, $array->getFlags());
     }
@@ -124,16 +149,14 @@ final class NSArrayTest extends TestCase
      */
     public function testOffsetExists(): void
     {
-        $array = new NSArray([
+        $array = new LowerCaseArrayYP8NW([
             '\\Foo\\Bar' => 'FOO BAR',
             123          => true,
             567          => null,
         ]);
 
         $this->assertTrue($array->offsetExists('\\Foo\\Bar'));
-        $this->assertTrue($array->offsetExists('Foo\\Bar'));
         $this->assertTrue($array->offsetExists('\\foo\\bar'));
-        $this->assertTrue($array->offsetExists('foo\\bar'));
         $this->assertTrue($array->offsetExists(123));
         $this->assertTrue($array->offsetExists(567));
 
@@ -146,16 +169,14 @@ final class NSArrayTest extends TestCase
      */
     public function testOffsetIsset(): void
     {
-        $array = new NSArray([
+        $array = new LowerCaseArrayYP8NW([
             '\\Foo\\Bar' => 'FOO BAR',
             123          => true,
             567          => null,
         ]);
 
         $this->assertTrue($array->offsetIsSet('\\Foo\\Bar'));
-        $this->assertTrue($array->offsetIsSet('Foo\\Bar'));
         $this->assertTrue($array->offsetIsSet('\\foo\\bar'));
-        $this->assertTrue($array->offsetIsSet('foo\\bar'));
         $this->assertTrue($array->offsetIsSet(123));
 
         $this->assertFalse($array->offsetIsSet('inexistent'));
@@ -168,16 +189,14 @@ final class NSArrayTest extends TestCase
      */
     public function testIsset(): void
     {
-        $array = new NSArray([
+        $array = new LowerCaseArrayYP8NW([
             '\\Foo\\Bar' => 'FOO BAR',
             123          => true,
             567          => null,
         ]);
 
         $this->assertTrue(isset($array['\\Foo\\Bar']));
-        $this->assertTrue(isset($array['Foo\\Bar']));
         $this->assertTrue(isset($array['\\foo\\bar']));
-        $this->assertTrue(isset($array['foo\\bar']));
         $this->assertTrue(isset($array[123]));
         // https://bugs.php.net/bug.php?id=41727
         $this->assertTrue(isset($array[567]));
@@ -191,12 +210,12 @@ final class NSArrayTest extends TestCase
      */
     public function testOffsetSet(): void
     {
-        $array = new NSArray();
+        $array = new LowerCaseArrayYP8NW();
 
-        $this->assertFalse($array->offsetExists('foo\\bar'));
+        $this->assertFalse($array->offsetExists('\\foo\\bar'));
         $array['\\Foo\\Bar'] = 'FOO BAR';
-        $this->assertTrue($array->offsetExists('foo\\bar'));
-        $this->assertSame('FOO BAR', $array['foo\\bar']);
+        $this->assertTrue($array->offsetExists('\\foo\\bar'));
+        $this->assertSame('FOO BAR', $array['\\foo\\bar']);
     }
 
     /**
@@ -204,11 +223,11 @@ final class NSArrayTest extends TestCase
      */
     public function testOffsetUnset(): void
     {
-        $array = new NSArray(['\\Foo\\Bar' => 'FOO BAR']);
-        $this->assertTrue($array->offsetExists('foo\\bar'));
-        $this->assertSame('FOO BAR', $array['foo\\bar']);
+        $array = new LowerCaseArrayYP8NW(['\\Foo\\Bar' => 'FOO BAR']);
+        $this->assertTrue($array->offsetExists('\\foo\\bar'));
+        $this->assertSame('FOO BAR', $array['\\foo\\bar']);
         unset($array['\\Foo\\Bar']);
-        $this->assertFalse($array->offsetExists('foo\\bar'));
+        $this->assertFalse($array->offsetExists('\\foo\\bar'));
     }
 
     /**
@@ -216,14 +235,14 @@ final class NSArrayTest extends TestCase
      */
     public function testExchangeArrayWithArray(): void
     {
-        $array = new NSArray(['\\Foo\\Bar' => 'FOO BAR']);
+        $array = new LowerCaseArrayYP8NW(['\\Foo\\Bar' => 'FOO BAR']);
 
         $this->assertKsortedArrayIdenticalTo(
-            ['foo\\bar' => 'FOO BAR'],
+            ['\\foo\\bar' => 'FOO BAR'],
             $array->exchangeArray(['\\Baz\\Gez' => 'BAZ GEZ'])
         );
         $this->assertKsortedArrayIdenticalTo(
-            ['baz\\gez' => 'BAZ GEZ'],
+            ['\\baz\\gez' => 'BAZ GEZ'],
             $array->getArrayCopy()
         );
     }
@@ -233,9 +252,9 @@ final class NSArrayTest extends TestCase
      */
     public function testExchangeArrayWithObject(): void
     {
-        $array = new NSArray(['\\Foo\\Bar' => 'FOO BAR']);
+        $array = new LowerCaseArrayYP8NW(['\\Foo\\Bar' => 'FOO BAR']);
 
-        $this->assertKsortedArrayIdenticalTo(['foo\\bar' => 'FOO BAR'], $array->exchangeArray(new class() {}));
+        $this->assertKsortedArrayIdenticalTo(['\\foo\\bar' => 'FOO BAR'], $array->exchangeArray(new class() {}));
         $this->assertSame([], $array->getArrayCopy());
     }
 }
