@@ -1,10 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace Tailors\Tests\Lib\Injector;
+namespace Tailors\Lib\Injector;
 
 use PHPUnit\Framework\TestCase;
-use Tailors\Lib\Injector\AbstractNormalizedKeyArray;
-use Tailors\Lib\Injector\NSArray;
 use Tailors\PHPUnit\ExtendsClassTrait;
 use Tailors\PHPUnit\KsortedArrayIdenticalToTrait;
 
@@ -14,9 +12,6 @@ use Tailors\PHPUnit\KsortedArrayIdenticalToTrait;
  * @covers \Tailors\Lib\Injector\NSArray
  *
  * @internal
- *
- * @psalm-suppress InternalClass
- * @psalm-suppress InternalMethod
  */
 final class NSArrayTest extends TestCase
 {
@@ -110,6 +105,7 @@ final class NSArrayTest extends TestCase
      * @dataProvider provConstructor
      *
      * @psalm-suppress MissingThrowsDocblock
+     *
      * @psalm-param list{0?:array|object,1?:int} $args
      */
     public function testConstructor(array $args, array $expectArray, int $expectFlags): void

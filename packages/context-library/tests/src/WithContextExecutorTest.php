@@ -1,11 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace Tailors\Tests\Lib\Context;
+namespace Tailors\Lib\Context;
 
 use PHPUnit\Framework\TestCase;
-use Tailors\Lib\Context\ContextManagerInterface;
-use Tailors\Lib\Context\ExecutorInterface;
-use Tailors\Lib\Context\WithContextExecutor;
 use Tailors\PHPUnit\ImplementsInterfaceTrait;
 
 final class ExceptionEB3IB4EL extends \Exception

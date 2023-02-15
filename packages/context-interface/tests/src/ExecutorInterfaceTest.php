@@ -1,9 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace Tailors\Tests\Lib\Context;
+namespace Tailors\Lib\Context;
 
 use PHPUnit\Framework\TestCase;
-use Tailors\Lib\Context\ExecutorInterface;
 use Tailors\PHPUnit\ImplementsInterfaceTrait;
 
 final class ExecutorB2L09 implements ExecutorInterface
@@ -14,7 +13,7 @@ final class ExecutorB2L09 implements ExecutorInterface
 /**
  * @author Paweł Tomulik <pawel@tomulik.pl>
  *
- * @covers \Tailors\Tests\Lib\Context\ExecutorInterfaceTrait
+ * @covers \Tailors\Lib\Context\ExecutorInterfaceTrait
  *
  * @internal
  */

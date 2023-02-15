@@ -38,7 +38,7 @@
     },
     "autoload-dev": {
       "psr-4" : {
-        "Tailors\\Tests\\Lib\\Singleton\\" : "tests/src/"
+        "Tailors\\Lib\\Singleton\\" : "tests/src/"
       }
     }
 }

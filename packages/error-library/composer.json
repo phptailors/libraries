@@ -45,7 +45,7 @@
     },
     "autoload-dev": {
       "psr-4" : {
-        "Tailors\\Tests\\Lib\\Error\\" : "tests/src/"
+        "Tailors\\Lib\\Error\\" : "tests/src/"
       }
     }
 }

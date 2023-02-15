@@ -1,10 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace Tailors\Tests\Lib\Error;
+namespace Tailors\Lib\Error;
 
 use PHPUnit\Framework\TestCase;
-use Tailors\Lib\Error\CallerErrorHandler;
-use Tailors\Lib\Error\ErrorHandler;
 use Tailors\PHPUnit\ExtendsClassTrait;
 
 use function Tailors\Lib\Context\with;

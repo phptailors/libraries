@@ -47,7 +47,7 @@
     "autoload-dev": {
       "psr-4" : {
         "Tailors\\Testing\\Lib\\Context\\" : "testing/",
-        "Tailors\\Tests\\Lib\\Context\\" : "tests/src/"
+        "Tailors\\Lib\\Context\\" : "tests/src/"
       }
     }
 }

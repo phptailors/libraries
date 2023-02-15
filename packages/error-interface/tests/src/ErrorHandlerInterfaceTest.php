@@ -1,9 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace Tailors\Tests\Lib\Error;
+namespace Tailors\Lib\Error;
 
 use PHPUnit\Framework\TestCase;
-use Tailors\Lib\Error\ErrorHandlerInterface;
 use Tailors\PHPUnit\ImplementsInterfaceTrait;
 
 final class ErrorHandler5VEU2 implements ErrorHandlerInterface
@@ -14,7 +13,7 @@ final class ErrorHandler5VEU2 implements ErrorHandlerInterface
 /**
  * @author Paweł Tomulik <pawel@tomulik.pl>
  *
- * @covers \Tailors\Tests\Lib\Error\ErrorHandlerInterfaceTrait
+ * @covers \Tailors\Lib\Error\ErrorHandlerInterfaceTrait
  *
  * @internal This class is not covered by backward compatibility promise
  */

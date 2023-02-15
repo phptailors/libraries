@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Tailors\Tests\Lib\Error;
+namespace Tailors\Lib\Error;
 
 /**
  * @author Paweł Tomulik <pawel@tomulik.pl>

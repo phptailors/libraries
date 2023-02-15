@@ -58,23 +58,23 @@
     "autoload-dev": {
         "psr-4": {
             "Tailors\\Docs\\Behat\\": "docs/sphinx/behat/",
-            "Tailors\\Testing\\Lib\\Context\\": "packages/context-library/testing/",
-            "Tailors\\Tests\\Lib\\Context\\": [
+            "Tailors\\Lib\\Context\\": [
                 "packages/context-interface/tests/src/",
                 "packages/context-library/tests/src/"
             ],
-            "Tailors\\Tests\\Lib\\Error\\": [
+            "Tailors\\Lib\\Error\\": [
                 "packages/error-interface/tests/src/",
                 "packages/error-library/tests/src/"
             ],
-            "Tailors\\Tests\\Lib\\Injector\\": [
+            "Tailors\\Lib\\Injector\\": [
                 "packages/injector-interface/tests/src/",
                 "packages/injector-library/tests/src/"
             ],
-            "Tailors\\Tests\\Lib\\Singleton\\": [
+            "Tailors\\Lib\\Singleton\\": [
                 "packages/singleton-interface/tests/src/",
                 "packages/singleton-library/tests/src/"
             ],
+            "Tailors\\Testing\\Lib\\Context\\": "packages/context-library/testing/",
             "Tailors\\Tests\\Testing\\Lib\\Singleton\\": "packages/singleton-testing/tests/testing/"
         }
     },

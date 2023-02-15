@@ -1,9 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace Tailors\Tests\Lib\Singleton;
+namespace Tailors\Lib\Singleton;
 
 use PHPUnit\Framework\TestCase;
-use Tailors\Lib\Singleton\SingletonTrait;
 use Tailors\Testing\Lib\Singleton\AssertIsSingletonTrait;
 
 class MinimalSingletonC91F82BJ

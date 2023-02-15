@@ -1,19 +1,13 @@
 <?php declare(strict_types=1);
 
-namespace Tailors\Tests\Lib\Injector;
+namespace Tailors\Lib\Injector;
 
 use PHPUnit\Framework\TestCase;
-use Tailors\Lib\Injector\AbstractNormalizedKeyArray;
 use Tailors\PHPUnit\ExtendsClassTrait;
 use Tailors\PHPUnit\KsortedArrayIdenticalToTrait;
 
 /**
- * @psalm-template TKey
- * @psalm-template TValue
- *
- * @template-extends AbstractNormalizedKeyArray<TKey,TValue>
- * @psalm-suppress InternalClass
- * @psalm-suppress InternalMethod
+ * @template-extends AbstractNormalizedKeyArray<array-key,mixed>
  */
 final class LowerCaseArrayYP8NW extends AbstractNormalizedKeyArray
 {
@@ -36,7 +30,7 @@ final class LowerCaseArrayYP8NW extends AbstractNormalizedKeyArray
 
 /**
  * @covers \Tailors\Lib\Injector\AbstractNormalizedKeyArray
- * @covers \Tailors\Tests\Lib\Injector\LowerCaseArrayYP8NW
+ * @covers \Tailors\Lib\Injector\LowerCaseArrayYP8NW
  *
  * @internal
  *
@@ -135,6 +129,7 @@ final class AbstractNormalizedKeyArrayTest extends TestCase
      * @dataProvider provConstructor
      *
      * @psalm-param list{0?:array|object,1?:int} $args
+     *
      * @psalm-suppress MissingThrowsDocblock
      */
     public function testConstructor(array $args, array $expectArray, int $expectFlags): void

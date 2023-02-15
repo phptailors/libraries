@@ -1,9 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace Tailors\Tests\Lib\Injector;
+namespace Tailors\Lib\Injector;
 
 use PHPUnit\Framework\TestCase;
-use Tailors\Lib\Injector\ResolverInterface;
 use Tailors\PHPUnit\ImplementsInterfaceTrait;
 
 final class ResolverZMYOR implements ResolverInterface
@@ -14,7 +13,7 @@ final class ResolverZMYOR implements ResolverInterface
 /**
  * @author Paweł Tomulik <pawel@tomulik.pl>
  *
- * @covers \Tailors\Tests\Lib\Injector\ResolverInterfaceTrait
+ * @covers \Tailors\Lib\Injector\ResolverInterfaceTrait
  *
  * @internal
  */

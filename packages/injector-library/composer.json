@@ -40,7 +40,7 @@
     },
     "autoload-dev": {
       "psr-4" : {
-        "Tailors\\Tests\\Lib\\Injector\\" : "tests/src/"
+        "Tailors\\Lib\\Injector\\" : "tests/src/"
       }
     }
 }

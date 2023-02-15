@@ -32,76 +32,53 @@ namespace Tailors\Lib\Injector;
  */
 abstract class AbstractNormalizedKeyArray extends \ArrayObject
 {
-    /**
-     * @psalm-param array<TKey,TValue>|object $data
-     */
     final public function __construct(array|object $data = [], int $flags = 0)
     {
-        if(is_iterable($data)) {
-            $data = self::normalizeKeys($data);
+        if (is_iterable($data)) {
+            parent::__construct(self::normalizeKeys($data), $flags);
+        } else {
+            parent::__construct($data, $flags);
         }
-        parent::__construct($data, $flags);
     }
 
-    /**
-     * @psalm-param array-key $offset
-     */
     final public function offsetExists(mixed $offset): bool
     {
-        return parent::offsetExists(static::normalizeKey($offset));
+        return parent::offsetExists($this->normalizeKey($offset));
     }
 
-    /**
-     * @psalm-param array-key $offset
-     * @psalm-return TValue|null
-     */
     final public function offsetGet(mixed $offset): mixed
     {
-        return parent::offsetGet(static::normalizeKey($offset));
+        return parent::offsetGet($this->normalizeKey($offset));
     }
 
-    /**
-     * @psalm-param array_key $offset
-     */
     final public function offsetIsSet(mixed $offset): bool
     {
-        $offset = static::normalizeKey($offset);
+        $offset = $this->normalizeKey($offset);
 
         return parent::offsetExists($offset) && null !== parent::offsetGet($offset);
     }
 
-    /**
-     * @psalm-param array-key $offset
-     * @psalm-param TValue $value
-     */
     final public function offsetSet(mixed $offset, mixed $value): void
     {
-        parent::offsetSet(static::normalizeKey($offset), $value);
+        parent::offsetSet($this->normalizeKey($offset), $value);
     }
 
-    /**
-     * @psalm-param array-key $offset
-     */
     final public function offsetUnset(mixed $offset): void
     {
-        parent::offsetUnset(static::normalizeKey($offset));
+        parent::offsetUnset($this->normalizeKey($offset));
     }
 
-    /**
-     * @psalm-param array<TKey,TValue>|object $array
-     */
     final public function exchangeArray(array|object $array): array
     {
-        if(is_iterable($array)) {
-            $array = self::normalizeKeys($array);
+        if (is_iterable($array)) {
+            return parent::exchangeArray(self::normalizeKeys($array));
         }
+
         return parent::exchangeArray($array);
     }
 
     /**
-     * @psalm-template K
-     * @psalm-param K $key
-     * @psalm-return (K is string ? string : K)
+     * @psalm-return TKey
      */
     abstract protected static function normalizeKey(mixed $key): mixed;
 
@@ -111,7 +88,7 @@ abstract class AbstractNormalizedKeyArray extends \ArrayObject
      *
      * @psalm-param iterable<K,V> $array
      *
-     * @psalm-return array<K,V>
+     * @psalm-return array<TKey,V>
      */
     private static function normalizeKeys(iterable $array): array
     {
@@ -119,6 +96,7 @@ abstract class AbstractNormalizedKeyArray extends \ArrayObject
         foreach ($array as $key => $value) {
             $result[static::normalizeKey($key)] = $value;
         }
+
         return $result;
     }
 }

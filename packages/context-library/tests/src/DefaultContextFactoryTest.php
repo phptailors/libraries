@@ -1,13 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace Tailors\Tests\Lib\Context;
+namespace Tailors\Lib\Context;
 
 use PHPUnit\Framework\TestCase;
-use Tailors\Lib\Context\ContextFactoryInterface;
-use Tailors\Lib\Context\ContextManagerInterface;
-use Tailors\Lib\Context\DefaultContextFactory;
-use Tailors\Lib\Context\ResourceContextManager;
-use Tailors\Lib\Context\TrivialValueWrapper;
 use Tailors\Lib\Singleton\SingletonInterface;
 use Tailors\PHPUnit\ImplementsInterfaceTrait;
 use Tailors\Testing\Lib\Context\ExpectFunctionOnceWillReturnTrait;

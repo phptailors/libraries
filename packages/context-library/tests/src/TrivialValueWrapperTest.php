@@ -1,10 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace Tailors\Tests\Lib\Context;
+namespace Tailors\Lib\Context;
 
 use PHPUnit\Framework\TestCase;
-use Tailors\Lib\Context\ContextManagerInterface;
-use Tailors\Lib\Context\TrivialValueWrapper;
 use Tailors\PHPUnit\ImplementsInterfaceTrait;
 
 /**

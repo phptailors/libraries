@@ -2,8 +2,6 @@
 
 namespace Tailors\Lib\Injector;
 
-use Psr\Container\NotFoundExceptionInterface;
-
 final class NotFoundException extends \Exception implements NotFoundExceptionInterface
 {
 }

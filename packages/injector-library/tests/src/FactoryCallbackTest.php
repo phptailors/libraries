@@ -1,10 +1,8 @@
-<?php
+<?php declare(strict_types=1);
 
-namespace Tailors\Tests\Lib\Injector;
+namespace Tailors\Lib\Injector;
 
 use PHPUnit\Framework\TestCase;
-use Tailors\Lib\Injector\FactoryCallback;
-use Tailors\Lib\Injector\FactoryInterface;
 use Tailors\PHPUnit\ImplementsInterfaceTrait;
 
 /**
@@ -24,5 +22,17 @@ final class FactoryCallbackTest extends TestCase
     public function testImplementsFactoryInterface(): void
     {
         $this->assertImplementsInterface(FactoryInterface::class, FactoryCallback::class);
+    }
+
+    /**
+     * @psalm-suppress MissingThrowsDocblock
+     */
+    public function testFactoryCallback(): void
+    {
+        $resolver = $this->createStub(ResolverInterface::class);
+        $callback = fn (ResolverInterface $resolver): ResolverInterface => $resolver;
+        $factory = new FactoryCallback($callback);
+        $this->assertSame($callback, $factory->getCallback());
+        $this->assertSame($resolver, $factory->create($resolver));
     }
 }

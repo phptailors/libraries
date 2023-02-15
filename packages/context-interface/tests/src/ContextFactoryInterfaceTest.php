@@ -1,10 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace Tailors\Tests\Lib\Context;
+namespace Tailors\Lib\Context;
 
 use PHPUnit\Framework\TestCase;
-use Tailors\Lib\Context\ContextFactoryInterface;
-use Tailors\Lib\Context\ContextManagerInterface;
 use Tailors\PHPUnit\ImplementsInterfaceTrait;
 
 final class ContextFactoryE4N3C implements ContextFactoryInterface
@@ -15,7 +13,7 @@ final class ContextFactoryE4N3C implements ContextFactoryInterface
 /**
  * @author Paweł Tomulik <pawel@tomulik.pl>
  *
- * @covers \Tailors\Tests\Lib\Context\ContextFactoryInterfaceTrait
+ * @covers \Tailors\Lib\Context\ContextFactoryInterfaceTrait
  *
  * @internal
  */
