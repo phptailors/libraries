@@ -9,6 +9,6 @@ namespace Tailors\Lib\Injector;
  *
  * @psalm-internal Tailors\Lib\Injector
  */
-interface ScopeInterface extends ScopeAliasesInterface
+interface ScopeInterface extends AliasesInterface
 {
 }

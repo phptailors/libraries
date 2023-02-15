@@ -11,7 +11,7 @@ use Tailors\PHPUnit\UsesTraitTrait;
  * @author Paweł Tomulik <pawel@tomulik.pl>
  *
  * @covers \Tailors\Lib\Injector\Scope
- * @covers \Tailors\Lib\Injector\ScopeAliasesTrait
+ * @covers \Tailors\Lib\Injector\AliasesTrait
  *
  * @internal
  */
@@ -32,9 +32,9 @@ final class ScopeTest extends TestCase
     /**
      * @psalm-suppress MissingThrowsDocblock
      */
-    public function testUsesScopeAliasesTrait(): void
+    public function testUsesAliasesTrait(): void
     {
-        $this->assertUsesTrait(ScopeAliasesTrait::class, Scope::class);
+        $this->assertUsesTrait(AliasesTrait::class, Scope::class);
     }
 
     /**
@@ -60,7 +60,7 @@ final class ScopeTest extends TestCase
      */
     public function testConstructWithCyclicAliases(): void
     {
-        $this->expectException(CircularDependencyException::class);
+        $this->expectException(CyclicAliasException::class);
         $this->expectExceptionMessage('cyclic alias detected: \'foo\' -> \'bar\' -> \'baz\' -> \'foo\'');
 
         $this->assertNotNull(new Scope([
@@ -120,11 +120,23 @@ final class ScopeTest extends TestCase
     /**
      * @psalm-suppress MissingThrowsDocblock
      */
-    public function testAliasSetThrowsCircularDependencyException(): void
+    public function testAliasUnset(): void
+    {
+        $scope = new Scope(['aliases' => ['foo' => 'bar']]);
+        $this->assertNull($scope->aliasUnset('foo'));
+        $this->assertSame([], $scope->getAliases());
+        // Unsetting inexistent alias is harmless
+        $this->assertNull($scope->aliasUnset('inexisteng'));
+    }
+
+    /**
+     * @psalm-suppress MissingThrowsDocblock
+     */
+    public function testAliasSetThrowsCyclicAliasException(): void
     {
         $scope = new Scope(['aliases' => ['foo' => 'bar', 'bar' => 'baz']]);
 
-        $this->expectException(CircularDependencyException::class);
+        $this->expectException(CyclicAliasException::class);
         $this->expectExceptionMessage('cyclic alias detected: \'baz\' -> \'foo\' -> \'bar\' -> \'baz\'');
 
         $this->assertNull($scope->aliasSet('baz', 'foo'));

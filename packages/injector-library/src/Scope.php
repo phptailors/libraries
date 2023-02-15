@@ -15,12 +15,12 @@ namespace Tailors\Lib\Injector;
  */
 final class Scope implements ScopeInterface
 {
-    use ScopeAliasesTrait;
+    use AliasesTrait;
 
     /**
      * @psalm-param TOptions $options
      *
-     * @throws CircularDependencyException
+     * @throws CyclicAliasException
      */
     public function __construct(array $options = [])
     {

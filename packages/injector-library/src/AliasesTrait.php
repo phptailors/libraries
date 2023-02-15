@@ -9,7 +9,7 @@ namespace Tailors\Lib\Injector;
  *
  * @psalm-internal Tailors\Lib\Injector
  */
-trait ScopeAliasesTrait
+trait AliasesTrait
 {
     /**
      * @psalm-var array<string,string>
@@ -26,8 +26,6 @@ trait ScopeAliasesTrait
 
     /**
      * Returns true if *$alias* exists.
-     *
-     * @psalm-mutation-free
      */
     public function aliasExists(string $alias): bool
     {
@@ -35,12 +33,20 @@ trait ScopeAliasesTrait
     }
 
     /**
-     * @throws CircularDependencyException
+     * @throws CyclicAliasException
      */
     public function aliasSet(string $alias, string $target): void
     {
         self::aliasAssertNoCycles($this->aliases, $alias, $target);
         $this->aliases[$alias] = $target;
+    }
+
+    /**
+     * Remove *$alias*.
+     */
+    public function aliasUnset(string $alias): void
+    {
+        unset($this->aliases[$alias]);
     }
 
     /**
@@ -98,7 +104,7 @@ trait ScopeAliasesTrait
     /**
      * @psalm-param array<string,string> $aliases
      *
-     * @throws CircularDependencyException
+     * @throws CyclicAliasException
      */
     private static function aliasAssertNoCycles(array $aliases, string $alias = null, string $target = null): void
     {
@@ -106,7 +112,7 @@ trait ScopeAliasesTrait
             if (null !== ($cycle = self::aliasDetectCycle($aliases, $alias, $target))) {
                 $cycleStr = implode(' -> ', array_map(fn (string $s): string => var_export($s, true), $cycle));
 
-                throw new CircularDependencyException(sprintf('cyclic alias detected: %s', $cycleStr));
+                throw new CyclicAliasException(sprintf('cyclic alias detected: %s', $cycleStr));
             }
 
             return;

@@ -27,6 +27,7 @@ namespace Tailors\Lib\Injector;
  *
  * @psalm-template TKey
  * @psalm-template TValue
+ * @psalm-template TNormKey of TKey
  *
  * @template-extends \ArrayObject<TKey,TValue>
  */
@@ -78,7 +79,7 @@ abstract class AbstractNormalizedKeyArray extends \ArrayObject
     }
 
     /**
-     * @psalm-return TKey
+     * @psalm-return TNormKey
      */
     abstract protected static function normalizeKey(mixed $key): mixed;
 
@@ -88,7 +89,7 @@ abstract class AbstractNormalizedKeyArray extends \ArrayObject
      *
      * @psalm-param iterable<K,V> $array
      *
-     * @psalm-return array<TKey,V>
+     * @psalm-return array<TNormKey,V>
      */
     private static function normalizeKeys(iterable $array): array
     {

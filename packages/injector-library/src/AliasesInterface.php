@@ -9,7 +9,7 @@ namespace Tailors\Lib\Injector;
  *
  * @psalm-internal Tailors\Lib\Injector
  */
-interface ScopeAliasesInterface
+interface AliasesInterface
 {
     /**
      * @psalm-return array<string,string>
@@ -22,9 +22,14 @@ interface ScopeAliasesInterface
     public function aliasExists(string $alias): bool;
 
     /**
-     * @throws CircularDependencyExceptionInterface
+     * @throws CyclicAliasExceptionInterface
      */
     public function aliasSet(string $alias, string $target): void;
+
+    /**
+     * Remove *$alias*.
+     */
+    public function aliasUnset(string $alias): void;
 
     /**
      * Returns direct target assigned to alias.
