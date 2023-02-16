@@ -16,9 +16,6 @@ interface AliasesInterface
      */
     public function aliasesArray(): array;
 
-    /**
-     * Returns true if *$alias* exists.
-     */
     public function aliasExists(string $alias): bool;
 
     /**
@@ -26,20 +23,12 @@ interface AliasesInterface
      */
     public function aliasSet(string $alias, string $target): void;
 
-    /**
-     * Remove *$alias*.
-     */
     public function aliasUnset(string $alias): void;
 
     /**
-     * Returns direct target assigned to alias.
-     *
      * @throws NotFoundExceptionInterface if $alias does not exist
      */
     public function aliasGet(string $alias): string;
 
-    /**
-     * Resolves alias recursively.
-     */
     public function aliasResolve(string $alias): string;
 }

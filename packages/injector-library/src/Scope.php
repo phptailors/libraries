@@ -9,7 +9,7 @@ namespace Tailors\Lib\Injector;
  *
  * @psalm-internal Tailors\Lib\Injector
  */
-final class Scope implements ScopeInterface, AliasesInterface, AliasesWrapperInterface, InstancesInterface, InstancesWrapperInterface
+final class Scope implements ScopeInterface, AliasesWrapperInterface, InstancesWrapperInterface
 {
     use AliasesWrapperTrait;
     use InstancesWrapperTrait;

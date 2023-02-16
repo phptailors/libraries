@@ -25,8 +25,6 @@ final class Instances implements InstancesInterface
     }
 
     /**
-     * Returns an array of type => instance assignments.
-     *
      * @psalm-return array<object>
      */
     public function instancesArray(): array
@@ -35,8 +33,6 @@ final class Instances implements InstancesInterface
     }
 
     /**
-     * Returns true if *$type* has assigned instance.
-     *
      * @psalm-param array-key $type
      */
     public function instanceExists(mixed $type): bool
@@ -44,17 +40,12 @@ final class Instances implements InstancesInterface
         return $this->instances->offsetIsSet($type);
     }
 
-    /**
-     * Assigns *$instance* to *$type*.
-     */
     public function instanceSet(string $type, object $instance): void
     {
         $this->instances[$type] = $instance;
     }
 
     /**
-     * Unassign instance from *$type*.
-     *
      * @psalm-param array-key $type
      */
     public function instanceUnset(mixed $type): void
@@ -63,8 +54,6 @@ final class Instances implements InstancesInterface
     }
 
     /**
-     * Returns instance assigned to *$type*.
-     *
      * @throws NotFoundException
      *
      * @psalm-param array-key $type

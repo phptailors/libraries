@@ -9,29 +9,27 @@ namespace Tailors\Lib\Injector;
  *
  * @psalm-internal Tailors\Lib\Injector
  */
-interface InstancesInterface
+interface FactoriesInterface
 {
     /**
-     * @psalm-return array<object>
+     * @psalm-return array<FactoryInterface>
      */
-    public function instancesArray(): array;
+    public function factoriesArray(): array;
 
     /**
      * @psalm-param array-key $type
      */
-    public function instanceExists(mixed $type): bool;
+    public function factoryExists(mixed $type): bool;
 
-    public function instanceSet(string $type, object $instance): void;
+    public function factorySet(string $type, FactoryInterface $factory): void;
 
     /**
      * @psalm-param array-key $type
      */
-    public function instanceUnset(mixed $type): void;
+    public function factoryUnset(mixed $type): void;
 
     /**
      * @throws NotFoundExceptionInterface if *$type* does not exist
-     *
-     * @psalm-param array-key $type
      */
-    public function instanceGet(mixed $type): object;
+    public function factoryGet(string $type): FactoryInterface;
 }

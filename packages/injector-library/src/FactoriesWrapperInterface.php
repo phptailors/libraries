@@ -9,6 +9,7 @@ namespace Tailors\Lib\Injector;
  *
  * @psalm-internal Tailors\Lib\Injector
  */
-interface ScopeInterface extends AliasesInterface, InstancesInterface
+interface FactoriesWrapperInterface
 {
+    public function getFactories(): FactoriesInterface;
 }

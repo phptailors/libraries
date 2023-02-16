@@ -9,6 +9,7 @@ namespace Tailors\Lib\Injector;
  *
  * @psalm-internal Tailors\Lib\Injector
  */
-interface ScopeInterface extends AliasesInterface, InstancesInterface
+interface NamespacesWrapperInterface
 {
+    public function getNamespaces(): NamespacesInterface;
 }

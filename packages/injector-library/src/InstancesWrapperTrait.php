@@ -14,8 +14,6 @@ trait InstancesWrapperTrait
     abstract public function getInstances(): InstancesInterface;
 
     /**
-     * Returns an array of type => instance assignments.
-     *
      * @psalm-return array<object>
      */
     public function instancesArray(): array
@@ -24,8 +22,6 @@ trait InstancesWrapperTrait
     }
 
     /**
-     * Returns true if *$type* has assigned instance.
-     *
      * @psalm-param array-key $type
      */
     public function instanceExists(mixed $type): bool
@@ -33,17 +29,12 @@ trait InstancesWrapperTrait
         return $this->getInstances()->instanceExists($type);
     }
 
-    /**
-     * Assigns *$instance* to *$type*.
-     */
     public function instanceSet(string $type, object $instance): void
     {
         $this->getInstances()->instanceSet($type, $instance);
     }
 
     /**
-     * Remove *$instance*.
-     *
      * @psalm-param array-key $type
      */
     public function instanceUnset(mixed $type): void
@@ -52,8 +43,6 @@ trait InstancesWrapperTrait
     }
 
     /**
-     * Returns instance assigned to *$type*.
-     *
      * @throws NotFoundExceptionInterface if *$type* does not exist
      *
      * @psalm-param array-key $type

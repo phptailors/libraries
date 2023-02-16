@@ -45,8 +45,6 @@ final class ResolverInterfaceTest extends TestCase
             [null, ['foo']],
             [123, ['foo']],
             [new \Exception(), ['foo']],
-            ['return string', ['foo', []]],
-            ['return string', ['foo', [1, 'b']]],
         ];
     }
 
@@ -59,9 +57,43 @@ final class ResolverInterfaceTest extends TestCase
             [[null], 'Argument #1'],
             [[123], 'Argument #1'],
             [[new \Exception()], 'Argument #1'],
-            [[123, []], 'Argument #1'],
-            [[[self::class, 'inexistent']], 'Argument #1'],
-            [['ok', 'not ok'], 'Argument #2'],
+            [[[1,2,3]], 'Argument #1'],
+        ];
+    }
+
+    /**
+     * @psalm-return list<list{0: object, 1:list{0:string,1?:array}}>
+     */
+    public static function provResolveObjectWithValidArguments(): array
+    {
+        return [
+            [new \Exception(), ['Exception']],
+        ];
+    }
+
+    /**
+     * @psalm-return list<list{list{0:mixed,1?:mixed}, string}>
+     */
+    public static function provResolveObjectWithInvalidArguments(): array
+    {
+        return [
+            [[null], 'Argument #1'],
+            [[123], 'Argument #1'],
+            [[new \Exception()], 'Argument #1'],
+        ];
+    }
+
+    /**
+     * @psalm-return list<list{mixed,string}>
+     */
+    public static function provResolveObjectWithInvalidReturnType(): array
+    {
+        return [
+            [null, 'Return value must be of type object, null returned'],
+            ['string', 'Return value must be of type object, string returned'],
+            [123, 'Return value must be of type object, int returned'],
+            [12.34, 'Return value must be of type object, float returned'],
+            [[1,2,3], 'Return value must be of type object, array returned'],
         ];
     }
 
@@ -111,5 +143,54 @@ final class ResolverInterfaceTest extends TestCase
 
         /** @psalm-suppress TooFewArguments */
         $this->assertNull($dummy->resolve());
+    }
+
+    /**
+     * @dataProvider provResolveObjectWithValidArguments
+     *
+     * @psalm-suppress MissingThrowsDocblock
+     *
+     * @psalm-param list{0:string,1?:array} $args
+     */
+    public function testResolveObjectWithValidArguments(object $retval, array $args): void
+    {
+        $dummy = $this->createDummyInstance();
+        $dummy->resolveObject = $retval;
+        $this->assertSame($retval, $dummy->resolveObject(...$args));
+    }
+
+    /**
+     * @dataProvider provResolveObjectWithInvalidArguments
+     *
+     * @psalm-suppress MissingThrowsDocblock
+     *
+     * @psalm-param list{0:mixed,1?:mixed} $args
+     */
+    public function testResolveObjectWithInvalidArguments(array $args, string $message): void
+    {
+        $dummy = $this->createDummyInstance();
+        $dummy->resolveObject = null;
+
+        $this->expectException(\TypeError::class);
+        $this->expectExceptionMessage($message);
+
+        /** @psalm-suppress MixedArgument */
+        $this->assertNull($dummy->resolveObject(...$args));
+    }
+
+   /**
+     * @dataProvider provResolveObjectWithInvalidReturnType
+     *
+     * @psalm-suppress MissingThrowsDocblock
+     */
+    public function testResolveObjectWithInvalidReturnType(mixed $retval, string $message): void
+    {
+        $dummy = $this->createDummyInstance();
+        $dummy->resolveObject = $retval;
+
+        $this->expectException(\TypeError::class);
+        $this->expectExceptionMessage($message);
+
+        $this->assertSame($retval, $dummy->resolveObject('foo'));
     }
 }

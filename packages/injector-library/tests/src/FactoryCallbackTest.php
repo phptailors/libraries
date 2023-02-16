@@ -9,6 +9,7 @@ use Tailors\PHPUnit\ImplementsInterfaceTrait;
 /**
  * @author Paweł Tomulik <pawel@tomulik.pl>
  *
+ * @covers \Tailors\Lib\Injector\AbstractFactoryBase
  * @covers \Tailors\Lib\Injector\FactoryCallback
  *
  * @internal

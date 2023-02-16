@@ -35,9 +35,6 @@ final class Aliases implements AliasesInterface
         return $this->aliases;
     }
 
-    /**
-     * Returns true if *$alias* exists.
-     */
     public function aliasExists(string $alias): bool
     {
         return isset($this->aliases[$alias]);
@@ -52,17 +49,12 @@ final class Aliases implements AliasesInterface
         $this->aliases[$alias] = $target;
     }
 
-    /**
-     * Remove *$alias*.
-     */
     public function aliasUnset(string $alias): void
     {
         unset($this->aliases[$alias]);
     }
 
     /**
-     * Returns direct target assigned to alias.
-     *
      * @throws NotFoundException
      */
     public function aliasGet(string $alias): string
@@ -75,8 +67,6 @@ final class Aliases implements AliasesInterface
     }
 
     /**
-     * Resolves alias recursively.
-     *
      * @throws NotFoundExceptionInterface
      */
     public function aliasResolve(string $alias): string
