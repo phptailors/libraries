@@ -4,9 +4,11 @@ namespace Tailors\Lib\Injector;
 
 final class Resolver implements ResolverInterface
 {
+    private array $resolveStack;
+
     private RegistryInterface $registry;
 
-    public function __construct(RetistryInterface $registry)
+    public function __construct(RegistryInterface $registry)
     {
         $this->registry = $registry;
     }

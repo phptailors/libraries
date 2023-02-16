@@ -61,6 +61,22 @@ final class ScopeTest extends TestCase
     /**
      * @psalm-suppress MissingThrowsDocblock
      */
+    public function testImplementsFactoriesInterface(): void
+    {
+        $this->assertImplementsInterface(FactoriesInterface::class, Scope::class);
+    }
+
+    /**
+     * @psalm-suppress MissingThrowsDocblock
+     */
+    public function testImplementsFactoriesWrapperInterface(): void
+    {
+        $this->assertImplementsInterface(FactoriesWrapperInterface::class, Scope::class);
+    }
+
+    /**
+     * @psalm-suppress MissingThrowsDocblock
+     */
     public function testUsesAliasesWrapperTrait(): void
     {
         $this->assertUsesTrait(AliasesWrapperTrait::class, Scope::class);
@@ -77,12 +93,21 @@ final class ScopeTest extends TestCase
     /**
      * @psalm-suppress MissingThrowsDocblock
      */
+    public function testUsesFactoriesWrapperTrait(): void
+    {
+        $this->assertUsesTrait(FactoriesWrapperTrait::class, Scope::class);
+    }
+
+    /**
+     * @psalm-suppress MissingThrowsDocblock
+     */
     public function testGetAliases(): void
     {
         $aliases = $this->createStub(AliasesInterface::class);
         $instances = $this->getMockBuilder(InstancesInterface::class)->getMock();
+        $factories = $this->getMockBuilder(FactoriesInterface::class)->getMock();
 
-        $scope = new Scope($aliases, $instances);
+        $scope = new Scope($aliases, $instances, $factories);
 
         $this->assertSame($aliases, $scope->getAliases());
     }
@@ -94,13 +119,14 @@ final class ScopeTest extends TestCase
     {
         $aliases = $this->getMockBuilder(AliasesInterface::class)->getMock();
         $instances = $this->getMockBuilder(InstancesInterface::class)->getMock();
+        $factories = $this->getMockBuilder(FactoriesInterface::class)->getMock();
 
         $aliases->expects($this->once())
             ->method('aliasesArray')
             ->willReturn(['foo' => 'bar'])
         ;
 
-        $scope = new Scope($aliases, $instances);
+        $scope = new Scope($aliases, $instances, $factories);
 
         $this->assertSame(['foo' => 'bar'], $scope->aliasesArray());
     }
@@ -112,6 +138,7 @@ final class ScopeTest extends TestCase
     {
         $aliases = $this->getMockBuilder(AliasesInterface::class)->getMock();
         $instances = $this->getMockBuilder(InstancesInterface::class)->getMock();
+        $factories = $this->getMockBuilder(FactoriesInterface::class)->getMock();
 
         $aliases->expects($this->exactly(2))
             ->method('aliasExists')
@@ -123,7 +150,7 @@ final class ScopeTest extends TestCase
             )
         ;
 
-        $scope = new Scope($aliases, $instances);
+        $scope = new Scope($aliases, $instances, $factories);
 
         $this->assertTrue($scope->aliasExists('foo'));
         $this->assertFalse($scope->aliasExists('bar'));
@@ -136,13 +163,14 @@ final class ScopeTest extends TestCase
     {
         $aliases = $this->getMockBuilder(AliasesInterface::class)->getMock();
         $instances = $this->getMockBuilder(InstancesInterface::class)->getMock();
+        $factories = $this->getMockBuilder(FactoriesInterface::class)->getMock();
 
         $aliases->expects($this->once())
             ->method('aliasSet')
             ->with('foo', 'bar')
         ;
 
-        $scope = new Scope($aliases, $instances);
+        $scope = new Scope($aliases, $instances, $factories);
 
         $this->assertNull($scope->aliasSet('foo', 'bar'));
     }
@@ -154,13 +182,14 @@ final class ScopeTest extends TestCase
     {
         $aliases = $this->getMockBuilder(AliasesInterface::class)->getMock();
         $instances = $this->getMockBuilder(InstancesInterface::class)->getMock();
+        $factories = $this->getMockBuilder(FactoriesInterface::class)->getMock();
 
         $aliases->expects($this->once())
             ->method('aliasUnset')
             ->with('foo')
         ;
 
-        $scope = new Scope($aliases, $instances);
+        $scope = new Scope($aliases, $instances, $factories);
 
         $this->assertNull($scope->aliasUnset('foo'));
     }
@@ -172,6 +201,7 @@ final class ScopeTest extends TestCase
     {
         $aliases = $this->getMockBuilder(AliasesInterface::class)->getMock();
         $instances = $this->getMockBuilder(InstancesInterface::class)->getMock();
+        $factories = $this->getMockBuilder(FactoriesInterface::class)->getMock();
 
         $aliases->expects($this->once())
             ->method('aliasGet')
@@ -179,7 +209,7 @@ final class ScopeTest extends TestCase
             ->willReturn('bar')
         ;
 
-        $scope = new Scope($aliases, $instances);
+        $scope = new Scope($aliases, $instances, $factories);
 
         $this->assertSame('bar', $scope->aliasGet('foo'));
     }
@@ -191,6 +221,7 @@ final class ScopeTest extends TestCase
     {
         $aliases = $this->getMockBuilder(AliasesInterface::class)->getMock();
         $instances = $this->getMockBuilder(InstancesInterface::class)->getMock();
+        $factories = $this->getMockBuilder(FactoriesInterface::class)->getMock();
 
         $aliases->expects($this->once())
             ->method('aliasResolve')
@@ -198,7 +229,7 @@ final class ScopeTest extends TestCase
             ->willReturn('bar')
         ;
 
-        $scope = new Scope($aliases, $instances);
+        $scope = new Scope($aliases, $instances, $factories);
 
         $this->assertSame('bar', $scope->aliasResolve('foo'));
     }
@@ -210,8 +241,9 @@ final class ScopeTest extends TestCase
     {
         $aliases = $this->getMockBuilder(AliasesInterface::class)->getMock();
         $instances = $this->getMockBuilder(InstancesInterface::class)->getMock();
+        $factories = $this->getMockBuilder(FactoriesInterface::class)->getMock();
 
-        $scope = new Scope($aliases, $instances);
+        $scope = new Scope($aliases, $instances, $factories);
 
         $this->assertSame($instances, $scope->getInstances());
     }
@@ -223,6 +255,7 @@ final class ScopeTest extends TestCase
     {
         $aliases = $this->getMockBuilder(AliasesInterface::class)->getMock();
         $instances = $this->getMockBuilder(InstancesInterface::class)->getMock();
+        $factories = $this->getMockBuilder(FactoriesInterface::class)->getMock();
 
         $instance = $this->createStub(\stdClass::class);
         $instances->expects($this->once())
@@ -230,7 +263,7 @@ final class ScopeTest extends TestCase
             ->willReturn(['foo' => $instance])
         ;
 
-        $scope = new Scope($aliases, $instances);
+        $scope = new Scope($aliases, $instances, $factories);
 
         $this->assertSame(['foo' => $instance], $scope->instancesArray());
     }
@@ -242,6 +275,7 @@ final class ScopeTest extends TestCase
     {
         $aliases = $this->getMockBuilder(AliasesInterface::class)->getMock();
         $instances = $this->getMockBuilder(InstancesInterface::class)->getMock();
+        $factories = $this->getMockBuilder(FactoriesInterface::class)->getMock();
 
         $instances->expects($this->exactly(2))
             ->method('instanceExists')
@@ -253,7 +287,7 @@ final class ScopeTest extends TestCase
             )
         ;
 
-        $scope = new Scope($aliases, $instances);
+        $scope = new Scope($aliases, $instances, $factories);
 
         $this->assertTrue($scope->instanceExists('foo'));
         $this->assertFalse($scope->instanceExists('bar'));
@@ -266,6 +300,7 @@ final class ScopeTest extends TestCase
     {
         $aliases = $this->getMockBuilder(AliasesInterface::class)->getMock();
         $instances = $this->getMockBuilder(InstancesInterface::class)->getMock();
+        $factories = $this->getMockBuilder(FactoriesInterface::class)->getMock();
 
         $instance = $this->createStub(\stdClass::class);
         $instances->expects($this->once())
@@ -273,7 +308,7 @@ final class ScopeTest extends TestCase
             ->with('foo', $instance)
         ;
 
-        $scope = new Scope($aliases, $instances);
+        $scope = new Scope($aliases, $instances, $factories);
 
         $this->assertNull($scope->instanceSet('foo', $instance));
     }
@@ -285,13 +320,14 @@ final class ScopeTest extends TestCase
     {
         $aliases = $this->getMockBuilder(AliasesInterface::class)->getMock();
         $instances = $this->getMockBuilder(InstancesInterface::class)->getMock();
+        $factories = $this->getMockBuilder(FactoriesInterface::class)->getMock();
 
         $instances->expects($this->once())
             ->method('instanceUnset')
             ->with('foo')
         ;
 
-        $scope = new Scope($aliases, $instances);
+        $scope = new Scope($aliases, $instances, $factories);
 
         $this->assertNull($scope->instanceUnset('foo'));
     }
@@ -303,6 +339,7 @@ final class ScopeTest extends TestCase
     {
         $aliases = $this->getMockBuilder(AliasesInterface::class)->getMock();
         $instances = $this->getMockBuilder(InstancesInterface::class)->getMock();
+        $factories = $this->getMockBuilder(FactoriesInterface::class)->getMock();
 
         $instance = $this->createStub(\stdClass::class);
         $instances->expects($this->once())
@@ -311,8 +348,127 @@ final class ScopeTest extends TestCase
             ->willReturn($instance)
         ;
 
-        $scope = new Scope($aliases, $instances);
+        $scope = new Scope($aliases, $instances, $factories);
 
         $this->assertSame($instance, $scope->instanceGet('foo'));
+    }
+
+    /**
+     * @psalm-suppress MissingThrowsDocblock
+     */
+    public function testGetFactories(): void
+    {
+        $aliases = $this->getMockBuilder(AliasesInterface::class)->getMock();
+        $instances = $this->getMockBuilder(InstancesInterface::class)->getMock();
+        $factories = $this->getMockBuilder(FactoriesInterface::class)->getMock();
+
+        $scope = new Scope($aliases, $instances, $factories);
+
+        $this->assertSame($factories, $scope->getFactories());
+    }
+
+    /**
+     * @psalm-suppress MissingThrowsDocblock
+     */
+    public function testFactoriesArray(): void
+    {
+        $aliases = $this->getMockBuilder(AliasesInterface::class)->getMock();
+        $instances = $this->getMockBuilder(InstancesInterface::class)->getMock();
+        $factories = $this->getMockBuilder(FactoriesInterface::class)->getMock();
+
+        $factory = $this->createStub(FactoryInterface::class);
+        $factories->expects($this->once())
+            ->method('factoriesArray')
+            ->willReturn(['foo' => $factory])
+        ;
+
+        $scope = new Scope($aliases, $instances, $factories);
+
+        $this->assertSame(['foo' => $factory], $scope->factoriesArray());
+    }
+
+    /**
+     * @psalm-suppress MissingThrowsDocblock
+     */
+    public function testFactoryExists(): void
+    {
+        $aliases = $this->getMockBuilder(AliasesInterface::class)->getMock();
+        $instances = $this->getMockBuilder(InstancesInterface::class)->getMock();
+        $factories = $this->getMockBuilder(FactoriesInterface::class)->getMock();
+
+        $factories->expects($this->exactly(2))
+            ->method('factoryExists')
+            ->will(
+                $this->returnValueMap([
+                    ['foo', true],
+                    ['bar', false],
+                ])
+            )
+        ;
+
+        $scope = new Scope($aliases, $instances, $factories);
+
+        $this->assertTrue($scope->factoryExists('foo'));
+        $this->assertFalse($scope->factoryExists('bar'));
+    }
+
+    /**
+     * @psalm-suppress MissingThrowsDocblock
+     */
+    public function testFactorySet(): void
+    {
+        $aliases = $this->getMockBuilder(AliasesInterface::class)->getMock();
+        $instances = $this->getMockBuilder(InstancesInterface::class)->getMock();
+        $factories = $this->getMockBuilder(FactoriesInterface::class)->getMock();
+
+        $factory = $this->createStub(FactoryInterface::class);
+        $factories->expects($this->once())
+            ->method('factorySet')
+            ->with('foo', $factory)
+        ;
+
+        $scope = new Scope($aliases, $instances, $factories);
+
+        $this->assertNull($scope->factorySet('foo', $factory));
+    }
+
+    /**
+     * @psalm-suppress MissingThrowsDocblock
+     */
+    public function testFactoryUnset(): void
+    {
+        $aliases = $this->getMockBuilder(AliasesInterface::class)->getMock();
+        $instances = $this->getMockBuilder(InstancesInterface::class)->getMock();
+        $factories = $this->getMockBuilder(FactoriesInterface::class)->getMock();
+
+        $factories->expects($this->once())
+            ->method('factoryUnset')
+            ->with('foo')
+        ;
+
+        $scope = new Scope($aliases, $instances, $factories);
+
+        $this->assertNull($scope->factoryUnset('foo'));
+    }
+
+    /**
+     * @psalm-suppress MissingThrowsDocblock
+     */
+    public function testFactoryGet(): void
+    {
+        $aliases = $this->getMockBuilder(AliasesInterface::class)->getMock();
+        $instances = $this->getMockBuilder(InstancesInterface::class)->getMock();
+        $factories = $this->getMockBuilder(FactoriesInterface::class)->getMock();
+
+        $instance = $this->createStub(FactoryInterface::class);
+        $factories->expects($this->once())
+            ->method('factoryGet')
+            ->with('foo')
+            ->willReturn($instance)
+        ;
+
+        $scope = new Scope($aliases, $instances, $factories);
+
+        $this->assertSame($instance, $scope->factoryGet('foo'));
     }
 }
