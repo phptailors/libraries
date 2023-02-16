@@ -17,4 +17,9 @@ interface FactoryInterface
      * @psalm-return ReturnType
      */
     public function create(ResolverInterface $resolver): mixed;
+
+    /**
+     * Returns true if the created instance shall be shared (is a singleton).
+     */
+    public function shared(): bool;
 }

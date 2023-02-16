@@ -9,7 +9,7 @@ namespace Tailors\Lib\Injector;
  *
  * @psalm-internal Tailors\Lib\Injector
  */
-trait AliasesTrait
+final class Aliases implements AliasesInterface
 {
     /**
      * @psalm-var array<string,string>
@@ -17,9 +17,20 @@ trait AliasesTrait
     private array $aliases;
 
     /**
+     * @throws CyclicAliasException
+     *
+     * @psalm-param array<string,string> $aliases
+     */
+    public function __construct(array $aliases = [])
+    {
+        self::aliasAssertNoCycles($aliases);
+        $this->aliases = $aliases;
+    }
+
+    /**
      * @psalm-return array<string,string>
      */
-    public function getAliases(): array
+    public function aliasesArray(): array
     {
         return $this->aliases;
     }

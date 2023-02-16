@@ -12,29 +12,37 @@ namespace Tailors\Lib\Injector;
 interface InstancesInterface
 {
     /**
-     * @psalm-return array<class-string,object>
+     * Returns an array of type => instance assignments.
+     *
+     * @psalm-return array<object>
      */
-    public function getInstances(): array;
+    public function instancesArray(): array;
 
     /**
-     * Returns true if instance of given *$type* exists.
+     * Returns true if *$type* has assigned instance.
+     *
+     * @psalm-param array-key $type
      */
-    public function instanceExists(string $type): bool;
+    public function instanceExists(mixed $type): bool;
 
     /**
-     * Registers singleton of a given *$type*.
+     * Assigns *$instance* to *$type*.
      */
     public function instanceSet(string $type, object $instance): void;
 
     /**
-     * Unregister instance registered under *$type*.
+     * Unassign instance from *$type*.
+     *
+     * @psalm-param array-key $type
      */
-    public function instanceUnset(string $type): void;
+    public function instanceUnset(mixed $type): void;
 
     /**
-     * Returns direct target assigned to instance.
+     * Returns instance assigned to *$type*.
      *
      * @throws NotFoundExceptionInterface if *$type* does not exist
+     *
+     * @psalm-param array-key $type
      */
-    public function instanceGet(string $type): string;
+    public function instanceGet(mixed $type): object;
 }

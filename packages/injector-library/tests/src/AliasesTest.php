@@ -6,39 +6,23 @@ use PHPUnit\Framework\TestCase;
 use Tailors\PHPUnit\KsortedArrayIdenticalToTrait;
 
 /**
- * Class using AliasesTrait for testing purposes.
- */
-final class Aliases5EMA9 implements AliasesInterface
-{
-    use AliasesTrait;
-
-    /**
-     * @psalm-param array<string,string> $aliases
-     */
-    public function __construct(array $aliases = [])
-    {
-        $this->aliases = $aliases;
-    }
-}
-
-/**
  * @author Paweł Tomulik <pawel@tomulik.pl>
  *
- * @covers \Tailors\Lib\Injector\AliasesTrait
+ * @covers \Tailors\Lib\Injector\Aliases
  *
  * @internal
  */
-final class AliasesTraitTest extends TestCase
+final class AliasesTest extends TestCase
 {
     use KsortedArrayIdenticalToTrait;
 
     /**
      * @psalm-suppress MissingThrowsDocblock
      */
-    public function testGetAliases(): void
+    public function testAliasesArray(): void
     {
-        $aliases = new Aliases5EMA9(['foo' => 'bar']);
-        $this->assertSame(['foo' => 'bar'], $aliases->getAliases());
+        $aliases = new Aliases(['foo' => 'bar']);
+        $this->assertSame(['foo' => 'bar'], $aliases->aliasesArray());
     }
 
     /**
@@ -46,7 +30,7 @@ final class AliasesTraitTest extends TestCase
      */
     public function testAliasExists(): void
     {
-        $aliases = new Aliases5EMA9();
+        $aliases = new Aliases();
         $this->assertFalse($aliases->aliasExists('foo'));
         $this->assertNull($aliases->aliasSet('foo', 'bar'));
         $this->assertTrue($aliases->aliasExists('foo'));
@@ -58,7 +42,7 @@ final class AliasesTraitTest extends TestCase
      */
     public function testAliasGet(): void
     {
-        $aliases = new Aliases5EMA9(['foo' => 'bar']);
+        $aliases = new Aliases(['foo' => 'bar']);
         $this->assertSame('bar', $aliases->aliasGet('foo'));
     }
 
@@ -67,7 +51,7 @@ final class AliasesTraitTest extends TestCase
      */
     public function testAliasGetThrowsNotFoundException(): void
     {
-        $aliases = new Aliases5EMA9();
+        $aliases = new Aliases();
 
         $this->expectException(NotFoundException::class);
         $this->expectExceptionMessage('alias \'foo\' not found');
@@ -80,9 +64,9 @@ final class AliasesTraitTest extends TestCase
      */
     public function testAliasSet(): void
     {
-        $aliases = new Aliases5EMA9(['foo' => 'bar']);
+        $aliases = new Aliases(['foo' => 'bar']);
         $this->assertNull($aliases->aliasSet('bar', 'baz'));
-        $this->assertKsortedArrayIdenticalTo(['foo' => 'bar', 'bar' => 'baz'], $aliases->getAliases());
+        $this->assertKsortedArrayIdenticalTo(['foo' => 'bar', 'bar' => 'baz'], $aliases->aliasesArray());
     }
 
     /**
@@ -90,9 +74,9 @@ final class AliasesTraitTest extends TestCase
      */
     public function testAliasUnset(): void
     {
-        $aliases = new Aliases5EMA9(['foo' => 'bar']);
+        $aliases = new Aliases(['foo' => 'bar']);
         $this->assertNull($aliases->aliasUnset('foo'));
-        $this->assertSame([], $aliases->getAliases());
+        $this->assertSame([], $aliases->aliasesArray());
         // Unsetting inexistent alias is harmless
         $this->assertNull($aliases->aliasUnset('inexisteng'));
     }
@@ -102,7 +86,7 @@ final class AliasesTraitTest extends TestCase
      */
     public function testAliasSetThrowsCyclicAliasException(): void
     {
-        $aliases = new Aliases5EMA9(['foo' => 'bar', 'bar' => 'baz']);
+        $aliases = new Aliases(['foo' => 'bar', 'bar' => 'baz']);
 
         $this->expectException(CyclicAliasException::class);
         $this->expectExceptionMessage('cyclic alias detected: \'baz\' -> \'foo\' -> \'bar\' -> \'baz\'');
@@ -131,7 +115,7 @@ final class AliasesTraitTest extends TestCase
      */
     public function testAliasResolve(array $aliases, string $alias, string $expect): void
     {
-        $aliases = new Aliases5EMA9($aliases);
+        $aliases = new Aliases($aliases);
         $this->assertSame($expect, $aliases->aliasResolve($alias));
     }
 }

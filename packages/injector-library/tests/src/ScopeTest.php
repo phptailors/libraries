@@ -4,14 +4,12 @@ namespace Tailors\Lib\Injector;
 
 use PHPUnit\Framework\TestCase;
 use Tailors\PHPUnit\ImplementsInterfaceTrait;
-use Tailors\PHPUnit\KsortedArrayIdenticalToTrait;
 use Tailors\PHPUnit\UsesTraitTrait;
 
 /**
  * @author Paweł Tomulik <pawel@tomulik.pl>
  *
  * @covers \Tailors\Lib\Injector\Scope
- * @covers \Tailors\Lib\Injector\AliasesTrait
  *
  * @internal
  */
@@ -19,7 +17,6 @@ final class ScopeTest extends TestCase
 {
     use ImplementsInterfaceTrait;
     use UsesTraitTrait;
-    use KsortedArrayIdenticalToTrait;
 
     /**
      * @psalm-suppress MissingThrowsDocblock
@@ -32,45 +29,80 @@ final class ScopeTest extends TestCase
     /**
      * @psalm-suppress MissingThrowsDocblock
      */
-    public function testUsesAliasesTrait(): void
+    public function testImplementsAliasesInterface(): void
     {
-        $this->assertUsesTrait(AliasesTrait::class, Scope::class);
+        $this->assertImplementsInterface(AliasesInterface::class, Scope::class);
     }
 
     /**
      * @psalm-suppress MissingThrowsDocblock
      */
-    public function testConstructWithoutArgs(): void
+    public function testImplementsAliasesWrapperInterface(): void
     {
-        $scope = new Scope();
-        $this->assertSame([], $scope->getAliases());
+        $this->assertImplementsInterface(AliasesWrapperInterface::class, Scope::class);
     }
 
     /**
      * @psalm-suppress MissingThrowsDocblock
      */
-    public function testConstructWithAliases(): void
+    public function testImplementsInstancesInterface(): void
     {
-        $scope = new Scope(['aliases' => ['foo' => 'bar']]);
-        $this->assertSame(['foo' => 'bar'], $scope->getAliases());
+        $this->assertImplementsInterface(InstancesInterface::class, Scope::class);
     }
 
     /**
      * @psalm-suppress MissingThrowsDocblock
      */
-    public function testConstructWithCyclicAliases(): void
+    public function testImplementsInstancesWrapperInterface(): void
     {
-        $this->expectException(CyclicAliasException::class);
-        $this->expectExceptionMessage('cyclic alias detected: \'foo\' -> \'bar\' -> \'baz\' -> \'foo\'');
+        $this->assertImplementsInterface(InstancesWrapperInterface::class, Scope::class);
+    }
 
-        $this->assertNotNull(new Scope([
-            'aliases' => [
-                'foo' => 'bar',
-                'bar' => 'baz',
-                'gez' => 'foo',
-                'baz' => 'foo',
-            ],
-        ]));
+    /**
+     * @psalm-suppress MissingThrowsDocblock
+     */
+    public function testUsesAliasesWrapperTrait(): void
+    {
+        $this->assertUsesTrait(AliasesWrapperTrait::class, Scope::class);
+    }
+
+    /**
+     * @psalm-suppress MissingThrowsDocblock
+     */
+    public function testUsesInstancesWrapperTrait(): void
+    {
+        $this->assertUsesTrait(InstancesWrapperTrait::class, Scope::class);
+    }
+
+    /**
+     * @psalm-suppress MissingThrowsDocblock
+     */
+    public function testGetAliases(): void
+    {
+        $aliases = $this->createStub(AliasesInterface::class);
+        $instances = $this->getMockBuilder(InstancesInterface::class)->getMock();
+
+        $scope = new Scope($aliases, $instances);
+
+        $this->assertSame($aliases, $scope->getAliases());
+    }
+
+    /**
+     * @psalm-suppress MissingThrowsDocblock
+     */
+    public function testAliasesArray(): void
+    {
+        $aliases = $this->getMockBuilder(AliasesInterface::class)->getMock();
+        $instances = $this->getMockBuilder(InstancesInterface::class)->getMock();
+
+        $aliases->expects($this->once())
+            ->method('aliasesArray')
+            ->willReturn(['foo' => 'bar'])
+        ;
+
+        $scope = new Scope($aliases, $instances);
+
+        $this->assertSame(['foo' => 'bar'], $scope->aliasesArray());
     }
 
     /**
@@ -78,9 +110,21 @@ final class ScopeTest extends TestCase
      */
     public function testAliasExists(): void
     {
-        $scope = new Scope();
-        $this->assertFalse($scope->aliasExists('foo'));
-        $this->assertNull($scope->aliasSet('foo', 'bar'));
+        $aliases = $this->getMockBuilder(AliasesInterface::class)->getMock();
+        $instances = $this->getMockBuilder(InstancesInterface::class)->getMock();
+
+        $aliases->expects($this->exactly(2))
+            ->method('aliasExists')
+            ->will(
+                $this->returnValueMap([
+                    ['foo', true],
+                    ['bar', false],
+                ])
+            )
+        ;
+
+        $scope = new Scope($aliases, $instances);
+
         $this->assertTrue($scope->aliasExists('foo'));
         $this->assertFalse($scope->aliasExists('bar'));
     }
@@ -88,33 +132,19 @@ final class ScopeTest extends TestCase
     /**
      * @psalm-suppress MissingThrowsDocblock
      */
-    public function testAliasGet(): void
-    {
-        $scope = new Scope(['aliases' => ['foo' => 'bar']]);
-        $this->assertSame('bar', $scope->aliasGet('foo'));
-    }
-
-    /**
-     * @psalm-suppress MissingThrowsDocblock
-     */
-    public function testAliasGetThrowsNotFoundException(): void
-    {
-        $scope = new Scope();
-
-        $this->expectException(NotFoundException::class);
-        $this->expectExceptionMessage('alias \'foo\' not found');
-
-        $this->assertNull($scope->aliasGet('foo'));
-    }
-
-    /**
-     * @psalm-suppress MissingThrowsDocblock
-     */
     public function testAliasSet(): void
     {
-        $scope = new Scope(['aliases' => ['foo' => 'bar']]);
-        $this->assertNull($scope->aliasSet('bar', 'baz'));
-        $this->assertKsortedArrayIdenticalTo(['foo' => 'bar', 'bar' => 'baz'], $scope->getAliases());
+        $aliases = $this->getMockBuilder(AliasesInterface::class)->getMock();
+        $instances = $this->getMockBuilder(InstancesInterface::class)->getMock();
+
+        $aliases->expects($this->once())
+            ->method('aliasSet')
+            ->with('foo', 'bar')
+        ;
+
+        $scope = new Scope($aliases, $instances);
+
+        $this->assertNull($scope->aliasSet('foo', 'bar'));
     }
 
     /**
@@ -122,48 +152,167 @@ final class ScopeTest extends TestCase
      */
     public function testAliasUnset(): void
     {
-        $scope = new Scope(['aliases' => ['foo' => 'bar']]);
+        $aliases = $this->getMockBuilder(AliasesInterface::class)->getMock();
+        $instances = $this->getMockBuilder(InstancesInterface::class)->getMock();
+
+        $aliases->expects($this->once())
+            ->method('aliasUnset')
+            ->with('foo')
+        ;
+
+        $scope = new Scope($aliases, $instances);
+
         $this->assertNull($scope->aliasUnset('foo'));
-        $this->assertSame([], $scope->getAliases());
-        // Unsetting inexistent alias is harmless
-        $this->assertNull($scope->aliasUnset('inexisteng'));
     }
 
     /**
      * @psalm-suppress MissingThrowsDocblock
      */
-    public function testAliasSetThrowsCyclicAliasException(): void
+    public function testAliasGet(): void
     {
-        $scope = new Scope(['aliases' => ['foo' => 'bar', 'bar' => 'baz']]);
+        $aliases = $this->getMockBuilder(AliasesInterface::class)->getMock();
+        $instances = $this->getMockBuilder(InstancesInterface::class)->getMock();
 
-        $this->expectException(CyclicAliasException::class);
-        $this->expectExceptionMessage('cyclic alias detected: \'baz\' -> \'foo\' -> \'bar\' -> \'baz\'');
+        $aliases->expects($this->once())
+            ->method('aliasGet')
+            ->with('foo')
+            ->willReturn('bar')
+        ;
 
-        $this->assertNull($scope->aliasSet('baz', 'foo'));
+        $scope = new Scope($aliases, $instances);
+
+        $this->assertSame('bar', $scope->aliasGet('foo'));
     }
 
     /**
-     * @psalm-return iterable<array-key, list{0:array<string,string>,1:string,2:string}>
-     */
-    public static function provAliasResolve(): iterable
-    {
-        yield [['foo' => 'bar'], 'foo', 'bar'];
-
-        yield [['foo' => 'bar', 'baz' => 'foo'], 'foo', 'bar'];
-
-        yield [['foo' => 'bar', 'baz' => 'foo', 'bar' => 'gez'], 'foo', 'gez'];
-    }
-
-    /**
-     * @dataProvider provAliasResolve
-     *
      * @psalm-suppress MissingThrowsDocblock
-     *
-     * @psalm-param array<string, string> $aliases
      */
-    public function testAliasResolve(array $aliases, string $alias, string $expect): void
+    public function testAliasResolve(): void
     {
-        $scope = new Scope(['aliases' => $aliases]);
-        $this->assertSame($expect, $scope->aliasResolve($alias));
+        $aliases = $this->getMockBuilder(AliasesInterface::class)->getMock();
+        $instances = $this->getMockBuilder(InstancesInterface::class)->getMock();
+
+        $aliases->expects($this->once())
+            ->method('aliasResolve')
+            ->with('foo')
+            ->willReturn('bar')
+        ;
+
+        $scope = new Scope($aliases, $instances);
+
+        $this->assertSame('bar', $scope->aliasResolve('foo'));
+    }
+
+    /**
+     * @psalm-suppress MissingThrowsDocblock
+     */
+    public function testGetInstances(): void
+    {
+        $aliases = $this->getMockBuilder(AliasesInterface::class)->getMock();
+        $instances = $this->getMockBuilder(InstancesInterface::class)->getMock();
+
+        $scope = new Scope($aliases, $instances);
+
+        $this->assertSame($instances, $scope->getInstances());
+    }
+
+    /**
+     * @psalm-suppress MissingThrowsDocblock
+     */
+    public function testInstancesArray(): void
+    {
+        $aliases = $this->getMockBuilder(AliasesInterface::class)->getMock();
+        $instances = $this->getMockBuilder(InstancesInterface::class)->getMock();
+
+        $instance = $this->createStub(\stdClass::class);
+        $instances->expects($this->once())
+            ->method('instancesArray')
+            ->willReturn(['foo' => $instance])
+        ;
+
+        $scope = new Scope($aliases, $instances);
+
+        $this->assertSame(['foo' => $instance], $scope->instancesArray());
+    }
+
+    /**
+     * @psalm-suppress MissingThrowsDocblock
+     */
+    public function testInstanceExists(): void
+    {
+        $aliases = $this->getMockBuilder(AliasesInterface::class)->getMock();
+        $instances = $this->getMockBuilder(InstancesInterface::class)->getMock();
+
+        $instances->expects($this->exactly(2))
+            ->method('instanceExists')
+            ->will(
+                $this->returnValueMap([
+                    ['foo', true],
+                    ['bar', false],
+                ])
+            )
+        ;
+
+        $scope = new Scope($aliases, $instances);
+
+        $this->assertTrue($scope->instanceExists('foo'));
+        $this->assertFalse($scope->instanceExists('bar'));
+    }
+
+    /**
+     * @psalm-suppress MissingThrowsDocblock
+     */
+    public function testInstanceSet(): void
+    {
+        $aliases = $this->getMockBuilder(AliasesInterface::class)->getMock();
+        $instances = $this->getMockBuilder(InstancesInterface::class)->getMock();
+
+        $instance = $this->createStub(\stdClass::class);
+        $instances->expects($this->once())
+            ->method('instanceSet')
+            ->with('foo', $instance)
+        ;
+
+        $scope = new Scope($aliases, $instances);
+
+        $this->assertNull($scope->instanceSet('foo', $instance));
+    }
+
+    /**
+     * @psalm-suppress MissingThrowsDocblock
+     */
+    public function testInstanceUnset(): void
+    {
+        $aliases = $this->getMockBuilder(AliasesInterface::class)->getMock();
+        $instances = $this->getMockBuilder(InstancesInterface::class)->getMock();
+
+        $instances->expects($this->once())
+            ->method('instanceUnset')
+            ->with('foo')
+        ;
+
+        $scope = new Scope($aliases, $instances);
+
+        $this->assertNull($scope->instanceUnset('foo'));
+    }
+
+    /**
+     * @psalm-suppress MissingThrowsDocblock
+     */
+    public function testInstanceGet(): void
+    {
+        $aliases = $this->getMockBuilder(AliasesInterface::class)->getMock();
+        $instances = $this->getMockBuilder(InstancesInterface::class)->getMock();
+
+        $instance = $this->createStub(\stdClass::class);
+        $instances->expects($this->once())
+            ->method('instanceGet')
+            ->with('foo')
+            ->willReturn($instance)
+        ;
+
+        $scope = new Scope($aliases, $instances);
+
+        $this->assertSame($instance, $scope->instanceGet('foo'));
     }
 }

@@ -3,6 +3,7 @@
 namespace Tailors\Lib\Injector;
 
 use PHPUnit\Framework\TestCase;
+use Tailors\PHPUnit\ExtendsClassTrait;
 use Tailors\PHPUnit\ImplementsInterfaceTrait;
 
 /**
@@ -15,6 +16,15 @@ use Tailors\PHPUnit\ImplementsInterfaceTrait;
 final class FactoryCallbackTest extends TestCase
 {
     use ImplementsInterfaceTrait;
+    use ExtendsClassTrait;
+
+    /**
+     * @psalm-suppress MissingThrowsDocblock
+     */
+    public function testExtendsAbstractFactoryBase(): void
+    {
+        $this->assertExtendsClass(AbstractFactoryBase::class, FactoryCallback::class);
+    }
 
     /**
      * @psalm-suppress MissingThrowsDocblock
@@ -27,12 +37,29 @@ final class FactoryCallbackTest extends TestCase
     /**
      * @psalm-suppress MissingThrowsDocblock
      */
-    public function testFactoryCallback(): void
+    public function testCallback(): void
     {
         $resolver = $this->createStub(ResolverInterface::class);
         $callback = fn (ResolverInterface $resolver): ResolverInterface => $resolver;
         $factory = new FactoryCallback($callback);
         $this->assertSame($callback, $factory->getCallback());
         $this->assertSame($resolver, $factory->create($resolver));
+    }
+
+    /**
+     * @psalm-suppress MissingThrowsDocblock
+     */
+    public function testShared(): void
+    {
+        $callback = fn (ResolverInterface $resolver): ResolverInterface => $resolver;
+
+        $factory = new FactoryCallback($callback);
+        $this->assertFalse($factory->shared());
+
+        $factory = new FactoryCallback($callback, false);
+        $this->assertFalse($factory->shared());
+
+        $factory = new FactoryCallback($callback, true);
+        $this->assertTrue($factory->shared());
     }
 }

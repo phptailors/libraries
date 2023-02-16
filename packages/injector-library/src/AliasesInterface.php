@@ -14,7 +14,7 @@ interface AliasesInterface
     /**
      * @psalm-return array<string,string>
      */
-    public function getAliases(): array;
+    public function aliasesArray(): array;
 
     /**
      * Returns true if *$alias* exists.

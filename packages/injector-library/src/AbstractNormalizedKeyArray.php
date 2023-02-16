@@ -25,14 +25,15 @@ namespace Tailors\Lib\Injector;
  *
  * @psalm-internal Tailors\Lib\Injector
  *
- * @psalm-template TKey
  * @psalm-template TValue
- * @psalm-template TNormKey of TKey
  *
- * @template-extends \ArrayObject<TKey,TValue>
+ * @template-extends \ArrayObject<mixed,TValue>
  */
 abstract class AbstractNormalizedKeyArray extends \ArrayObject
 {
+    /**
+     * @psalm-param array<TValue>|object $data
+     */
     final public function __construct(array|object $data = [], int $flags = 0)
     {
         if (is_iterable($data)) {
@@ -47,6 +48,9 @@ abstract class AbstractNormalizedKeyArray extends \ArrayObject
         return parent::offsetExists($this->normalizeKey($offset));
     }
 
+    /**
+     * @psalm-return TValue
+     */
     final public function offsetGet(mixed $offset): mixed
     {
         return parent::offsetGet($this->normalizeKey($offset));
@@ -59,6 +63,9 @@ abstract class AbstractNormalizedKeyArray extends \ArrayObject
         return parent::offsetExists($offset) && null !== parent::offsetGet($offset);
     }
 
+    /**
+     * @psalm-param TValue $value
+     */
     final public function offsetSet(mixed $offset, mixed $value): void
     {
         parent::offsetSet($this->normalizeKey($offset), $value);
@@ -79,7 +86,7 @@ abstract class AbstractNormalizedKeyArray extends \ArrayObject
     }
 
     /**
-     * @psalm-return TNormKey
+     * @psalm-return array-key
      */
     abstract protected static function normalizeKey(mixed $key): mixed;
 
@@ -89,7 +96,7 @@ abstract class AbstractNormalizedKeyArray extends \ArrayObject
      *
      * @psalm-param iterable<K,V> $array
      *
-     * @psalm-return array<TNormKey,V>
+     * @psalm-return array<V>
      */
     private static function normalizeKeys(iterable $array): array
     {

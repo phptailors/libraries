@@ -8,24 +8,28 @@ namespace Tailors\Lib\Injector;
  * @internal this class is not covered by backward compatibility promise
  *
  * @psalm-internal Tailors\Lib\Injector
- *
- * @psalm-type TOptions = array{
- *  aliases?: array<string,string>
- * }
  */
-final class Scope implements ScopeInterface
+final class Scope implements ScopeInterface, AliasesInterface, AliasesWrapperInterface, InstancesInterface, InstancesWrapperInterface
 {
-    use AliasesTrait;
+    use AliasesWrapperTrait;
+    use InstancesWrapperTrait;
 
-    /**
-     * @psalm-param TOptions $options
-     *
-     * @throws CyclicAliasException
-     */
-    public function __construct(array $options = [])
+    private AliasesInterface $aliases;
+    private InstancesInterface $instances;
+
+    public function __construct(AliasesInterface $aliases, InstancesInterface $instances)
     {
-        $aliases = $options['aliases'] ?? [];
-        self::aliasAssertNoCycles($aliases);
         $this->aliases = $aliases;
+        $this->instances = $instances;
+    }
+
+    public function getAliases(): AliasesInterface
+    {
+        return $this->aliases;
+    }
+
+    public function getInstances(): InstancesInterface
+    {
+        return $this->instances;
     }
 }

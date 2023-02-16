@@ -120,6 +120,7 @@ final class NSArrayTest extends TestCase
      */
     public function testOffsetExists(): void
     {
+        /** @psalm-var NSArray<mixed> */
         $array = new NSArray([
             '\\Foo\\Bar' => 'FOO BAR',
             123          => true,
@@ -142,6 +143,7 @@ final class NSArrayTest extends TestCase
      */
     public function testOffsetIsset(): void
     {
+        /** @psalm-var NSArray<mixed> */
         $array = new NSArray([
             '\\Foo\\Bar' => 'FOO BAR',
             123          => true,
@@ -164,6 +166,7 @@ final class NSArrayTest extends TestCase
      */
     public function testIsset(): void
     {
+        /** @psalm-var NSArray<mixed> */
         $array = new NSArray([
             '\\Foo\\Bar' => 'FOO BAR',
             123          => true,
@@ -187,6 +190,7 @@ final class NSArrayTest extends TestCase
      */
     public function testOffsetSet(): void
     {
+        /** @psalm-var NSArray<mixed> */
         $array = new NSArray();
 
         $this->assertFalse($array->offsetExists('foo\\bar'));
@@ -200,7 +204,9 @@ final class NSArrayTest extends TestCase
      */
     public function testOffsetUnset(): void
     {
+        /** @psalm-var NSArray<mixed> */
         $array = new NSArray(['\\Foo\\Bar' => 'FOO BAR']);
+
         $this->assertTrue($array->offsetExists('foo\\bar'));
         $this->assertSame('FOO BAR', $array['foo\\bar']);
         unset($array['\\Foo\\Bar']);
@@ -212,6 +218,7 @@ final class NSArrayTest extends TestCase
      */
     public function testExchangeArrayWithArray(): void
     {
+        /** @psalm-var NSArray<mixed> */
         $array = new NSArray(['\\Foo\\Bar' => 'FOO BAR']);
 
         $this->assertKsortedArrayIdenticalTo(

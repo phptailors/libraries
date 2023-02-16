@@ -9,6 +9,7 @@ namespace Tailors\Lib\Injector;
  *
  * @psalm-internal Tailors\Lib\Injector
  */
-interface ScopeInterface
+interface InstancesWrapperInterface
 {
+    public function getInstances(): InstancesInterface;
 }

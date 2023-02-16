@@ -13,7 +13,7 @@ namespace Tailors\Lib\Injector;
  *
  * @template-implements FactoryInterface<ReturnType>
  */
-final class FactoryCallback implements FactoryInterface
+final class FactoryCallback extends AbstractFactoryBase implements FactoryInterface
 {
     /**
      * @psalm-var \Closure(ResolverInterface):ReturnType
@@ -25,13 +25,14 @@ final class FactoryCallback implements FactoryInterface
     /**
      * @psalm-param \Closure(ResolverInterface):ReturnType $callback
      */
-    public function __construct(\Closure $callback)
+    public function __construct(\Closure $callback, bool $shared = false)
     {
+        parent::__construct($shared);
         $this->callback = $callback;
     }
 
     /**
-     * @psalm-immutable
+     * @psalm-mutation-free
      */
     public function getCallback(): \Closure
     {

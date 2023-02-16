@@ -7,7 +7,7 @@ use Tailors\PHPUnit\ExtendsClassTrait;
 use Tailors\PHPUnit\KsortedArrayIdenticalToTrait;
 
 /**
- * @template-extends AbstractNormalizedKeyArray<array-key,mixed>
+ * @template-extends AbstractNormalizedKeyArray<mixed>
  */
 final class LowerCaseArrayYP8NW extends AbstractNormalizedKeyArray
 {

@@ -45,11 +45,9 @@ namespace Tailors\Lib\Injector;
  *
  * @psalm-internal Tailors\Lib\Injector
  *
- * @psalm-template TKey
- * @psalm-template TValue
- * @psalm-template TNormKey of TKey
+ * @psalm-template TValue of mixed
  *
- * @template-extends AbstractNormalizedKeyArray<TKey,TValue,TNormKey>
+ * @template-extends AbstractNormalizedKeyArray<TValue>
  */
 final class NSArray extends AbstractNormalizedKeyArray
 {
