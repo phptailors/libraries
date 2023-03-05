@@ -1,33 +1,25 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Tailors\Lib\Injector;
 
 /**
- * Provides a value depending on context.
+ * @author Paweł Tomulik <pawel@tomulik.pl>
+ *
+ * @internal This interface is not covered by backward compatibility promise
+ *
+ * @psalm-internal Tailors\Lib\Injector
  *
  * @psalm-template TValue
  *
- * @internal This interface is not covered by backward compatibility promise
- * @psalm-internal Tailors\Lib\Injector
+ * @template-extends ValueAccessorInterface<TValue>
+ * @template-extends ValueMutatorInterface<TValue>
  */
-interface ValueProviderInterface
+interface ValueProviderInterface extends ValueAccessorInterface, ValueMutatorInterface
 {
     /**
-     * @psalm-return ?TValue
+     * Lookup for a value in the order specified by *$scopes*.
+     *
+     * @psalm-param array<list{string,string|array<string>}> $scopes
      */
-    public function getGlobalValue(): mixed;
-
-    public function hasScopedValues(string $scopeType): bool;
-
-    /**
-     * @psalm-return array<string,TValue>
-     */
-    public function getScopedValues(string $scopeType): array;
-
-    /**
-     * @psalm-return TValue
-     */
-    public function getScopedValue(string $scopeType, string $scopeName): mixed;
-
-    public function hasScopedValue(string $scopeType, string $scopeName): bool;
+    public function lookup(array $scopes): mixed;
 }

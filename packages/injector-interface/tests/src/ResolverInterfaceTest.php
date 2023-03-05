@@ -57,7 +57,7 @@ final class ResolverInterfaceTest extends TestCase
             [[null], 'Argument #1'],
             [[123], 'Argument #1'],
             [[new \Exception()], 'Argument #1'],
-            [[[1,2,3]], 'Argument #1'],
+            [[[1, 2, 3]], 'Argument #1'],
         ];
     }
 
@@ -93,7 +93,7 @@ final class ResolverInterfaceTest extends TestCase
             ['string', 'Return value must be of type object, string returned'],
             [123, 'Return value must be of type object, int returned'],
             [12.34, 'Return value must be of type object, float returned'],
-            [[1,2,3], 'Return value must be of type object, array returned'],
+            [[1, 2, 3], 'Return value must be of type object, array returned'],
         ];
     }
 
@@ -178,7 +178,7 @@ final class ResolverInterfaceTest extends TestCase
         $this->assertNull($dummy->resolveObject(...$args));
     }
 
-   /**
+    /**
      * @dataProvider provResolveObjectWithInvalidReturnType
      *
      * @psalm-suppress MissingThrowsDocblock

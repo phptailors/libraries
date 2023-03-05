@@ -9,12 +9,12 @@ namespace Tailors\Lib\Injector;
  *
  * @psalm-internal Tailors\Lib\Injector
  *
- * @psalm-template ReturnType
+ * @psalm-template TValue
  */
 interface FactoryInterface
 {
     /**
-     * @psalm-return ReturnType
+     * @psalm-return TValue
      */
     public function create(ResolverInterface $resolver): mixed;
 

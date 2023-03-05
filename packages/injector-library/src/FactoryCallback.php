@@ -9,21 +9,21 @@ namespace Tailors\Lib\Injector;
  *
  * @psalm-internal Tailors\Lib\Injector
  *
- * @psalm-template ReturnType
+ * @psalm-template TValue
  *
- * @template-implements FactoryInterface<ReturnType>
+ * @template-implements FactoryInterface<TValue>
  */
 final class FactoryCallback extends AbstractFactoryBase implements FactoryInterface
 {
     /**
-     * @psalm-var \Closure(ResolverInterface):ReturnType
+     * @psalm-var \Closure(ResolverInterface):TValue
      *
      * @psalm-readonly
      */
     private \Closure $callback;
 
     /**
-     * @psalm-param \Closure(ResolverInterface):ReturnType $callback
+     * @psalm-param \Closure(ResolverInterface):TValue $callback
      */
     public function __construct(\Closure $callback, bool $shared = false)
     {
@@ -40,7 +40,7 @@ final class FactoryCallback extends AbstractFactoryBase implements FactoryInterf
     }
 
     /**
-     * @psalm-return ReturnType
+     * @psalm-return TValue
      */
     public function create(ResolverInterface $resolver): mixed
     {

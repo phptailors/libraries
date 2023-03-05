@@ -1,11 +1,14 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Tailors\Lib\Injector;
 
 /**
+ * @author Paweł Tomulik <pawel@tomulik.pl>
+ *
  * @psalm-template TValue
  *
  * @internal This interface is not covered by backward compatibility promise
+ *
  * @psalm-internal Tailors\Lib\Injector
  */
 interface ValueMutatorInterface
@@ -13,16 +16,15 @@ interface ValueMutatorInterface
     /**
      * @psalm-param TValue $value
      */
-    public function setGlobalValue(mixed $value): void;
-
-    public function unsetGlobalValue(): void;
+    public function setValue(mixed $value, string $scopeType = '', string $scopeName = ''): void;
 
     /**
-     * @psalm-param TValue $value
+     * Unset scoped value.
      */
-    public function setScopedValue(string $scopeType, string $scopeName, mixed $value): void;
+    public function unsetValue(string $scopeType = '', string $scopeName = ''): void;
 
-    public function unsetScopedValue(string $scopeType, string $scopeName): void;
-
-    public function unsetScopedValues(string $scopeType): void;
+    /**
+     * Unset all values for the given scope type.
+     */
+    public function unsetValues(string $scopeType): void;
 }

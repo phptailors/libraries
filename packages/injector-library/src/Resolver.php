@@ -1,18 +1,9 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Tailors\Lib\Injector;
 
 final class Resolver implements ResolverInterface
 {
-    private array $resolveStack;
-
-    private RegistryInterface $registry;
-
-    public function __construct(RegistryInterface $registry)
-    {
-        $this->registry = $registry;
-    }
-
     /**
      * Resolve the dependency specified by **$abstract**.
      *
@@ -25,7 +16,7 @@ final class Resolver implements ResolverInterface
     /**
      * Resolve object specified by **$type**.
      *
-     * @param string $type A class or interface name of the object to be resolved.
+     * @param string $type a class or interface name of the object to be resolved
      *
      * @psalm-template C
      *

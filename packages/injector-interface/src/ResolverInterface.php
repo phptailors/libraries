@@ -14,7 +14,7 @@ interface ResolverInterface
     /**
      * Resolve object specified by **$type**.
      *
-     * @param string $type A class or interface name of the object to be resolved.
+     * @param string $type a class or interface name of the object to be resolved
      *
      * @psalm-template C
      *
