@@ -398,8 +398,7 @@ final class ValueProviderTest extends TestCase
                     ['C', 'Bar'],
                     ['', ''],
                 ],
-                'Value not defined for any of the scopes: '.
-                '\'namespace\': [\'Foo\'], \'class\': [\'Bar\'], \'\': [\'\']',
+                'Value not defined for any of the scopes: \'N\': [\'Foo\'], \'C\': [\'Bar\'], \'\': [\'\']',
             ],
 
             // #2
@@ -413,8 +412,7 @@ final class ValueProviderTest extends TestCase
                     ['C', 'Bar'],
                     ['', ''],
                 ],
-                'Value not defined for any of the scopes: '.
-                '\'namespace\': [\'Foo\'], \'class\': [\'Bar\'], \'\': [\'\']',
+                'Value not defined for any of the scopes: \'N\': [\'Foo\'], \'C\': [\'Bar\'], \'\': [\'\']',
             ],
 
             // #3
@@ -428,8 +426,7 @@ final class ValueProviderTest extends TestCase
                     ['C', 'Bar'],
                     ['', ''],
                 ],
-                'Value not defined for any of the scopes: '.
-                '\'namespace\': [\'Foo\', \'Baz\'], \'class\': [\'Bar\'], \'\': [\'\']',
+                'Value not defined for any of the scopes: \'N\': [\'Foo\', \'Baz\'], \'C\': [\'Bar\'], \'\': [\'\']',
             ],
         ];
     }

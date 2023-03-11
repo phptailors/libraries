@@ -21,9 +21,9 @@ final class ClassContext extends AbstractContextBase implements ContextInterface
     {
         if (!isset($this->scopes)) {
             $this->scopes = [
-                [ScopeType::ClassScope->value, ContextHelper::getClassLookupScopes($this->name)],
+                [ScopeType::ClassScope->value, ContextHelper::getClassLookupScopes($this->name())],
             ];
-            if (!empty($namespaceScopes = array_slice(ContextHelper::getNamespaceLookupScopes($this->name), 1))) {
+            if (!empty($namespaceScopes = array_slice(ContextHelper::getNamespaceLookupScopes($this->name()), 1))) {
                 $this->scopes[] = [ScopeType::NamespaceScope->value, $namespaceScopes];
             }
             $this->scopes[] = [ScopeType::GlobalScope->value, ''];

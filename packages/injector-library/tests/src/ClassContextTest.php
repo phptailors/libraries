@@ -34,6 +34,6 @@ final class ClassContextTest extends TestCase
      */
     public function testImplementsContextInterface(): void
     {
-        $this->assertImplementsInterface(ContextInterface::class, CLassContext::class);
+        $this->assertImplementsInterface(ContextInterface::class, ClassContext::class);
     }
 }
