@@ -12,7 +12,7 @@ use Tailors\PHPUnit\ExtendsClassTrait;
  *
  * @internal
  *
- * @psalm-type ErrorHandlerFunc callable(int,string,string,int):bool
+ * @psalm-type ErrorHandlerFunc (callable(int,string,string,int):bool)
  */
 final class ErrorHandlerTest extends TestCase
 {

@@ -14,7 +14,7 @@ use function Tailors\Lib\Context\with;
  *
  * @internal
  *
- * @psalm-type ExceptionGenerator callable(int,string,string,int):\Exception
+ * @psalm-type ExceptionGenerator (callable(int,string,string,int):\Exception)
  */
 final class ExceptionErrorHandlerTest extends TestCase
 {

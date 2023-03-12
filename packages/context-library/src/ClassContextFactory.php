@@ -5,8 +5,8 @@ namespace Tailors\Lib\Context;
 /**
  * A factory that associates classes with context managers.
  *
- * @psalm-type ContextManagerWrapper = callable(mixed):ContextManagerInterface
- * @psalm-type ContextManagerRegistry = array<string, ContextManagerWrapper>
+ * @psalm-type ContextManagerWrapper (callable(mixed):ContextManagerInterface)
+ * @psalm-type ContextManagerRegistry (array<string, ContextManagerWrapper>)
  */
 final class ClassContextFactory extends AbstractManagedContextFactory
 {

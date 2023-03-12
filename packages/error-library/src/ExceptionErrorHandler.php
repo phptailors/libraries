@@ -5,7 +5,7 @@ namespace Tailors\Lib\Error;
 /**
  * An error handler which raises custom exception.
  *
- * @psalm-type ExceptionGenerator callable(int,string,string,int):\Exception
+ * @psalm-type ExceptionGenerator (callable(int,string,string,int):\Exception)
  */
 class ExceptionErrorHandler extends AbstractManagedErrorHandler
 {

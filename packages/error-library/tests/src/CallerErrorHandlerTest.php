@@ -14,7 +14,7 @@ use function Tailors\Lib\Context\with;
  *
  * @internal
  *
- * @psalm-type ErrorHandlerFunction callable(int,string,string,int):bool
+ * @psalm-type ErrorHandlerFunction (callable(int,string,string,int):bool)
  */
 final class CallerErrorHandlerTest extends TestCase
 {
