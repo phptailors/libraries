@@ -34,7 +34,7 @@ final class MethodScopeLookupTest extends TestCase
      */
     public function testGetScopeType(): void
     {
-        $this->assertSame(ScopeType::MethodScope, (new MethodScopeLookup(['','']))->getScopeType());
+        $this->assertSame(ScopeType::MethodScope, (new MethodScopeLookup(['', '']))->getScopeType());
     }
 
     /**

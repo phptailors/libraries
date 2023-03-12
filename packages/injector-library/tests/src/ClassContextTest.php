@@ -126,6 +126,7 @@ final class ClassContextTest extends TestCase
      * @dataProvider provGetLookupScopes
      *
      * @psalm-param class-string $name
+     *
      * @psalm-suppress MissingThrowsDocblock
      */
     public function testGetLookupScopes(string $name, array $expected): void
