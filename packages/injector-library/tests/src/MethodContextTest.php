@@ -10,13 +10,13 @@ use Tailors\PHPUnit\ImplementsInterfaceTrait;
  * @author Paweł Tomulik <pawel@tomulik.pl>
  *
  * @covers \Tailors\Lib\Injector\AbstractContextBase
- * @covers \Tailors\Lib\Injector\ClassContext
+ * @covers \Tailors\Lib\Injector\MethodContext
  *
  * @internal this class is not covered by backward compatibility promise
  *
  * @psalm-internal Tailors\Lib\Injector
  */
-final class ClassContextTest extends TestCase
+final class MethodContextTest extends TestCase
 {
     use ExtendsClassTrait;
     use ImplementsInterfaceTrait;
@@ -26,7 +26,7 @@ final class ClassContextTest extends TestCase
      */
     public function testExtendsAbstractContextBase(): void
     {
-        $this->assertExtendsClass(AbstractContextBase::class, ClassContext::class);
+        $this->assertExtendsClass(AbstractContextBase::class, MethodContext::class);
     }
 
     /**
@@ -34,7 +34,7 @@ final class ClassContextTest extends TestCase
      */
     public function testImplementsContextInterface(): void
     {
-        $this->assertImplementsInterface(ContextInterface::class, ClassContext::class);
+        $this->assertImplementsInterface(ContextInterface::class, MethodContext::class);
     }
 
     /**
@@ -42,12 +42,13 @@ final class ClassContextTest extends TestCase
      */
     public function testName(): void
     {
-        $context = new ClassContext(self::class);
-        $this->assertSame(self::class, $context->name());
+        $context = new MethodContext('testName', self::class);
+        $this->assertSame('testName', $context->name());
+        $this->assertSame(self::class, $context->className());
     }
 
     /**
-     * @psalm-return iterable<array-key, list{class-string, array}>
+     * @psalm-return iterable<array-key, list{list{string,class-string}, array}>
      */
     public static function provGetLookupScopes(): iterable
     {
@@ -56,9 +57,20 @@ final class ClassContextTest extends TestCase
         sort($interfaces);
 
         return [
-            'Exception' => [
-                \Exception::class,
+            'Exception::foo' => [
+                ['foo', \Exception::class],
                 [
+                    [
+                        ScopeType::MethodScope,
+                        [
+                            'foo',
+                            [
+                                \Exception::class,
+                                \Stringable::class,
+                                \Throwable::class,
+                            ],
+                        ],
+                    ],
                     [
                         ScopeType::ClassScope,
                         [
@@ -70,9 +82,21 @@ final class ClassContextTest extends TestCase
                     [ScopeType::GlobalScope, null],
                 ],
             ],
-            'RuntimeException' => [
-                \RuntimeException::class,
+            'RuntimeException::foo' => [
+                ['foo', \RuntimeException::class],
                 [
+                    [
+                        ScopeType::MethodScope,
+                        [
+                            'foo',
+                            [
+                                \RuntimeException::class,
+                                \Exception::class,
+                                \Stringable::class,
+                                \Throwable::class,
+                            ],
+                        ],
+                    ],
                     [
                         ScopeType::ClassScope,
                         [
@@ -85,9 +109,22 @@ final class ClassContextTest extends TestCase
                     [ScopeType::GlobalScope, null],
                 ],
             ],
-            'LengthException' => [
-                \LengthException::class,
+            'LengthException::foo' => [
+                ['foo', \LengthException::class],
                 [
+                    [
+                        ScopeType::MethodScope,
+                        [
+                            'foo',
+                            [
+                                \LengthException::class,
+                                \LogicException::class,
+                                \Exception::class,
+                                \Stringable::class,
+                                \Throwable::class,
+                            ],
+                        ],
+                    ],
                     [
                         ScopeType::ClassScope,
                         [
@@ -101,9 +138,16 @@ final class ClassContextTest extends TestCase
                     [ScopeType::GlobalScope, null],
                 ],
             ],
-            self::class => [
-                self::class,
+            self::class.'::foo' => [
+                ['foo', self::class],
                 [
+                    [
+                        ScopeType::MethodScope,
+                        [
+                            'foo',
+                            array_merge([self::class], $parents, $interfaces),
+                        ],
+                    ],
                     [
                         ScopeType::ClassScope,
                         array_merge([self::class], $parents, $interfaces),
@@ -125,12 +169,13 @@ final class ClassContextTest extends TestCase
     /**
      * @dataProvider provGetLookupScopes
      *
-     * @psalm-param class-string $name
+     * @psalm-param list{string,class-string} $args
+     *
      * @psalm-suppress MissingThrowsDocblock
      */
-    public function testGetLookupScopes(string $name, array $expected): void
+    public function testGetLookupScopes(array $args, array $expected): void
     {
-        $context = new ClassContext($name);
+        $context = new MethodContext(...$args);
         $scopes = array_map(
             fn (ScopeLookupInterface $scope): array => [$scope->getScopeType(), $scope->getScopeLookup()],
             $context->getLookupScopes()

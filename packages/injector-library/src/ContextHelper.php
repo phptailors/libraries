@@ -11,10 +11,17 @@ namespace Tailors\Lib\Injector;
  */
 final class ContextHelper
 {
+    public static function getNamespaceOf(string $fqdn_name): string
+    {
+        $pieces = array_filter(explode('\\', $fqdn_name));
+
+        return implode('\\', array_slice($pieces, 0, -1));
+    }
+
     /**
      * @psalm-return list<string>
      */
-    public static function getNamespaceLookupScopes(string $namespace): array
+    public static function getNamespaceScopeLookup(string $namespace): array
     {
         $pieces = array_filter(explode('\\', $namespace));
         $lookup = [];
@@ -31,14 +38,16 @@ final class ContextHelper
      *
      * @psalm-return list<class-string>
      */
-    public static function getClassLookupScopes(string $class): array
+    public static function getClassScopeLookup(string $class): array
     {
         $scopes = [$class];
         if (!empty($parents = class_parents($class))) {
             $scopes = array_merge($scopes, array_values($parents));
         }
         if (!empty($ifaces = class_implements($class))) {
-            $scopes = array_merge($scopes, array_values($ifaces));
+            $ifaces = array_values($ifaces);
+            sort($ifaces);
+            $scopes = array_merge($scopes, $ifaces);
         }
 
         return $scopes;

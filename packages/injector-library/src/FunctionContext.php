@@ -5,21 +5,21 @@ namespace Tailors\Lib\Injector;
 /**
  * @author Paweł Tomulik
  *
- * @template-extends AbstractContextBase<class-string>
+ * @template-extends AbstractContextBase<string>
  *
  * @psalm-import-type TLookupScopes from ContextInterface
  */
-final class ClassContext extends AbstractContextBase implements ContextInterface
+final class FunctionContext extends AbstractContextBase implements ContextInterface
 {
     /**
      * @psalm-return TLookupScopes
      */
-    protected function makeLookupScopes(): array
+    public function makeLookupScopes(): array
     {
         $namespace = ContextHelper::getNamespaceOf($this->name());
 
         return $this->appendNamespaceAndGlobalLookupScopes($namespace, [
-            new ClassScopeLookup(ContextHelper::getClassScopeLookup($this->name())),
+            new FunctionScopeLookup($this->name()),
         ]);
     }
 }

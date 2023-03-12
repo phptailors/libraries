@@ -6,13 +6,15 @@ namespace Tailors\Lib\Injector;
  * @author Paweł Tomulik <pawel@tomulik.pl>
  *
  * @psalm-template TName of string
+ *
+ * @psalm-import-type TLookupScopes from ContextInterface
  */
 abstract class AbstractContextBase
 {
     /**
-     * @psalm-readonly
+     * @psalm-var ?TLookupScopes
      */
-    private ContextType $type;
+    private ?array $scopes = null;
 
     /**
      * @psalm-var TName
@@ -24,15 +26,9 @@ abstract class AbstractContextBase
     /**
      * @psalm-param TName $name
      */
-    public function __construct(ContextType $type, string $name)
+    public function __construct(string $name)
     {
-        $this->type = $type;
         $this->name = $name;
-    }
-
-    final public function type(): ContextType
-    {
-        return $this->type;
     }
 
     /**
@@ -41,5 +37,37 @@ abstract class AbstractContextBase
     final public function name(): string
     {
         return $this->name;
+    }
+
+    /**
+     * @psalm-return TLookupScopes
+     */
+    final public function getLookupScopes(): array
+    {
+        if (!isset($this->scopes)) {
+            $this->scopes = $this->makeLookupScopes();
+        }
+
+        return $this->scopes;
+    }
+
+    /**
+     * @psalm-return TLookupScopes
+     */
+    abstract protected function makeLookupScopes(): array;
+
+    /**
+     * @psalm-param TLookupScopes $scopes
+     *
+     * @psalm-return TLookupScopes
+     */
+    final protected function appendNamespaceAndGlobalLookupScopes(string $namespace, array $scopes): array
+    {
+        if (!empty($nsScopes = ContextHelper::getNamespaceScopeLookup($namespace))) {
+            $scopes[] = new NamespaceScopeLookup($nsScopes);
+        }
+        $scopes[] = new GlobalScopeLookup();
+
+        return $scopes;
     }
 }

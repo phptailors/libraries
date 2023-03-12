@@ -5,15 +5,15 @@ namespace Tailors\Lib\Injector;
 /**
  * @author Paweł Tomulik <pawel@tomulik.pl>
  */
-enum ScopeType: string
+enum ScopeType
 {
-    case ClassScope = 'C';
+    case ClassScope;
 
-    case NamespaceScope = 'N';
+    case NamespaceScope;
 
-    case FunctionScope = 'F';
+    case FunctionScope;
 
-    case MethodScope = 'M';
+    case MethodScope;
 
-    case GlobalScope = '';
+    case GlobalScope;
 }
