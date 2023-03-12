@@ -14,5 +14,5 @@ interface GlobalScopeLookupInterface extends ScopeLookupInterface
     /**
      * @psalm-return TGlobalScopeLookup
      */
-    public function getScopeLookup(): null;
+    public function getScopeLookup(): mixed;
 }

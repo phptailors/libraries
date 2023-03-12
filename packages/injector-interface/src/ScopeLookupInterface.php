@@ -14,5 +14,5 @@ interface ScopeLookupInterface
     /**
      * @psalm-return TScopeLookup
      */
-    public function getScopeLookup(): null|string|array;
+    public function getScopeLookup(): mixed;
 }

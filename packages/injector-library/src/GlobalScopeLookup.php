@@ -17,7 +17,7 @@ final class GlobalScopeLookup implements GlobalScopeLookupInterface
     /**
      * @psalm-return TGlobalScopeLookup
      */
-    public function getScopeLookup(): null
+    public function getScopeLookup(): mixed
     {
         return null;
     }
