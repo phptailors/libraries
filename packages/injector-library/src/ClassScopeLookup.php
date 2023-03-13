@@ -10,6 +10,11 @@ namespace Tailors\Lib\Injector;
 final class ClassScopeLookup implements ClassScopeLookupInterface
 {
     /**
+     * @template-use TwoLevelLookupTrait<TClassScopeLookup>
+     */
+    use TwoLevelLookupTrait;
+
+    /**
      * @psalm-var TClassScopeLookup
      */
     private string|array $scopeLookup;
@@ -33,5 +38,22 @@ final class ClassScopeLookup implements ClassScopeLookupInterface
     public function getScopeLookup(): string|array
     {
         return $this->scopeLookup;
+    }
+
+    /**
+     * @psalm-template TUnscopedArray of array<string,mixed>
+     * @psalm-template TKey of string
+     *
+     * @psalm-param array{ClassScope?: array<string,TUnscopedArray>, ...} $array
+     * @psalm-param TKey $key
+     *
+     * @psalm-param-out null|TUnscopedArray[TKey] $retval
+     */
+    public function lookup(array $array, string $key, mixed &$retval = null): bool
+    {
+        if (!isset($array['ClassScope'])) {
+            return false;
+        }
+        return $this->twoLevelLookup($array['ClassScope'], $key, $retval);
     }
 }

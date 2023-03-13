@@ -10,6 +10,11 @@ namespace Tailors\Lib\Injector;
 final class NamespaceScopeLookup implements NamespaceScopeLookupInterface
 {
     /**
+     * @template-use TwoLevelLookupTrait<TNamespaceScopeLookup>
+     */
+    use TwoLevelLookupTrait;
+
+    /**
      * @psalm-var TNamespaceScopeLookup
      */
     private string|array $scopeLookup;
@@ -33,5 +38,22 @@ final class NamespaceScopeLookup implements NamespaceScopeLookupInterface
     public function getScopeLookup(): string|array
     {
         return $this->scopeLookup;
+    }
+
+    /**
+     * @psalm-template TKey of string
+     * @psalm-template TUnscopedArray of array<string,mixed>
+     *
+     * @psalm-param array{NamespaceScope?: array<string,TUnscopedArray>, ...} $array
+     * @psalm-param TKey $key
+     *
+     * @psalm-param-out null|TUnscopedArray[TKey] $retval
+     */
+    public function lookup(array $array, string $key, mixed &$retval = null): bool
+    {
+        if (!isset($array['NamespaceScope'])) {
+            return false;
+        }
+        return $this->twoLevelLookup($array['NamespaceScope'], $key, $retval);
     }
 }

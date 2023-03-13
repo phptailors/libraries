@@ -10,6 +10,7 @@ use Tailors\PHPUnit\ImplementsInterfaceTrait;
  *
  * @covers \Tailors\Lib\Injector\AbstractContextBase
  * @covers \Tailors\Lib\Injector\ClassScopeLookup
+ * @covers \Tailors\Lib\Injector\TwoLevelLookupTrait
  *
  * @internal this class is not covered by backward compatibility promise
  *
@@ -61,5 +62,125 @@ final class ClassScopeLookupTest extends TestCase
     {
         $lookup = new ClassScopeLookup(...$args);
         $this->assertSame($expected, $lookup->getScopeLookup());
+    }
+
+    /**
+     * @psalm-return iterable<array-key, list{
+     *      list{TClassScopeLookup},
+     *      array{ClassScope?: array<string,array<string,mixed>>, ...},
+     *      string,
+     *      bool,
+     *      mixed
+     *  }>
+     */
+    public static function provLookup(): iterable
+    {
+        return [
+            // #0
+            [
+                [''],
+                [
+                ],
+                'foo', false, null,
+            ],
+            // #1
+            [
+                ['Foo\\Bar'],
+                [
+                    'ClassScope' => [],
+                ],
+                'foo', false, null,
+            ],
+            // #2
+            [
+                ['Foo\\Bar'],
+                [
+                    'ClassScope' => [
+                        'Foo\\Baz' => ['foo' => 'Foo\\Baz::foo'],
+                        'Foo\\Gez' => ['foo' => 'Foo\\Baz::foo'],
+                    ],
+                ],
+                'foo', false, null,
+            ],
+            // #3
+            [
+                ['Foo\\Bar'],
+                [
+                    'ClassScope' => [
+                        'Foo\\Bar' => ['bar' => 'Foo\\Bar::bar'],
+                        'Foo\\Baz' => ['foo' => 'Foo\\Baz::foo'],
+                    ],
+                ],
+                'foo', false, null,
+            ],
+            // #4
+            [
+                ['Foo\\Bar'],
+                [
+                    'ClassScope' => [
+                        'Foo\\Baz' => [
+                            'foo' => 'Foo\\Baz::foo',
+                            'bar' => 'Foo\\Baz::bar',
+                        ],
+                        'Foo\\Bar' => [
+                            'foo' => 'Foo\\Bar::foo',
+                            'bar' => 'Foo\\Bar::bar',
+                        ],
+                    ],
+                ],
+                'foo', true, 'Foo\\Bar::foo',
+            ],
+            // #5
+            [
+                [['Foo\\Baz', 'Foo\\Bar']],
+                [
+                    'ClassScope' => [
+                        'Foo\\Bar' => [
+                            'foo' => 'Foo\\Bar::foo',
+                            'bar' => 'Foo\\Bar::bar',
+                        ],
+                        'Foo\\Baz' => [
+                            'foo' => 'Foo\\Baz::foo',
+                            'bar' => 'Foo\\Baz::bar',
+                        ],
+                    ],
+                ],
+                'foo', true, 'Foo\\Baz::foo',
+            ],
+            // #6
+            [
+                [['Foo\\Baz', 'Foo\\Bar']],
+                [
+                    'ClassScope' => [
+                        'Foo\\Bar' => [
+                            'foo' => 1,
+                            'bar' => 2,
+                        ],
+                        'Foo\\Baz' => [
+                            'foo' => 3,
+                            'bar' => 4,
+                        ],
+                    ],
+                ],
+                'foo', true, 3,
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider provLookup
+     *
+     * @psalm-param list{TClassScopeLookup} $args
+     * @psalm-param array{ClassScope?: array<string,array<string,mixed>>, ...} $array
+     *
+     * @psalm-suppress MissingThrowsDocblock
+     */
+    public function testLookup(array $args, array $array, string $key, bool $result, mixed $value): void
+    {
+        $lookup = new ClassScopeLookup(...$args);
+        $this->assertSame($result, $lookup->lookup($array, $key, $retval));
+        if ($result) {
+            $this->assertSame($value, $retval);
+        }
     }
 }
