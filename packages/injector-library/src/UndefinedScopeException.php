@@ -2,6 +2,6 @@
 
 namespace Tailors\Lib\Injector;
 
-class UndefinedScopeException extends \Exception implements ValueProviderExceptionInterface
+class UndefinedScopeException extends \Exception implements UndefinedScopeExceptionInterface
 {
 }
