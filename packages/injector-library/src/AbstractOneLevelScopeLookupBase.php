@@ -32,8 +32,36 @@ abstract class AbstractOneLevelScopeLookupBase
      *
      * @psalm-assert-if-true TVal $retval
      */
-    final public function lookup(array $array, string $key, mixed &$retval = null): bool
+    final public function lookupScopedArray(array $array, string $key, mixed &$retval = null): bool
     {
-        return self::oneLevelLookup($array[$this->getScopeType()] ?? null, $key, $retval);
+        return self::oneLevelArrayLookup($array[$this->getScopeType()] ?? null, $key, $retval);
+    }
+
+    /**
+     * @psalm-template TObj of object
+     *
+     * @psalm-param array{global?: class-string-map<T,T>, ...} $array
+     *
+     * @psalm-param class-string<TObj> $class
+     *
+     * @psalm-return ?TObj
+     */
+    public function lookupScopedInstanceMap(array $array, string $class): ?object
+    {
+        return self::oneLevelInstanceMapLookup($array[$this->getScopeType()] ?? null, $class);
+    }
+
+    /**
+     * @psalm-template TObj of object
+     *
+     * @psalm-param array{global?: class-string-map<T,FactoryInterface<T>>, ...} $array
+     *
+     * @psalm-param class-string<TObj> $class
+     *
+     * @psalm-return ?FactoryInterface<TObj>
+     */
+    public function lookupScopedFactoryMap(array $array, string $class): ?FactoryInterface
+    {
+        return self::oneLevelFactoryMapLookup($array[$this->getScopeType()] ?? null, $class);
     }
 }

@@ -37,22 +37,63 @@ abstract class AbstractTwoLevelScopeLookupBase
     }
 
     /**
-     * @psalm-template TUnscopedArray of array<string,mixed>
      * @psalm-template TKey of string
+     * @psalm-template TVal of mixed
      *
      * @psalm-param array{
-     *      class?: array<string,TUnscopedArray>,
-     *      namespace?: array<string,TUnscopedArray>,
-     *      function?: array<string,TUnscopedArray>,
+     *      class?: array<string,array<TKey,TVal>>,
+     *      namespace?: array<string,array<TKey,TVal>>,
+     *      function?: array<string,array<TKey,TVal>>,
      *      ...
      * } $array
-     * @psalm-param TKey $key
      *
-     * @psalm-param-out null|TUnscopedArray[TKey] $retval
+     * @psalm-param-out null|TVal $retval
+     *
+     * @psalm-assert-if-true TVal $retval
      */
-    final public function lookup(array $array, string $key, mixed &$retval = null): bool
+    final public function lookupScopedArray(array $array, string $key, mixed &$retval = null): bool
     {
         /** @psalm-suppress PossiblyUndefinedArrayOffset */ // psalm bug...
-        return self::twoLevelLookup((array) $this->scopeLookup, $array[$this->getScopeType()] ?? null, $key, $retval);
+        return self::twoLevelArrayLookup((array) $this->scopeLookup, $array[$this->getScopeType()] ?? null, $key, $retval);
+    }
+
+    /**
+     * @psalm-template TObj of object
+     *
+     * @psalm-param array{
+     *      class?:     array<string,class-string-map<T,T>>,
+     *      function?:  array<string,class-string-map<T,T>>,
+     *      namespace?: array<string,class-string-map<T,T>>,
+     *      ...
+     * } $array
+     *
+     * @psalm-param class-string<TObj> $class
+     *
+     * @psalm-return ?TObj
+     */
+    final public function lookupScopedInstanceMap(array $array, string $class): ?object
+    {
+        /** @psalm-suppress PossiblyUndefinedArrayOffset */ // psalm bug...
+        return self::twoLevelInstanceMapLookup((array) $this->scopeLookup, $array[$this->getScopeType()] ?? null, $class);
+    }
+
+    /**
+     * @psalm-template TObj of object
+     *
+     * @psalm-param array{
+     *      class?:     array<string,class-string-map<T,FactoryInterface<T>>>,
+     *      function?:  array<string,class-string-map<T,FactoryInterface<T>>>,
+     *      namespace?: array<string,class-string-map<T,FactoryInterface<T>>>,
+     *      ...
+     * } $array
+     *
+     * @psalm-param class-string<TObj> $class
+     *
+     * @psalm-return ?FactoryInterface<TObj>
+     */
+    final public function lookupScopedFactoryMap(array $array, string $class): ?FactoryInterface
+    {
+        /** @psalm-suppress PossiblyUndefinedArrayOffset */ // psalm bug...
+        return self::twoLevelFactoryMapLookup((array) $this->scopeLookup, $array[$this->getScopeType()] ?? null, $class);
     }
 }

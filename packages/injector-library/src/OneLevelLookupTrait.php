@@ -5,23 +5,59 @@ namespace Tailors\Lib\Injector;
 trait OneLevelLookupTrait
 {
     /**
-     * @psalm-template TUnscopedArray of array<string,mixed>
      * @psalm-template TKey of string
+     * @psalm-template TVal of mixed
      *
-     * @psalm-param null|TUnscopedArray $array
-     * @psalm-param TKey $key
+     * @psalm-param null|array<TKey,TVal> $array
      *
-     * @psalm-param-out null|TUnscopedArray[TKey] $retval
+     * @psalm-param-out null|TVal $retval
+     *
+     * @psalm-assert-if-true TVal $retval
      */
-    private static function oneLevelLookup(?array $array, string $key, mixed &$retval = null): bool
+    private static function oneLevelArrayLookup(?array $array, string $key, mixed &$retval = null): bool
     {
         if (null === $array || !array_key_exists($key, $array)) {
             return false;
         }
 
-        /** @psalm-var TUnscopedArray[TKey] */
         $retval = $array[$key];
 
         return true;
+    }
+
+    /**
+     * @psalm-template TObj of object
+     *
+     * @psalm-param null|class-string-map<T,T> $array
+     *
+     * @psalm-param class-string<TObj> $class
+     *
+     * @psalm-return ?TObj
+     */
+    private static function oneLevelInstanceMapLookup(?array $array, string $class): ?object
+    {
+        if (null === $array || !array_key_exists($class, $array)) {
+            return null;
+        }
+
+        return $array[$class];
+    }
+
+    /**
+     * @psalm-template TObj of object
+     *
+     * @psalm-param null|class-string-map<T,FactoryInterface<T>> $array
+     *
+     * @psalm-param class-string<TObj> $class
+     *
+     * @psalm-return ?FactoryInterface<TObj>
+     */
+    private static function oneLevelFactoryMapLookup(?array $array, string $class): ?FactoryInterface
+    {
+        if (null === $array || !array_key_exists($class, $array)) {
+            return null;
+        }
+
+        return $array[$class];
     }
 }

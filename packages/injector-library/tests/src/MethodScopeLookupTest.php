@@ -69,39 +69,35 @@ final class MethodScopeLookupTest extends TestCase
      *      mixed
      *  }>
      */
-    public static function provLookup(): iterable
+    public static function provLookupScopedArray(): iterable
     {
         return [
-            // #0
-            [
+            '#00' => [
                 [['', []]],
                 [
                 ],
                 'foo', false, null,
             ],
-            // #1
-            [
+            '#01' => [
                 [['m1', 'Foo\\Bar']],
                 [
                     'method' => [],
                 ],
                 'foo', false, null,
             ],
-            // #2
-            [
+            '#02' => [
                 [['m1', 'Foo\\Bar']],
                 [
                     'method' => [
                         'm1' => [
                             'Foo\\Baz' => ['foo' => 'Foo\\Baz::m1[foo]'],
-                            'Foo\\Gez' => ['foo' => 'Foo\\Baz::m1[foo]'],
+                            'Foo\\Gez' => ['foo' => 'Foo\\Gez::m1[foo]'],
                         ],
                     ],
                 ],
                 'foo', false, null,
             ],
-            // #3
-            [
+            '#03' => [
                 [['m1', 'Foo\\Bar']],
                 [
                     'method' => [
@@ -113,8 +109,7 @@ final class MethodScopeLookupTest extends TestCase
                 ],
                 'foo', false, null,
             ],
-            // #4
-            [
+            '#04' => [
                 [['m1', 'Foo\\Bar']],
                 [
                     'method' => [
@@ -132,8 +127,7 @@ final class MethodScopeLookupTest extends TestCase
                 ],
                 'foo', true, 'Foo\\Bar::m1[foo]',
             ],
-            // #5
-            [
+            '#05' => [
                 [['m2', ['Foo\\Baz', 'Foo\\Bar']]],
                 [
                     'method' => [
@@ -161,8 +155,7 @@ final class MethodScopeLookupTest extends TestCase
                 ],
                 'foo', true, 'Foo\\Baz::m2[foo]',
             ],
-            // #6
-            [
+            '#06' => [
                 [['m1', ['Foo\\Baz', 'Foo\\Bar']]],
                 [
                     'method' => [
@@ -184,19 +177,140 @@ final class MethodScopeLookupTest extends TestCase
     }
 
     /**
-     * @dataProvider provLookup
+     * @dataProvider provLookupScopedArray
      *
      * @psalm-param list{list{string,string|array<string>}} $args
      * @psalm-param array{method?: array<string,array<string,array<string,mixed>>>, ...} $array
      *
      * @psalm-suppress MissingThrowsDocblock
      */
-    public function testLookup(array $args, array $array, string $key, bool $result, mixed $value): void
+    public function testLookupScopedArray(array $args, array $array, string $key, bool $result, mixed $value): void
     {
         $lookup = new MethodScopeLookup(...$args);
-        $this->assertSame($result, $lookup->lookup($array, $key, $retval));
+        $this->assertSame($result, $lookup->lookupScopedArray($array, $key, $retval));
         if ($result) {
             $this->assertSame($value, $retval);
         }
+    }
+
+    /**
+     * @psalm-return iterable<array-key, list{
+     *      list{list{string,string|array<string>}},
+     *      array{method?: array<string,array<string,class-string-map<T,T>>>, ...},
+     *      class-string,
+     *      mixed
+     *  }>
+     */
+    public static function provLookupScopedInstanceMap(): iterable
+    {
+        $e1 = new \Exception();
+        $e2 = new \Exception();
+        $e3 = new \Exception();
+        $e4 = new \Exception();
+        $r1 = new \RuntimeException();
+        $r2 = new \RuntimeException();
+        $r3 = new \RuntimeException();
+        $r4 = new \RuntimeException();
+
+        return [
+            '#00' => [
+                [['', []]],
+                [
+                ],
+                \Exception::class, null,
+            ],
+            '#01' => [
+                [['m1', 'Foo\\Bar']],
+                [
+                    'method' => [],
+                ],
+                \Exception::class, null,
+            ],
+            '#02' => [
+                [['m1', 'Foo\\Bar']],
+                [
+                    'method' => [
+                        'm1' => [
+                            'Foo\\Baz' => [\Exception::class => $e1],
+                            'Foo\\Gez' => [\Exception::class => $e2],
+                        ],
+                    ],
+                ],
+                \Exception::class, null,
+            ],
+            '#03' => [
+                [['m1', 'Foo\\Bar']],
+                [
+                    'method' => [
+                        'm1' => [
+                            'Foo\\Bar' => [\RuntimeException::class => $r1],
+                            'Foo\\Baz' => [\Exception::class => $e1],
+                        ],
+                    ],
+                ],
+                \Exception::class, null,
+            ],
+            '#04' => [
+                [['m1', 'Foo\\Bar']],
+                [
+                    'method' => [
+                        'm1' => [
+                            'Foo\\Baz' => [
+                                \Exception::class => $e2,
+                                \RuntimeException::class => $r2,
+                            ],
+                            'Foo\\Bar' => [
+                                \Exception::class => $e1,
+                                \RuntimeException::class => $r1,
+                            ],
+                        ],
+                    ],
+                ],
+                \Exception::class, $e1,
+            ],
+            '#05' => [
+                [['m2', ['Foo\\Baz', 'Foo\\Bar']]],
+                [
+                    'method' => [
+                        'm1' => [
+                            'Foo\\Bar' => [
+                                \Exception::class => $e1,
+                                \RuntimeException::class => $r1,
+                            ],
+                            'Foo\\Baz' => [
+                                \Exception::class => $e2,
+                                \RuntimeException::class => $r2,
+                            ],
+                        ],
+                        'm2' => [
+                            'Foo\\Bar' => [
+                                \Exception::class => $e3,
+                                \RuntimeException::class => $r3,
+                            ],
+                            'Foo\\Baz' => [
+                                \Exception::class => $e4,
+                                \RuntimeException::class => $r4,
+                            ],
+                        ],
+                    ],
+                ],
+                \Exception::class, $e4,
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider provLookupScopedInstanceMap
+     *
+     * @psalm-param list{list{string,string|array<string>}} $args
+     * @psalm-param array{method?: array<string,array<string,class-string-map<T,T>>>, ...} $array
+     * @psalm-param class-string $class
+     *
+     * @psalm-suppress MissingThrowsDocblock
+     */
+    public function testLookupScopedInstanceMap(array $args, array $array, string $class, mixed $expected): void
+    {
+        $lookup = new MethodScopeLookup(...$args);
+        $this->assertSame($expected, $lookup->lookupScopedInstanceMap($array, $class));
     }
 }

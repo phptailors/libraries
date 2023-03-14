@@ -63,24 +63,21 @@ final class GlobalScopeLookupTest extends TestCase
      *      mixed
      *  }>
      */
-    public static function provLookup(): iterable
+    public static function provLookupScopedArray(): iterable
     {
         return [
-            // #0
-            [
+            '#00' => [
                 [
                 ],
                 'foo', false, null,
             ],
-            // #1
-            [
+            '#01' => [
                 [
                     'global' => [],
                 ],
                 'foo', false, null,
             ],
-            // #2
-            [
+            '#02' => [
                 [
                     'global' => [
                         'bar' => 'BAR',
@@ -88,8 +85,7 @@ final class GlobalScopeLookupTest extends TestCase
                 ],
                 'foo', false, null,
             ],
-            // #3
-            [
+            '#03' => [
                 [
                     'global' => [
                         'foo' => 'FOO',
@@ -102,18 +98,76 @@ final class GlobalScopeLookupTest extends TestCase
     }
 
     /**
-     * @dataProvider provLookup
+     * @dataProvider provLookupScopedArray
      *
      * @psalm-param array{function?: array<string,array<string,mixed>>, ...} $array
      *
      * @psalm-suppress MissingThrowsDocblock
      */
-    public function testLookup(array $array, string $key, bool $result, mixed $value): void
+    public function testLookupScopedArray(array $array, string $key, bool $result, mixed $value): void
     {
         $lookup = new GlobalScopeLookup();
-        $this->assertSame($result, $lookup->lookup($array, $key, $retval));
+        $this->assertSame($result, $lookup->lookupScopedArray($array, $key, $retval));
         if ($result) {
             $this->assertSame($value, $retval);
         }
+    }
+
+    /**
+     * @psalm-return iterable<array-key, list{
+     *      array{global?: class-string-map<T,T>, ...},
+     *      class-string,
+     *      mixed
+     *  }>
+     */
+    public static function provLookupScopedInstanceMap(): iterable
+    {
+        $e1 = new \Exception();
+        $r1 = new \RuntimeException();
+
+        return [
+            '#00' => [
+                [
+                ],
+                \Exception::class, null,
+            ],
+            '#01' => [
+                [
+                    'global' => [],
+                ],
+                \Exception::class, null,
+            ],
+            '#02' => [
+                [
+                    'global' => [
+                        \RuntimeException::class => $r1,
+                    ],
+                ],
+                \Exception::class, null,
+            ],
+            '#03' => [
+                [
+                    'global' => [
+                        \Exception::class => $e1,
+                        \RuntimeException::class => $r1,
+                    ],
+                ],
+                \Exception::class, $e1,
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider provLookupScopedInstanceMap
+     *
+     * @psalm-param array{function?: array<string,class-string-map<T,T>>, ...} $array
+     * @psalm-param class-string $class
+     *
+     * @psalm-suppress MissingThrowsDocblock
+     */
+    public function testLookupScopedInstanceMap(array $array, string $class, mixed $expected): void
+    {
+        $lookup = new GlobalScopeLookup();
+        $this->assertSame($expected, $lookup->lookupScopedInstanceMap($array, $class));
     }
 }

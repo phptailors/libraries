@@ -39,15 +39,44 @@ abstract class AbstractThreeLevelScopeLookupBase
 
     /**
      * @psalm-template TKey of string
-     * @psalm-template TUnscopedArray of array<string,mixed>
+     * @psalm-template TVal of mixed
      *
-     * @psalm-param array{method?: array<string,array<string,TUnscopedArray>>, ...} $array
-     * @psalm-param TKey $key
+     * @psalm-param array{method?: array<string,array<string,array<TKey,TVal>>>, ...} $array
      *
-     * @psalm-param-out null|TUnscopedArray[TKey] $retval
+     * @psalm-param-out null|TVal $retval
+     *
+     * @psalm-assert-if-true TVal $retval
      */
-    final public function lookup(array $array, string $key, mixed &$retval = null): bool
+    final public function lookupScopedArray(array $array, string $key, mixed &$retval = null): bool
     {
-        return self::threeLevelLookup($this->scopeLookup, $array[$this->getScopeType()] ?? null, $key, $retval);
+        return self::threeLevelArrayLookup($this->scopeLookup, $array[$this->getScopeType()] ?? null, $key, $retval);
+    }
+
+    /**
+     * @psalm-template TObj of object
+     *
+     * @psalm-param array{method?: array<string,array<string,class-string-map<T,T>>>, ...} $array
+     *
+     * @psalm-param class-string<TObj> $class
+     *
+     * @psalm-return ?TObj
+     */
+    final public function lookupScopedInstanceMap(array $array, string $class): ?object
+    {
+        return self::threeLevelInstanceMapLookup($this->scopeLookup, $array[$this->getScopeType()] ?? null, $class);
+    }
+
+    /**
+     * @psalm-template TObj of object
+     *
+     * @psalm-param array{method?: array<string,array<string,class-string-map<T,FactoryInterface<T>>>>, ...} $array
+     *
+     * @psalm-param class-string<TObj> $class
+     *
+     * @psalm-return ?FactoryInterface<TObj>
+     */
+    final public function lookupScopedFactoryMap(array $array, string $class): ?FactoryInterface
+    {
+        return self::threeLevelFactoryMapLookup($this->scopeLookup, $array[$this->getScopeType()] ?? null, $class);
     }
 }

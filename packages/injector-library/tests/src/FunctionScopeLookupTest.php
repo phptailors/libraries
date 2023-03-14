@@ -69,26 +69,23 @@ final class FunctionScopeLookupTest extends TestCase
      *      mixed
      *  }>
      */
-    public static function provLookup(): iterable
+    public static function provLookupScopedArray(): iterable
     {
         return [
-            // #0
-            [
+            '#00' => [
                 [''],
                 [
                 ],
                 'foo', false, null,
             ],
-            // #1
-            [
+            '#01' => [
                 ['Foo\\bar'],
                 [
                     'function' => [],
                 ],
                 'foo', false, null,
             ],
-            // #2
-            [
+            '#02' => [
                 ['Foo\\bar'],
                 [
                     'function' => [
@@ -98,8 +95,7 @@ final class FunctionScopeLookupTest extends TestCase
                 ],
                 'foo', false, null,
             ],
-            // #3
-            [
+            '#03' => [
                 ['Foo\\bar'],
                 [
                     'function' => [
@@ -109,8 +105,7 @@ final class FunctionScopeLookupTest extends TestCase
                 ],
                 'foo', false, null,
             ],
-            // #4
-            [
+            '#04' => [
                 ['Foo\\bar'],
                 [
                     'function' => [
@@ -130,19 +125,108 @@ final class FunctionScopeLookupTest extends TestCase
     }
 
     /**
-     * @dataProvider provLookup
+     * @dataProvider provLookupScopedArray
      *
      * @psalm-param list{string|array<string>} $args
      * @psalm-param array{function?: array<string,array<string,mixed>>, ...} $array
      *
      * @psalm-suppress MissingThrowsDocblock
      */
-    public function testLookup(array $args, array $array, string $key, bool $result, mixed $value): void
+    public function testLookupScopedArray(array $args, array $array, string $key, bool $result, mixed $value): void
     {
         $lookup = new FunctionScopeLookup(...$args);
-        $this->assertSame($result, $lookup->lookup($array, $key, $retval));
+        $this->assertSame($result, $lookup->lookupScopedArray($array, $key, $retval));
         if ($result) {
             $this->assertSame($value, $retval);
         }
+    }
+
+    /**
+     * @psalm-return iterable<array-key, list{
+     *      list{string|array<string>},
+     *      array{function?: array<string,array<string,mixed>>, ...},
+     *      string,
+     *      bool,
+     *      mixed
+     *  }>
+     */
+    public static function provLookupScopedInstanceMap(): iterable
+    {
+        $e1 = new \Exception();
+        $e2 = new \Exception();
+        $r1 = new \RuntimeException();
+        $r2 = new \RuntimeException();
+
+        return [
+            // #0
+            [
+                [''],
+                [
+                ],
+                \Exception::class, null,
+            ],
+            // #1
+            [
+                ['Foo\\bar'],
+                [
+                    'function' => [],
+                ],
+                \Exception::class, null,
+            ],
+            // #2
+            [
+                ['Foo\\bar'],
+                [
+                    'function' => [
+                        'Foo\\baz' => [\Exception::class => $e1],
+                        'Foo\\gez' => [\Exception::class => $e1],
+                    ],
+                ],
+                \Exception::class, null,
+            ],
+            // #3
+            [
+                ['Foo\\bar'],
+                [
+                    'function' => [
+                        'Foo\\bar' => [\RuntimeException::class => $r1],
+                        'Foo\\baz' => [\Exception::class => $e1],
+                    ],
+                ],
+                \Exception::class, null,
+            ],
+            // #4
+            [
+                ['Foo\\bar'],
+                [
+                    'function' => [
+                        'Foo\\baz' => [
+                            \Exception::class => $e2,
+                            \RuntimeException::class => $r2,
+                        ],
+                        'Foo\\bar' => [
+                            \Exception::class => $e1,
+                            \RuntimeException::class => $r1,
+                        ],
+                    ],
+                ],
+                \Exception::class, $e1,
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider provLookupScopedInstanceMap
+     *
+     * @psalm-param list{string|array<string>} $args
+     * @psalm-param array{function?: array<string,class-string-map<T,T>>, ...} $array
+     * @psalm-param class-string $class
+     *
+     * @psalm-suppress MissingThrowsDocblock
+     */
+    public function testLookupScopedInstanceMap(array $args, array $array, string $class, mixed $expected): void
+    {
+        $lookup = new FunctionScopeLookup(...$args);
+        $this->assertSame($expected, $lookup->lookupScopedInstanceMap($array, $class));
     }
 }
