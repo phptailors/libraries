@@ -23,13 +23,14 @@ abstract class AbstractOneLevelScopeLookupBase
     }
 
     /**
-     * @psalm-template TUnscopedArray of array<string,mixed>
      * @psalm-template TKey of string
+     * @psalm-template TVal of mixed
      *
-     * @psalm-param array{global?: TUnscopedArray, ...} $array
-     * @psalm-param TKey $key
+     * @psalm-param array{global?: array<TKey,TVal>, ...} $array
      *
-     * @psalm-param-out null|TUnscopedArray[TKey] $retval
+     * @psalm-param-out null|TVal $retval
+     *
+     * @psalm-assert-if-true TVal $retval
      */
     final public function lookup(array $array, string $key, mixed &$retval = null): bool
     {
