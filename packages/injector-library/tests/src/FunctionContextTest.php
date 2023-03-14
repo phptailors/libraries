@@ -55,24 +55,24 @@ final class FunctionContextTest extends TestCase
             'foo' => [
                 'foo',
                 [
-                    [ScopeType::FunctionScope, 'foo'],
-                    [ScopeType::GlobalScope, null],
+                    ['function', 'foo'],
+                    ['global', null],
                 ],
             ],
             'Foo\\bar' => [
                 'Foo\\bar',
                 [
-                    [ScopeType::FunctionScope, 'Foo\\bar'],
-                    [ScopeType::NamespaceScope, ['Foo']],
-                    [ScopeType::GlobalScope, null],
+                    ['function', 'Foo\\bar'],
+                    ['namespace', ['Foo']],
+                    ['global', null],
                 ],
             ],
             'Foo\\Bar\\baz' => [
                 'Foo\\Bar\\baz',
                 [
-                    [ScopeType::FunctionScope, 'Foo\\Bar\\baz'],
-                    [ScopeType::NamespaceScope, ['Foo\\Bar', 'Foo']],
-                    [ScopeType::GlobalScope, null],
+                    ['function', 'Foo\\Bar\\baz'],
+                    ['namespace', ['Foo\\Bar', 'Foo']],
+                    ['global', null],
                 ],
             ],
         ];

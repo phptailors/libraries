@@ -5,22 +5,15 @@ namespace Tailors\Lib\Injector;
 /**
  * @author Paweł Tomulik <pawel@tomulik.pl>
  *
- * @psalm-type TFunctionScopeLookup = string
- *
- * @template-extends ScopeLookupInterface<TFunctionScopeLookup>
+ * @template-extends TwoLevelScopeLookupInterface<'function'>
  */
-interface FunctionScopeLookupInterface extends ScopeLookupInterface
+interface FunctionScopeLookupInterface extends TwoLevelScopeLookupInterface
 {
-    /**
-     * @psalm-return TFunctionScopeLookup
-     */
-    public function getScopeLookup(): string;
-
     /**
      * @psalm-template TKey of string
      * @psalm-template TUnscopedArray of array<string,mixed>
      *
-     * @psalm-param array{ClassScope?: array<string,TUnscopedArray>, ...} $array
+     * @psalm-param array{function?: array<string,TUnscopedArray>, ...} $array
      * @psalm-param TKey $key
      *
      * @psalm-param-out null|TUnscopedArray[TKey] $retval

@@ -8,14 +8,13 @@ use Tailors\PHPUnit\ImplementsInterfaceTrait;
 /**
  * @author Paweł Tomulik <pawel@tomulik.pl>
  *
- * @covers \Tailors\Lib\Injector\AbstractContextBase
+ * @covers \Tailors\Lib\Injector\AbstractTwoLevelScopeLookupBase
  * @covers \Tailors\Lib\Injector\NamespaceScopeLookup
+ * @covers \Tailors\Lib\Injector\TwoLevelLookupTrait
  *
  * @internal this class is not covered by backward compatibility promise
  *
  * @psalm-internal Tailors\Lib\Injector
- *
- * @psalm-import-type TNamespaceScopeLookup from NamespaceScopeLookupInterface
  */
 final class NamespaceScopeLookupTest extends TestCase
 {
@@ -34,11 +33,11 @@ final class NamespaceScopeLookupTest extends TestCase
      */
     public function testGetScopeType(): void
     {
-        $this->assertSame(ScopeType::NamespaceScope, (new NamespaceScopeLookup([]))->getScopeType());
+        $this->assertSame('namespace', (new NamespaceScopeLookup([]))->getScopeType());
     }
 
     /**
-     * @psalm-return iterable<array-key, list{list{TNamespaceScopeLookup}, mixed}>
+     * @psalm-return iterable<array-key, list{list{string|array<string>}, mixed}>
      */
     public static function provGetScopeLookup(): iterable
     {
@@ -53,7 +52,7 @@ final class NamespaceScopeLookupTest extends TestCase
     /**
      * @dataProvider provGetScopeLookup
      *
-     * @psalm-param list{TNamespaceScopeLookup} $args
+     * @psalm-param list{string|array<string>} $args
      *
      * @psalm-suppress MissingThrowsDocblock
      */
@@ -65,8 +64,8 @@ final class NamespaceScopeLookupTest extends TestCase
 
     /**
      * @psalm-return iterable<array-key, list{
-     *      list{TNamespaceScopeLookup},
-     *      array{NamespaceScope?: array<string,array<string,mixed>>, ...},
+     *      list{string|array<string>},
+     *      array{namespace?: array<string,array<string,mixed>>, ...},
      *      string,
      *      bool,
      *      mixed
@@ -86,7 +85,7 @@ final class NamespaceScopeLookupTest extends TestCase
             [
                 ['Foo\\Bar'],
                 [
-                    'NamespaceScope' => [],
+                    'namespace' => [],
                 ],
                 'foo', false, null,
             ],
@@ -94,7 +93,7 @@ final class NamespaceScopeLookupTest extends TestCase
             [
                 ['Foo\\Bar'],
                 [
-                    'NamespaceScope' => [
+                    'namespace' => [
                         'Foo\\Baz' => ['foo' => 'Foo\\Baz::foo'],
                         'Foo\\Gez' => ['foo' => 'Foo\\Baz::foo'],
                     ],
@@ -105,7 +104,7 @@ final class NamespaceScopeLookupTest extends TestCase
             [
                 ['Foo\\Bar'],
                 [
-                    'NamespaceScope' => [
+                    'namespace' => [
                         'Foo\\Bar' => ['bar' => 'Foo\\Bar::bar'],
                         'Foo\\Baz' => ['foo' => 'Foo\\Baz::foo'],
                     ],
@@ -116,7 +115,7 @@ final class NamespaceScopeLookupTest extends TestCase
             [
                 ['Foo\\Bar'],
                 [
-                    'NamespaceScope' => [
+                    'namespace' => [
                         'Foo\\Baz' => [
                             'foo' => 'Foo\\Baz::foo',
                             'bar' => 'Foo\\Baz::bar',
@@ -133,7 +132,7 @@ final class NamespaceScopeLookupTest extends TestCase
             [
                 [['Foo\\Baz', 'Foo\\Bar']],
                 [
-                    'NamespaceScope' => [
+                    'namespace' => [
                         'Foo\\Bar' => [
                             'foo' => 'Foo\\Bar::foo',
                             'bar' => 'Foo\\Bar::bar',
@@ -150,7 +149,7 @@ final class NamespaceScopeLookupTest extends TestCase
             [
                 [['Foo\\Baz', 'Foo\\Bar']],
                 [
-                    'NamespaceScope' => [
+                    'namespace' => [
                         'Foo\\Bar' => [
                             'foo' => 1,
                             'bar' => 2,
@@ -169,8 +168,8 @@ final class NamespaceScopeLookupTest extends TestCase
     /**
      * @dataProvider provLookup
      *
-     * @psalm-param list{TNamespaceScopeLookup} $args
-     * @psalm-param array{NamespaceScope?: array<string,array<string,mixed>>, ...} $array
+     * @psalm-param list{string|array<string>} $args
+     * @psalm-param array{namespace?: array<string,array<string,mixed>>, ...} $array
      *
      * @psalm-suppress MissingThrowsDocblock
      */

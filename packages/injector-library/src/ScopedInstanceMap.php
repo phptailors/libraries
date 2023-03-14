@@ -5,11 +5,11 @@ namespace Tailors\Lib\Injector;
 /**
  * @psalm-type TUnscopedArray class-string-map<T,T>
  * @psalm-type TScopedArray array{
- *      ClassScope?: array<string, class-string-map<T,T>>,
- *      NamespaceScope?: array<string, class-string-map<T,T>>,
- *      FunctionScope?: array<string, class-string-map<T,T>>,
- *      MethodScope?: array<string, array<string, class-string-map<T,T>>>,
- *      GlobalScope?: class-string-map<T,T>
+ *      class?: array<string, class-string-map<T,T>>,
+ *      namespace?: array<string, class-string-map<T,T>>,
+ *      function?: array<string, class-string-map<T,T>>,
+ *      method?: array<string, array<string, class-string-map<T,T>>>,
+ *      global?: class-string-map<T,T>
  * }
  *
  * @template-extends AbstractScopedArrayBase<class-string-map<T,T>>

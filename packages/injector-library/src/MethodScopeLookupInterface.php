@@ -5,16 +5,18 @@ namespace Tailors\Lib\Injector;
 /**
  * @author Paweł Tomulik <pawel@tomulik.pl>
  *
- * @psalm-import-type TClassScopeLookup from ClassScopeLookupInterface
- *
- * @psalm-type TMethodScopeLookup = list{string,TClassScopeLookup}
- *
- * @template-extends ScopeLookupInterface<TMethodScopeLookup>
+ * @template-extends ThreeLevelScopeLookupInterface<'method'>
  */
-interface MethodScopeLookupInterface extends ScopeLookupInterface
+interface MethodScopeLookupInterface extends ThreeLevelScopeLookupInterface
 {
     /**
-     * @psalm-return TMethodScopeLookup
+     * @psalm-template TKey of string
+     * @psalm-template TUnscopedArray of array<string,mixed>
+     *
+     * @psalm-param array{method?: array<string,array<string,TUnscopedArray>>, ...} $array
+     * @psalm-param TKey $key
+     *
+     * @psalm-param-out null|TUnscopedArray[TKey] $retval
      */
-    public function getScopeLookup(): array;
+    public function lookup(array $array, string $key, mixed &$retval = null): bool;
 }

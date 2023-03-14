@@ -46,7 +46,7 @@ final class ScopedInstanceMapTest extends TestCase
     public function testGetScopedArray(): void
     {
         /** @psalm-var TScopedArray */
-        $array = ['GlobalScope' => [self::class => $this]];
+        $array = ['global' => [self::class => $this]];
         $map = new ScopedInstanceMap($array);
         $this->assertSame($array, $map->getScopedArray());
     }

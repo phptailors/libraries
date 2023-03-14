@@ -1,38 +1,39 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Tailors\Lib\Injector;
 
-/**
- * @psalm-template TScopeLookup of string|list<string>
- */
 trait TwoLevelLookupTrait
 {
     /**
-     * @psalm-return TScopeLookup
+     * @psalm-template TUnscopedArray of array<string,mixed>
+     * @psalm-template TKey of string
+     *
+     * @psalm-param TUnscopedArray $array
+     * @psalm-param TKey $key
+     *
+     * @psalm-param-out null|TUnscopedArray[TKey] $retval
      */
-    abstract public function getScopeLookup(): string|array;
+    abstract private static function oneLevelLookup(array $array, string $key, mixed &$retval = null): bool;
 
     /**
      * @psalm-template TUnscopedArray of array<string,mixed>
      * @psalm-template TKey of string
      *
-     * @psalm-param array<string,TUnscopedArray> $scopes
+     * @psalm-param array<string> $skeys
+     * @psalm-param null|array<string,TUnscopedArray> $array
      * @psalm-param TKey $key
      *
      * @psalm-param-out null|TUnscopedArray[TKey] $retval
      */
-    private function twoLevelLookup(array $scopes, string $key, mixed &$retval = null): bool
+    private static function twoLevelLookup(array $skeys, ?array $array, string $key, mixed &$retval = null): bool
     {
-        $skeys = (array) $this->getScopeLookup();
-        foreach ($skeys as $skey) {
-            if (isset($scopes[$skey])) {
-                $scope = $scopes[$skey];
-                if (array_key_exists($key, $scope)) {
-                    /** @psalm-var TUnscopedArray[TKey] */
-                    $retval = $scope[$key];
+        if (null === $array) {
+            return false;
+        }
 
-                    return true;
-                }
+        foreach ($skeys as $skey) {
+            if (self::oneLevelLookup($array[$skey] ?? null, $key, $retval)) {
+                return true;
             }
         }
 

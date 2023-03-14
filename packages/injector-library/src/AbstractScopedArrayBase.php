@@ -9,22 +9,22 @@ abstract class AbstractScopedArrayBase
 {
     /**
      * @psalm-var array{
-     *      ClassScope?: array<string, TUnscopedArray>,
-     *      NamespaceScope?: array<string, TUnscopedArray>,
-     *      FunctionScope?: array<string, TUnscopedArray>,
-     *      MethodScope?: array<string, array<string, TUnscopedArray>>,
-     *      GlobalScope?: TUnscopedArray
+     *      class?: array<string, TUnscopedArray>,
+     *      namespace?: array<string, TUnscopedArray>,
+     *      function?: array<string, TUnscopedArray>,
+     *      method?: array<string, array<string, TUnscopedArray>>,
+     *      global?: TUnscopedArray
      * }
      */
     private array $array;
 
     /**
      * @psalm-param array{
-     *      ClassScope?: array<string, TUnscopedArray>,
-     *      NamespaceScope?: array<string, TUnscopedArray>,
-     *      FunctionScope?: array<string, TUnscopedArray>,
-     *      MethodScope?: array<string, array<string, TUnscopedArray>>,
-     *      GlobalScope?: TUnscopedArray
+     *      class?: array<string, TUnscopedArray>,
+     *      namespace?: array<string, TUnscopedArray>,
+     *      function?: array<string, TUnscopedArray>,
+     *      method?: array<string, array<string, TUnscopedArray>>,
+     *      global?: TUnscopedArray
      * } $array
      */
     public function __construct(array $array)
@@ -34,11 +34,11 @@ abstract class AbstractScopedArrayBase
 
     /**
      * @psalm-return array{
-     *      ClassScope?: array<string, TUnscopedArray>,
-     *      NamespaceScope?: array<string, TUnscopedArray>,
-     *      FunctionScope?: array<string, TUnscopedArray>,
-     *      MethodScope?: array<string, array<string, TUnscopedArray>>,
-     *      GlobalScope?: TUnscopedArray
+     *      class?: array<string, TUnscopedArray>,
+     *      namespace?: array<string, TUnscopedArray>,
+     *      function?: array<string, TUnscopedArray>,
+     *      method?: array<string, array<string, TUnscopedArray>>,
+     *      global?: TUnscopedArray
      * }
      */
     public function getScopedArray(): array

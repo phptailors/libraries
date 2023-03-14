@@ -61,7 +61,7 @@ final class MethodContextTest extends TestCase
                 ['foo', \Exception::class],
                 [
                     [
-                        ScopeType::MethodScope,
+                        'method',
                         [
                             'foo',
                             [
@@ -72,21 +72,21 @@ final class MethodContextTest extends TestCase
                         ],
                     ],
                     [
-                        ScopeType::ClassScope,
+                        'class',
                         [
                             \Exception::class,
                             \Stringable::class,
                             \Throwable::class,
                         ],
                     ],
-                    [ScopeType::GlobalScope, null],
+                    ['global', null],
                 ],
             ],
             'RuntimeException::foo' => [
                 ['foo', \RuntimeException::class],
                 [
                     [
-                        ScopeType::MethodScope,
+                        'method',
                         [
                             'foo',
                             [
@@ -98,7 +98,7 @@ final class MethodContextTest extends TestCase
                         ],
                     ],
                     [
-                        ScopeType::ClassScope,
+                        'class',
                         [
                             \RuntimeException::class,
                             \Exception::class,
@@ -106,14 +106,14 @@ final class MethodContextTest extends TestCase
                             \Throwable::class,
                         ],
                     ],
-                    [ScopeType::GlobalScope, null],
+                    ['global', null],
                 ],
             ],
             'LengthException::foo' => [
                 ['foo', \LengthException::class],
                 [
                     [
-                        ScopeType::MethodScope,
+                        'method',
                         [
                             'foo',
                             [
@@ -126,7 +126,7 @@ final class MethodContextTest extends TestCase
                         ],
                     ],
                     [
-                        ScopeType::ClassScope,
+                        'class',
                         [
                             \LengthException::class,
                             \LogicException::class,
@@ -135,32 +135,32 @@ final class MethodContextTest extends TestCase
                             \Throwable::class,
                         ],
                     ],
-                    [ScopeType::GlobalScope, null],
+                    ['global', null],
                 ],
             ],
             self::class.'::foo' => [
                 ['foo', self::class],
                 [
                     [
-                        ScopeType::MethodScope,
+                        'method',
                         [
                             'foo',
                             array_merge([self::class], $parents, $interfaces),
                         ],
                     ],
                     [
-                        ScopeType::ClassScope,
+                        'class',
                         array_merge([self::class], $parents, $interfaces),
                     ],
                     [
-                        ScopeType::NamespaceScope,
+                        'namespace',
                         [
                             'Tailors\\Lib\\Injector',
                             'Tailors\\Lib',
                             'Tailors',
                         ],
                     ],
-                    [ScopeType::GlobalScope, null],
+                    ['global', null],
                 ],
             ],
         ];

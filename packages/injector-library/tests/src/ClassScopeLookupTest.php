@@ -8,15 +8,13 @@ use Tailors\PHPUnit\ImplementsInterfaceTrait;
 /**
  * @author Paweł Tomulik <pawel@tomulik.pl>
  *
- * @covers \Tailors\Lib\Injector\AbstractContextBase
+ * @covers \Tailors\Lib\Injector\AbstractTwoLevelScopeLookupBase
  * @covers \Tailors\Lib\Injector\ClassScopeLookup
  * @covers \Tailors\Lib\Injector\TwoLevelLookupTrait
  *
  * @internal this class is not covered by backward compatibility promise
  *
  * @psalm-internal Tailors\Lib\Injector
- *
- * @psalm-import-type TClassScopeLookup from ClassScopeLookupInterface
  */
 final class ClassScopeLookupTest extends TestCase
 {
@@ -35,11 +33,11 @@ final class ClassScopeLookupTest extends TestCase
      */
     public function testGetScopeType(): void
     {
-        $this->assertSame(ScopeType::ClassScope, (new ClassScopeLookup([]))->getScopeType());
+        $this->assertSame('class', (new ClassScopeLookup([]))->getScopeType());
     }
 
     /**
-     * @psalm-return iterable<array-key, list{list{TClassScopeLookup}, mixed}>
+     * @psalm-return iterable<array-key, list{list{string|array<string>}, mixed}>
      */
     public static function provGetScopeLookup(): iterable
     {
@@ -54,7 +52,7 @@ final class ClassScopeLookupTest extends TestCase
     /**
      * @dataProvider provGetScopeLookup
      *
-     * @psalm-param list{TClassScopeLookup} $args
+     * @psalm-param list{string|array<string>} $args
      *
      * @psalm-suppress MissingThrowsDocblock
      */
@@ -66,8 +64,8 @@ final class ClassScopeLookupTest extends TestCase
 
     /**
      * @psalm-return iterable<array-key, list{
-     *      list{TClassScopeLookup},
-     *      array{ClassScope?: array<string,array<string,mixed>>, ...},
+     *      list{string|array<string>},
+     *      array{class?: array<string,array<string,mixed>>, ...},
      *      string,
      *      bool,
      *      mixed
@@ -87,7 +85,7 @@ final class ClassScopeLookupTest extends TestCase
             [
                 ['Foo\\Bar'],
                 [
-                    'ClassScope' => [],
+                    'class' => [],
                 ],
                 'foo', false, null,
             ],
@@ -95,7 +93,7 @@ final class ClassScopeLookupTest extends TestCase
             [
                 ['Foo\\Bar'],
                 [
-                    'ClassScope' => [
+                    'class' => [
                         'Foo\\Baz' => ['foo' => 'Foo\\Baz::foo'],
                         'Foo\\Gez' => ['foo' => 'Foo\\Baz::foo'],
                     ],
@@ -106,7 +104,7 @@ final class ClassScopeLookupTest extends TestCase
             [
                 ['Foo\\Bar'],
                 [
-                    'ClassScope' => [
+                    'class' => [
                         'Foo\\Bar' => ['bar' => 'Foo\\Bar::bar'],
                         'Foo\\Baz' => ['foo' => 'Foo\\Baz::foo'],
                     ],
@@ -117,7 +115,7 @@ final class ClassScopeLookupTest extends TestCase
             [
                 ['Foo\\Bar'],
                 [
-                    'ClassScope' => [
+                    'class' => [
                         'Foo\\Baz' => [
                             'foo' => 'Foo\\Baz::foo',
                             'bar' => 'Foo\\Baz::bar',
@@ -134,7 +132,7 @@ final class ClassScopeLookupTest extends TestCase
             [
                 [['Foo\\Baz', 'Foo\\Bar']],
                 [
-                    'ClassScope' => [
+                    'class' => [
                         'Foo\\Bar' => [
                             'foo' => 'Foo\\Bar::foo',
                             'bar' => 'Foo\\Bar::bar',
@@ -151,7 +149,7 @@ final class ClassScopeLookupTest extends TestCase
             [
                 [['Foo\\Baz', 'Foo\\Bar']],
                 [
-                    'ClassScope' => [
+                    'class' => [
                         'Foo\\Bar' => [
                             'foo' => 1,
                             'bar' => 2,
@@ -170,8 +168,8 @@ final class ClassScopeLookupTest extends TestCase
     /**
      * @dataProvider provLookup
      *
-     * @psalm-param list{TClassScopeLookup} $args
-     * @psalm-param array{ClassScope?: array<string,array<string,mixed>>, ...} $array
+     * @psalm-param list{string|array<string>} $args
+     * @psalm-param array{class?: array<string,array<string,mixed>>, ...} $array
      *
      * @psalm-suppress MissingThrowsDocblock
      */

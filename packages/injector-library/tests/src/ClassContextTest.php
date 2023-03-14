@@ -60,21 +60,21 @@ final class ClassContextTest extends TestCase
                 \Exception::class,
                 [
                     [
-                        ScopeType::ClassScope,
+                        'class',
                         [
                             \Exception::class,
                             \Stringable::class,
                             \Throwable::class,
                         ],
                     ],
-                    [ScopeType::GlobalScope, null],
+                    ['global', null],
                 ],
             ],
             'RuntimeException' => [
                 \RuntimeException::class,
                 [
                     [
-                        ScopeType::ClassScope,
+                        'class',
                         [
                             \RuntimeException::class,
                             \Exception::class,
@@ -82,14 +82,14 @@ final class ClassContextTest extends TestCase
                             \Throwable::class,
                         ],
                     ],
-                    [ScopeType::GlobalScope, null],
+                    ['global', null],
                 ],
             ],
             'LengthException' => [
                 \LengthException::class,
                 [
                     [
-                        ScopeType::ClassScope,
+                        'class',
                         [
                             \LengthException::class,
                             \LogicException::class,
@@ -98,25 +98,25 @@ final class ClassContextTest extends TestCase
                             \Throwable::class,
                         ],
                     ],
-                    [ScopeType::GlobalScope, null],
+                    ['global', null],
                 ],
             ],
             self::class => [
                 self::class,
                 [
                     [
-                        ScopeType::ClassScope,
+                        'class',
                         array_merge([self::class], $parents, $interfaces),
                     ],
                     [
-                        ScopeType::NamespaceScope,
+                        'namespace',
                         [
                             'Tailors\\Lib\\Injector',
                             'Tailors\\Lib',
                             'Tailors',
                         ],
                     ],
-                    [ScopeType::GlobalScope, null],
+                    ['global', null],
                 ],
             ],
         ];
