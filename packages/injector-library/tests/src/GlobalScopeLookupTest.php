@@ -114,6 +114,8 @@ final class GlobalScopeLookupTest extends TestCase
     }
 
     /**
+     * @psalm-suppress InvalidReturnType
+     * @psalm-suppress InvalidReturnStatement
      * @psalm-return iterable<array-key, list{
      *      array{global?: class-string-map<T,T>, ...},
      *      class-string,

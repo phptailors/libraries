@@ -102,7 +102,7 @@ final class ExceptionErrorHandlerTest extends TestCase
             ' Argument #1 \\(\\$arg\\) must be of type callable\\|string\\|null, int given/'
         );
 
-        /** @psalm-suppress InvalidScalarArgument */
+        /** @psalm-suppress InvalidArgument */
         ExceptionErrorHandler::makeExceptionGenerator(123);
     }
 

@@ -176,6 +176,8 @@ final class NamespaceScopeLookupTest extends TestCase
     }
 
     /**
+     * @psalm-suppress InvalidReturnType
+     * @psalm-suppress InvalidReturnStatement
      * @psalm-return iterable<array-key, list{
      *      list{string|array<string>},
      *      array{namespace?: array<string,class-string-map<T,T>>, ...},

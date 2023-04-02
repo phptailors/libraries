@@ -53,8 +53,9 @@ abstract class AbstractTwoLevelScopeLookupBase
      */
     final public function lookupScopedArray(array $array, string $key, mixed &$retval = null): bool
     {
+        $scopeLookup = (array) $this->scopeLookup;
         /** @psalm-suppress PossiblyUndefinedArrayOffset */ // psalm bug...
-        return self::twoLevelArrayLookup((array) $this->scopeLookup, $array[$this->getScopeType()] ?? null, $key, $retval);
+        return self::twoLevelArrayLookup($scopeLookup, $array[$this->getScopeType()] ?? null, $key, $retval);
     }
 
     /**
@@ -73,8 +74,9 @@ abstract class AbstractTwoLevelScopeLookupBase
      */
     final public function lookupScopedInstanceMap(array $array, string $class): ?object
     {
+        $scopeLookup = (array) $this->scopeLookup;
         /** @psalm-suppress PossiblyUndefinedArrayOffset */ // psalm bug...
-        return self::twoLevelInstanceMapLookup((array) $this->scopeLookup, $array[$this->getScopeType()] ?? null, $class);
+        return self::twoLevelInstanceMapLookup($scopeLookup, $array[$this->getScopeType()] ?? null, $class);
     }
 
     /**
@@ -93,7 +95,8 @@ abstract class AbstractTwoLevelScopeLookupBase
      */
     final public function lookupScopedFactoryMap(array $array, string $class): ?FactoryInterface
     {
+        $scopeLookup = (array) $this->scopeLookup;
         /** @psalm-suppress PossiblyUndefinedArrayOffset */ // psalm bug...
-        return self::twoLevelFactoryMapLookup((array) $this->scopeLookup, $array[$this->getScopeType()] ?? null, $class);
+        return self::twoLevelFactoryMapLookup($scopeLookup, $array[$this->getScopeType()] ?? null, $class);
     }
 }

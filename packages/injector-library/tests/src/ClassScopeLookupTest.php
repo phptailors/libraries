@@ -176,6 +176,8 @@ final class ClassScopeLookupTest extends TestCase
     }
 
     /**
+     * @psalm-suppress InvalidReturnType
+     * @psalm-suppress InvalidReturnStatement
      * @psalm-return iterable<array-key, list{
      *      list{string|array<string>},
      *      array{class?: array<string,class-string-map<T,T>>, ...},

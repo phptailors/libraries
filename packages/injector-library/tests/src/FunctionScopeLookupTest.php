@@ -142,10 +142,12 @@ final class FunctionScopeLookupTest extends TestCase
     }
 
     /**
+     * @psalm-suppress InvalidReturnType
+     * @psalm-suppress InvalidReturnStatement
      * @psalm-return iterable<array-key, list{
      *      list{string|array<string>},
-     *      array{function?: array<string,array<string,mixed>>, ...},
-     *      string,
+     *      array{function?: array<string,class-string-map<T,T>>, ...},
+     *      class-string,
      *      bool,
      *      mixed
      *  }>
