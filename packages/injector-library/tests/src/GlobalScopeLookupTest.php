@@ -172,4 +172,64 @@ final class GlobalScopeLookupTest extends TestCase
         $lookup = new GlobalScopeLookup();
         $this->assertSame($expected, $lookup->lookupScopedInstanceMap($array, $class));
     }
+
+    /**
+     * @psalm-suppress InvalidReturnType
+     * @psalm-suppress InvalidReturnStatement
+     * @psalm-return iterable<array-key, list{
+     *      array{global?: class-string-map<T,FactoryInterface<T>>, ...},
+     *      class-string,
+     *      mixed
+     *  }>
+     */
+    public function provLookupScopedFactoryMap(): iterable
+    {
+        $e1 = $this->createStub(FactoryInterface::class);
+        $r1 = $this->createStub(FactoryInterface::class);
+        return [
+            '#00' => [
+                [
+                ],
+                \Exception::class, null,
+            ],
+            '#01' => [
+                [
+                    'global' => [],
+                ],
+                \Exception::class, null,
+            ],
+            '#02' => [
+                [
+                    'global' => [
+                        \RuntimeException::class => $r1,
+                    ],
+                ],
+                \Exception::class, null,
+            ],
+            '#03' => [
+                [
+                    'global' => [
+                        \Exception::class => $e1,
+                        \RuntimeException::class => $r1,
+                    ],
+                ],
+                \Exception::class, $e1,
+            ],
+        ];
+    }
+
+
+    /**
+     * @dataProvider provLookupScopedFactoryMap
+     *
+     * @psalm-param array{function?: array<string,class-string-map<T,FactoryInterface<T>>>, ...} $array
+     * @psalm-param class-string $class
+     *
+     * @psalm-suppress MissingThrowsDocblock
+     */
+    public function testLookupScopedFactoryMap(array $array, string $class, mixed $expected): void
+    {
+        $lookup = new GlobalScopeLookup();
+        $this->assertSame($expected, $lookup->lookupScopedFactoryMap($array, $class));
+    }
 }

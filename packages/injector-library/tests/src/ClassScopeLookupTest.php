@@ -275,4 +275,105 @@ final class ClassScopeLookupTest extends TestCase
         $lookup = new ClassScopeLookup(...$args);
         $this->assertSame($expected, $lookup->lookupScopedInstanceMap($array, $class));
     }
+
+    /**
+     * @psalm-suppress InvalidReturnType
+     * @psalm-suppress InvalidReturnStatement
+     * @psalm-return iterable<array-key, list{
+     *      list{string|array<string>},
+     *      array{class?: array<string,class-string-map<T,FactoryInterface<T>>>, ...},
+     *      class-string,
+     *      mixed
+     *  }>
+     */
+    public function provLookupFactoryMap(): iterable
+    {
+        $e1 = $this->createStub(FactoryInterface::class);
+        $e2 = $this->createStub(FactoryInterface::class);
+        $r1 = $this->createStub(FactoryInterface::class);
+        $r2 = $this->createStub(FactoryInterface::class);
+
+        return [
+            '#00' => [
+                [''],
+                [
+                ],
+                \Exception::class, null,
+            ],
+            '#01' => [
+                ['Foo\\Bar'],
+                [
+                    'class' => [],
+                ],
+                \Exception::class, null,
+            ],
+            '#02' => [
+                ['Foo\\Bar'],
+                [
+                    'class' => [
+                        'Foo\\Baz' => [\Exception::class => $e1],
+                        'Foo\\Gez' => [\Exception::class => $e2],
+                    ],
+                ],
+                \Exception::class, null,
+            ],
+            '#03' => [
+                ['Foo\\Bar'],
+                [
+                    'class' => [
+                        'Foo\\Bar' => [\RuntimeException::class => $r1],
+                        'Foo\\Baz' => [\Exception::class => $e1],
+                    ],
+                ],
+                \Exception::class, null,
+            ],
+            '#04' => [
+                ['Foo\\Bar'],
+                [
+                    'class' => [
+                        'Foo\\Baz' => [
+                            \Exception::class => $e1,
+                            \RuntimeException::class => $r1,
+                        ],
+                        'Foo\\Bar' => [
+                            \Exception::class => $e2,
+                            \RuntimeException::class => $r2,
+                        ],
+                    ],
+                ],
+                \Exception::class, $e2,
+            ],
+            '#05' => [
+                [['Foo\\Baz', 'Foo\\Bar']],
+                [
+                    'class' => [
+                        'Foo\\Bar' => [
+                            \Exception::class => $e1,
+                            \RuntimeException::class => $r1,
+                        ],
+                        'Foo\\Baz' => [
+                            \Exception::class => $e2,
+                            \RuntimeException::class => $r2,
+                        ],
+                    ],
+                ],
+                \Exception::class, $e2,
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider provLookupFactoryMap
+     *
+     * @psalm-param list{string|array<string>} $args
+     * @psalm-param array{class?: array<string,class-string-map<T,FactoryInterface<T>>>, ...} $array
+     * @psalm-param class-string $class
+     *
+     * @psalm-suppress MissingThrowsDocblock
+     */
+    public function testLookupFactoryMap(array $args, array $array, string $class, mixed $expected): void
+    {
+        $lookup = new ClassScopeLookup(...$args);
+        $this->assertSame($expected, $lookup->lookupScopedFactoryMap($array, $class));
+    }
 }

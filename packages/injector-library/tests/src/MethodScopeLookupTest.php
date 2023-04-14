@@ -8,6 +8,7 @@ use Tailors\PHPUnit\ImplementsInterfaceTrait;
 /**
  * @author Paweł Tomulik <pawel@tomulik.pl>
  *
+ * @covers \Tailors\Lib\Injector\AbstractThreeLevelScopeLookupBase
  * @covers \Tailors\Lib\Injector\MethodScopeLookup
  * @covers \Tailors\Lib\Injector\ThreeLevelLookupTrait
  * @covers \Tailors\Lib\Injector\TwoLevelLookupTrait
