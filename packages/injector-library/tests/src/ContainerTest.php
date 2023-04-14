@@ -480,4 +480,230 @@ final class ContainerTest extends TestCase
         $container = new Container([], $instances);
         $this->assertSame($expected, $container->lookupInstance($class, $context));
     }
+
+    /**
+     * @psalm-suppress InvalidReturnType
+     * @psalm-suppress InvalidReturnStatement
+     * @psalm-return iterable<array-key,list{
+     *  TFactories,
+     *  ContextInterface,
+     *  class-string,
+     *  mixed
+     * }>
+     */
+    public function provLookupFactory(): iterable
+    {
+        $f1 = $this->createStub(FactoryInterface::class);
+        $f2 = $this->createStub(FactoryInterface::class);
+        $f3 = $this->createStub(FactoryInterface::class);
+        $f4 = $this->createStub(FactoryInterface::class);
+        $f5 = $this->createStub(FactoryInterface::class);
+        $f6 = $this->createStub(FactoryInterface::class);
+
+        return [
+            'class-#00' => [
+                [], new ClassContext(self::class),
+                self::class, null,
+            ],
+            'class-#01' => [
+                [
+                    'method'    => [],
+                    'class'     => [],
+                    'namespace' => [],
+                    'function'  => [],
+                    'global'    => [],
+                ],
+                new ClassContext(self::class),
+                self::class, null,
+            ],
+            'class-#02' => [
+                [
+                    'global' => [ \Exception::class => $f1 ],
+                ],
+                new ClassContext(self::class),
+                \Exception::class, $f1,
+            ],
+            'class-#03' => [
+                [
+                    'class' => [
+                        self::class => [
+                            \Exception::class => $f1,
+                            \RuntimeException::class => $f4,
+                        ],
+                    ],
+                    'global' => [\Exception::class => $f2],
+                ],
+                new ClassContext(self::class),
+                \Exception::class, $f1,
+            ],
+            'class-#04' => [
+                [
+                    'class' => [
+                        parent::class => [
+                            \Exception::class => $f1,
+                            \RuntimeException::class => $f4,
+                        ],
+                    ],
+                    'global' => [\Exception::class => $f2],
+                ],
+                new ClassContext(self::class),
+                \Exception::class, $f1,
+            ],
+            'class-#05' => [
+                [
+                    'class' => [
+                        parent::class => [
+                            \Exception::class => $f1,
+                            \RuntimeException::class => $f4,
+                        ],
+                        self::class => [
+                            \Exception::class => $f2,
+                            \RuntimeException::class => $f5,
+                        ],
+                    ],
+                    'global' => [\Exception::class => $f3],
+                ],
+                new ClassContext(self::class),
+                \Exception::class, $f2,
+            ],
+            'class-#06' => [
+                [
+                    'class' => [
+                        parent::class => [
+                            \Exception::class => $f1,
+                            \RuntimeException::class => $f4,
+                        ],
+                        self::class => [
+                            \Exception::class => $f2,
+                            \RuntimeException::class => $f5,
+                        ],
+                    ],
+                    'global' => [\Exception::class => $f3],
+                ],
+                new ClassContext(parent::class),
+                \Exception::class, $f1,
+            ],
+            'class-#07' => [
+                [
+                    'namespace' => [
+                        'Tailors\\Lib\\Injector' => [
+                            \Exception::class => $f1,
+                            \RuntimeException::class => $f4,
+                        ],
+                    ],
+                    'global' => [\Exception::class => $f2],
+                ],
+                new ClassContext(self::class),
+                \Exception::class, $f1,
+            ],
+            'class-#08' => [
+                [
+                    'namespace' => [
+                        'Tailors\\Lib\\Injector' => [
+                            \RuntimeException::class => $f4,
+                        ],
+                        'Tailors\\Lib' => [
+                            \Exception::class => $f2,
+                        ],
+                    ],
+                    'global' => [\Exception::class => $f3],
+                ],
+                new ClassContext(self::class),
+                \Exception::class, $f2,
+            ],
+            'class-#09' => [
+                [
+                    'namespace' => [
+                        'Tailors\\Lib\\Injector' => [
+                            \DivisionByZeroError::class => $f6,
+                        ],
+                        'Tailors\\Lib' => [
+                            \RuntimeException::class => $f4,
+                        ],
+                        'Tailors' => [
+                            \Exception::class => $f1,
+                        ],
+                    ],
+                    'global' => [\Exception::class => $f2],
+                ],
+                new ClassContext(self::class),
+                \Exception::class, $f1,
+            ],
+            'class-#10' => [
+                [
+                    'namespace' => [
+                        'Tailors\\Lib\\Injector' => [
+                            \DivisionByZeroError::class => $f6,
+                        ],
+                        'Tailors\\Lib' => [
+                            \RuntimeException::class => $f4,
+                        ],
+                        'Tailors' => [
+                            \Exception::class => $f1,
+                        ],
+                    ],
+                    'global' => [\Exception::class => $f2],
+                ],
+                new ClassContext(self::class),
+                \RuntimeException::class, $f4,
+            ],
+            'method-#01' => [
+                [
+                    'global' => [\Exception::class => $f1],
+                ],
+                new MethodContext('testLookupFactory', self::class),
+                \Exception::class, $f1,
+            ],
+            'method-#02' => [
+                [
+                    'namespace' => [
+                        'Tailors' => [
+                            \Exception::class => $f1,
+                        ],
+                    ],
+                    'global' => [\Exception::class => $f2],
+                ],
+                new MethodContext('testLookupFactory', self::class),
+                \Exception::class, $f1,
+            ],
+            'method-#03' => [
+                [
+                    'namespace' => [
+                        'Tailors\\Lib' => [
+                            \Exception::class => $f1,
+                        ],
+                    ],
+                    'global' => [\Exception::class => $f2],
+                ],
+                new MethodContext('testLookupFactory', self::class),
+                \Exception::class, $f1,
+            ],
+            'method-#04' => [
+                [
+                    'namespace' => [
+                        'Tailors\\Lib\\Injector' => [
+                            \Exception::class => $f1,
+                        ],
+                    ],
+                    'global' => [\Exception::class => $f2],
+                ],
+                new MethodContext('testLookupFactory', self::class),
+                \Exception::class, $f1,
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider provLookupFactory
+     *
+     * @psalm-param TFactories $factories
+     * @psalm-param class-string $class
+     *
+     * @psalm-suppress MissingThrowsDocblock
+     */
+    public function testLookupFactory(array $factories, ContextInterface $context, string $class, mixed $expected): void
+    {
+        $container = new Container([], [], $factories);
+        $this->assertSame($expected, $container->lookupFactory($class, $context));
+    }
 }
