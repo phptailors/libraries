@@ -27,7 +27,6 @@ trait ThreeLevelLookupTrait
      *
      * @psalm-param array<string> $skeys
      * @psalm-param null|array<string,class-string-map<T,T>> $array
-     *
      * @psalm-param class-string<TObj> $class
      *
      * @psalm-return ?TObj
@@ -59,7 +58,6 @@ trait ThreeLevelLookupTrait
      *
      * @psalm-param list{string,string|array<string>} $skeys
      * @psalm-param null|array<string,array<string,class-string-map<T,T>>> $array
-     *
      * @psalm-param class-string<TObj> $class
      *
      * @psalm-return ?TObj
@@ -78,7 +76,6 @@ trait ThreeLevelLookupTrait
      *
      * @psalm-param list{string,string|array<string>} $skeys
      * @psalm-param null|array<string,array<string,class-string-map<T,FactoryInterface<T>>>> $array
-     *
      * @psalm-param class-string<TObj> $class
      *
      * @psalm-return ?FactoryInterface<TObj>

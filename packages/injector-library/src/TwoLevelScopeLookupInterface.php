@@ -42,7 +42,6 @@ interface TwoLevelScopeLookupInterface extends ScopeLookupInterface
      *      namespace?: array<string,class-string-map<T,T>>,
      *      ...
      * } $array
-     *
      * @psalm-param class-string<TObj> $class
      *
      * @psalm-return ?TObj
@@ -58,7 +57,6 @@ interface TwoLevelScopeLookupInterface extends ScopeLookupInterface
      *      namespace?: array<string,class-string-map<T,FactoryInterface<T>>>,
      *      ...
      * } $array
-     *
      * @psalm-param class-string<TObj> $class
      *
      * @psalm-return ?FactoryInterface<TObj>

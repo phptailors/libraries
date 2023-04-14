@@ -10,7 +10,6 @@ namespace Tailors\Lib\Injector;
  *      method?:    array<string,array<string, array<string,string>>>,
  *      global?:    array<string,string>
  * }
- *
  * @psalm-type TInstances array{
  *      class?:     array<string,class-string-map<T,T>>,
  *      namespace?: array<string,class-string-map<T,T>>,
@@ -18,7 +17,6 @@ namespace Tailors\Lib\Injector;
  *      method?:    array<string,array<string, class-string-map<T,T>>>,
  *      global?:    class-string-map<T,T>
  * }
- *
  * @psalm-type TFactories array{
  *      class?:     array<string,class-string-map<T,FactoryInterface<T>>>,
  *      namespace?: array<string,class-string-map<T,FactoryInterface<T>>>,
@@ -71,6 +69,7 @@ final class Container
      * @psalm-template TObj of object
      *
      * @psalm-param class-string<TObj> $class
+     *
      * @psalm-return ?TObj
      */
     public function lookupInstance(string $class, ContextInterface $context): ?object
@@ -88,6 +87,7 @@ final class Container
      * @psalm-template TObj of object
      *
      * @psalm-param class-string<TObj> $class
+     *
      * @psalm-return ?FactoryInterface<TObj>
      */
     public function lookupFactory(string $class, ContextInterface $context): ?FactoryInterface

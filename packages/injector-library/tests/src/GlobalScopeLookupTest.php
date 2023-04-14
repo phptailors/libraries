@@ -116,6 +116,7 @@ final class GlobalScopeLookupTest extends TestCase
     /**
      * @psalm-suppress InvalidReturnType
      * @psalm-suppress InvalidReturnStatement
+     *
      * @psalm-return iterable<array-key, list{
      *      array{global?: class-string-map<T,T>, ...},
      *      class-string,
@@ -150,7 +151,7 @@ final class GlobalScopeLookupTest extends TestCase
             '#03' => [
                 [
                     'global' => [
-                        \Exception::class => $e1,
+                        \Exception::class        => $e1,
                         \RuntimeException::class => $r1,
                     ],
                 ],
@@ -176,6 +177,7 @@ final class GlobalScopeLookupTest extends TestCase
     /**
      * @psalm-suppress InvalidReturnType
      * @psalm-suppress InvalidReturnStatement
+     *
      * @psalm-return iterable<array-key, list{
      *      array{global?: class-string-map<T,FactoryInterface<T>>, ...},
      *      class-string,
@@ -186,6 +188,7 @@ final class GlobalScopeLookupTest extends TestCase
     {
         $e1 = $this->createStub(FactoryInterface::class);
         $r1 = $this->createStub(FactoryInterface::class);
+
         return [
             '#00' => [
                 [
@@ -209,7 +212,7 @@ final class GlobalScopeLookupTest extends TestCase
             '#03' => [
                 [
                     'global' => [
-                        \Exception::class => $e1,
+                        \Exception::class        => $e1,
                         \RuntimeException::class => $r1,
                     ],
                 ],
@@ -217,7 +220,6 @@ final class GlobalScopeLookupTest extends TestCase
             ],
         ];
     }
-
 
     /**
      * @dataProvider provLookupScopedFactoryMap

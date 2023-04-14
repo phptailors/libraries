@@ -144,6 +144,7 @@ final class FunctionScopeLookupTest extends TestCase
     /**
      * @psalm-suppress InvalidReturnType
      * @psalm-suppress InvalidReturnStatement
+     *
      * @psalm-return iterable<array-key, list{
      *      list{string|array<string>},
      *      array{function?: array<string,class-string-map<T,T>>, ...},
@@ -198,11 +199,11 @@ final class FunctionScopeLookupTest extends TestCase
                 [
                     'function' => [
                         'Foo\\baz' => [
-                            \Exception::class => $e2,
+                            \Exception::class        => $e2,
                             \RuntimeException::class => $r2,
                         ],
                         'Foo\\bar' => [
-                            \Exception::class => $e1,
+                            \Exception::class        => $e1,
                             \RuntimeException::class => $r1,
                         ],
                     ],
@@ -230,6 +231,7 @@ final class FunctionScopeLookupTest extends TestCase
     /**
      * @psalm-suppress InvalidReturnType
      * @psalm-suppress InvalidReturnStatement
+     *
      * @psalm-return iterable<array-key, list{
      *      list{string|array<string>},
      *      array{function?: array<string,class-string-map<T,FactoryInterface<T>>>, ...},
@@ -284,11 +286,11 @@ final class FunctionScopeLookupTest extends TestCase
                 [
                     'function' => [
                         'Foo\\baz' => [
-                            \Exception::class => $e2,
+                            \Exception::class        => $e2,
                             \RuntimeException::class => $r2,
                         ],
                         'Foo\\bar' => [
-                            \Exception::class => $e1,
+                            \Exception::class        => $e1,
                             \RuntimeException::class => $r1,
                         ],
                     ],

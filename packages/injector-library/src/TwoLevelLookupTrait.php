@@ -20,7 +20,6 @@ trait TwoLevelLookupTrait
      * @psalm-template TObj of object
      *
      * @psalm-param null|class-string-map<T,T> $array
-     *
      * @psalm-param class-string<TObj> $class
      *
      * @psalm-return ?TObj
@@ -58,7 +57,6 @@ trait TwoLevelLookupTrait
      *
      * @psalm-param array<string> $skeys
      * @psalm-param null|array<string,class-string-map<T,T>> $array
-     *
      * @psalm-param class-string<TObj> $class
      *
      * @psalm-return ?TObj
@@ -83,7 +81,6 @@ trait TwoLevelLookupTrait
      *
      * @psalm-param array<string> $skeys
      * @psalm-param null|array<string,class-string-map<T,FactoryInterface<T>>> $array
-     *
      * @psalm-param class-string<TObj> $class
      *
      * @psalm-return ?FactoryInterface<TObj>

@@ -20,7 +20,6 @@ use PHPUnit\Framework\TestCase;
  *      method?:    array<string,array<string, array<string,string>>>,
  *      global?:    array<string,string>
  * }
- *
  * @psalm-type TInstances array{
  *      class?:     array<string,class-string-map<T,T>>,
  *      namespace?: array<string,class-string-map<T,T>>,
@@ -28,7 +27,6 @@ use PHPUnit\Framework\TestCase;
  *      method?:    array<string,array<string, class-string-map<T,T>>>,
  *      global?:    class-string-map<T,T>
  * }
- *
  * @psalm-type TFactories array{
  *      class?:     array<string,class-string-map<T,FactoryInterface<T>>>,
  *      namespace?: array<string,class-string-map<T,FactoryInterface<T>>>,
@@ -258,6 +256,7 @@ final class ContainerTest extends TestCase
     /**
      * @psalm-suppress InvalidReturnType
      * @psalm-suppress InvalidReturnStatement
+     *
      * @psalm-return iterable<array-key,list{
      *  TInstances,
      *  ContextInterface,
@@ -292,7 +291,7 @@ final class ContainerTest extends TestCase
             ],
             'class-#02' => [
                 [
-                    'global' => [ \Exception::class => $e1 ],
+                    'global' => [\Exception::class => $e1],
                 ],
                 new ClassContext(self::class),
                 \Exception::class, $e1,
@@ -301,7 +300,7 @@ final class ContainerTest extends TestCase
                 [
                     'class' => [
                         self::class => [
-                            \Exception::class => $e1,
+                            \Exception::class        => $e1,
                             \RuntimeException::class => $r1,
                         ],
                     ],
@@ -314,7 +313,7 @@ final class ContainerTest extends TestCase
                 [
                     'class' => [
                         parent::class => [
-                            \Exception::class => $e1,
+                            \Exception::class        => $e1,
                             \RuntimeException::class => $r1,
                         ],
                     ],
@@ -327,11 +326,11 @@ final class ContainerTest extends TestCase
                 [
                     'class' => [
                         parent::class => [
-                            \Exception::class => $e1,
+                            \Exception::class        => $e1,
                             \RuntimeException::class => $r1,
                         ],
                         self::class => [
-                            \Exception::class => $e2,
+                            \Exception::class        => $e2,
                             \RuntimeException::class => $r2,
                         ],
                     ],
@@ -344,11 +343,11 @@ final class ContainerTest extends TestCase
                 [
                     'class' => [
                         parent::class => [
-                            \Exception::class => $e1,
+                            \Exception::class        => $e1,
                             \RuntimeException::class => $r1,
                         ],
                         self::class => [
-                            \Exception::class => $e2,
+                            \Exception::class        => $e2,
                             \RuntimeException::class => $r2,
                         ],
                     ],
@@ -361,7 +360,7 @@ final class ContainerTest extends TestCase
                 [
                     'namespace' => [
                         'Tailors\\Lib\\Injector' => [
-                            \Exception::class => $e1,
+                            \Exception::class        => $e1,
                             \RuntimeException::class => $r1,
                         ],
                     ],
@@ -484,6 +483,7 @@ final class ContainerTest extends TestCase
     /**
      * @psalm-suppress InvalidReturnType
      * @psalm-suppress InvalidReturnStatement
+     *
      * @psalm-return iterable<array-key,list{
      *  TFactories,
      *  ContextInterface,
@@ -518,7 +518,7 @@ final class ContainerTest extends TestCase
             ],
             'class-#02' => [
                 [
-                    'global' => [ \Exception::class => $f1 ],
+                    'global' => [\Exception::class => $f1],
                 ],
                 new ClassContext(self::class),
                 \Exception::class, $f1,
@@ -527,7 +527,7 @@ final class ContainerTest extends TestCase
                 [
                     'class' => [
                         self::class => [
-                            \Exception::class => $f1,
+                            \Exception::class        => $f1,
                             \RuntimeException::class => $f4,
                         ],
                     ],
@@ -540,7 +540,7 @@ final class ContainerTest extends TestCase
                 [
                     'class' => [
                         parent::class => [
-                            \Exception::class => $f1,
+                            \Exception::class        => $f1,
                             \RuntimeException::class => $f4,
                         ],
                     ],
@@ -553,11 +553,11 @@ final class ContainerTest extends TestCase
                 [
                     'class' => [
                         parent::class => [
-                            \Exception::class => $f1,
+                            \Exception::class        => $f1,
                             \RuntimeException::class => $f4,
                         ],
                         self::class => [
-                            \Exception::class => $f2,
+                            \Exception::class        => $f2,
                             \RuntimeException::class => $f5,
                         ],
                     ],
@@ -570,11 +570,11 @@ final class ContainerTest extends TestCase
                 [
                     'class' => [
                         parent::class => [
-                            \Exception::class => $f1,
+                            \Exception::class        => $f1,
                             \RuntimeException::class => $f4,
                         ],
                         self::class => [
-                            \Exception::class => $f2,
+                            \Exception::class        => $f2,
                             \RuntimeException::class => $f5,
                         ],
                     ],
@@ -587,7 +587,7 @@ final class ContainerTest extends TestCase
                 [
                     'namespace' => [
                         'Tailors\\Lib\\Injector' => [
-                            \Exception::class => $f1,
+                            \Exception::class        => $f1,
                             \RuntimeException::class => $f4,
                         ],
                     ],

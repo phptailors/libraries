@@ -178,6 +178,7 @@ final class ClassScopeLookupTest extends TestCase
     /**
      * @psalm-suppress InvalidReturnType
      * @psalm-suppress InvalidReturnStatement
+     *
      * @psalm-return iterable<array-key, list{
      *      list{string|array<string>},
      *      array{class?: array<string,class-string-map<T,T>>, ...},
@@ -231,11 +232,11 @@ final class ClassScopeLookupTest extends TestCase
                 [
                     'class' => [
                         'Foo\\Baz' => [
-                            \Exception::class => $e1,
+                            \Exception::class        => $e1,
                             \RuntimeException::class => $r1,
                         ],
                         'Foo\\Bar' => [
-                            \Exception::class => $e2,
+                            \Exception::class        => $e2,
                             \RuntimeException::class => $r2,
                         ],
                     ],
@@ -247,11 +248,11 @@ final class ClassScopeLookupTest extends TestCase
                 [
                     'class' => [
                         'Foo\\Bar' => [
-                            \Exception::class => $e1,
+                            \Exception::class        => $e1,
                             \RuntimeException::class => $r1,
                         ],
                         'Foo\\Baz' => [
-                            \Exception::class => $e2,
+                            \Exception::class        => $e2,
                             \RuntimeException::class => $r2,
                         ],
                     ],
@@ -279,6 +280,7 @@ final class ClassScopeLookupTest extends TestCase
     /**
      * @psalm-suppress InvalidReturnType
      * @psalm-suppress InvalidReturnStatement
+     *
      * @psalm-return iterable<array-key, list{
      *      list{string|array<string>},
      *      array{class?: array<string,class-string-map<T,FactoryInterface<T>>>, ...},
@@ -332,11 +334,11 @@ final class ClassScopeLookupTest extends TestCase
                 [
                     'class' => [
                         'Foo\\Baz' => [
-                            \Exception::class => $e1,
+                            \Exception::class        => $e1,
                             \RuntimeException::class => $r1,
                         ],
                         'Foo\\Bar' => [
-                            \Exception::class => $e2,
+                            \Exception::class        => $e2,
                             \RuntimeException::class => $r2,
                         ],
                     ],
@@ -348,11 +350,11 @@ final class ClassScopeLookupTest extends TestCase
                 [
                     'class' => [
                         'Foo\\Bar' => [
-                            \Exception::class => $e1,
+                            \Exception::class        => $e1,
                             \RuntimeException::class => $r1,
                         ],
                         'Foo\\Baz' => [
-                            \Exception::class => $e2,
+                            \Exception::class        => $e2,
                             \RuntimeException::class => $r2,
                         ],
                     ],

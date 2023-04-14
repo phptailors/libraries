@@ -56,7 +56,6 @@ abstract class AbstractThreeLevelScopeLookupBase
      * @psalm-template TObj of object
      *
      * @psalm-param array{method?: array<string,array<string,class-string-map<T,T>>>, ...} $array
-     *
      * @psalm-param class-string<TObj> $class
      *
      * @psalm-return ?TObj
@@ -70,7 +69,6 @@ abstract class AbstractThreeLevelScopeLookupBase
      * @psalm-template TObj of object
      *
      * @psalm-param array{method?: array<string,array<string,class-string-map<T,FactoryInterface<T>>>>, ...} $array
-     *
      * @psalm-param class-string<TObj> $class
      *
      * @psalm-return ?FactoryInterface<TObj>

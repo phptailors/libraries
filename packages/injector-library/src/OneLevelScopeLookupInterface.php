@@ -32,7 +32,6 @@ interface OneLevelScopeLookupInterface extends ScopeLookupInterface
      * @psalm-template TObj of object
      *
      * @psalm-param array{global?: class-string-map<T,T>, ...} $array
-     *
      * @psalm-param class-string<TObj> $class
      *
      * @psalm-return ?TObj
@@ -43,7 +42,6 @@ interface OneLevelScopeLookupInterface extends ScopeLookupInterface
      * @psalm-template TObj of object
      *
      * @psalm-param array{global?: class-string-map<T,FactoryInterface<T>>, ...} $array
-     *
      * @psalm-param class-string<TObj> $class
      *
      * @psalm-return ?FactoryInterface<TObj>
