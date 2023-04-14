@@ -316,4 +316,127 @@ final class MethodScopeLookupTest extends TestCase
         $lookup = new MethodScopeLookup(...$args);
         $this->assertSame($expected, $lookup->lookupScopedInstanceMap($array, $class));
     }
+
+    /**
+     * @psalm-suppress InvalidReturnType
+     * @psalm-suppress InvalidReturnStatement
+     * @psalm-return iterable<array-key, list{
+     *      list{list{string,string|array<string>}},
+     *      array{method?: array<string,array<string,class-string-map<T,FactoryInterface<T>>>>, ...},
+     *      class-string,
+     *      mixed
+     *  }>
+     */
+    public function provLookupScopedFactoryMap(): iterable
+    {
+        $e1 = $this->createStub(FactoryInterface::class);
+        $e2 = $this->createStub(FactoryInterface::class);
+        $e3 = $this->createStub(FactoryInterface::class);
+        $e4 = $this->createStub(FactoryInterface::class);
+        $r1 = $this->createStub(FactoryInterface::class);
+        $r2 = $this->createStub(FactoryInterface::class);
+        $r3 = $this->createStub(FactoryInterface::class);
+        $r4 = $this->createStub(FactoryInterface::class);
+
+        return [
+            '#00' => [
+                [['', []]],
+                [
+                ],
+                \Exception::class, null,
+            ],
+            '#01' => [
+                [['m1', 'Foo\\Bar']],
+                [
+                    'method' => [],
+                ],
+                \Exception::class, null,
+            ],
+            '#02' => [
+                [['m1', 'Foo\\Bar']],
+                [
+                    'method' => [
+                        'm1' => [
+                            'Foo\\Baz' => [\Exception::class => $e1],
+                            'Foo\\Gez' => [\Exception::class => $e2],
+                        ],
+                    ],
+                ],
+                \Exception::class, null,
+            ],
+            '#03' => [
+                [['m1', 'Foo\\Bar']],
+                [
+                    'method' => [
+                        'm1' => [
+                            'Foo\\Bar' => [\RuntimeException::class => $r1],
+                            'Foo\\Baz' => [\Exception::class => $e1],
+                        ],
+                    ],
+                ],
+                \Exception::class, null,
+            ],
+            '#04' => [
+                [['m1', 'Foo\\Bar']],
+                [
+                    'method' => [
+                        'm1' => [
+                            'Foo\\Baz' => [
+                                \Exception::class => $e2,
+                                \RuntimeException::class => $r2,
+                            ],
+                            'Foo\\Bar' => [
+                                \Exception::class => $e1,
+                                \RuntimeException::class => $r1,
+                            ],
+                        ],
+                    ],
+                ],
+                \Exception::class, $e1,
+            ],
+            '#05' => [
+                [['m2', ['Foo\\Baz', 'Foo\\Bar']]],
+                [
+                    'method' => [
+                        'm1' => [
+                            'Foo\\Bar' => [
+                                \Exception::class => $e1,
+                                \RuntimeException::class => $r1,
+                            ],
+                            'Foo\\Baz' => [
+                                \Exception::class => $e2,
+                                \RuntimeException::class => $r2,
+                            ],
+                        ],
+                        'm2' => [
+                            'Foo\\Bar' => [
+                                \Exception::class => $e3,
+                                \RuntimeException::class => $r3,
+                            ],
+                            'Foo\\Baz' => [
+                                \Exception::class => $e4,
+                                \RuntimeException::class => $r4,
+                            ],
+                        ],
+                    ],
+                ],
+                \Exception::class, $e4,
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider provLookupScopedFactoryMap
+     *
+     * @psalm-param list{list{string,string|array<string>}} $args
+     * @psalm-param array{method?: array<string,array<string,class-string-map<T,FactoryInterface<T>>>>, ...} $array
+     * @psalm-param class-string $class
+     *
+     * @psalm-suppress MissingThrowsDocblock
+     */
+    public function testLookupScopedFactoryMap(array $args, array $array, string $class, mixed $expected): void
+    {
+        $lookup = new MethodScopeLookup(...$args);
+        $this->assertSame($expected, $lookup->lookupScopedFactoryMap($array, $class));
+    }
 }
