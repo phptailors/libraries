@@ -3,6 +3,7 @@
 namespace Tailors\Lib\Injector;
 
 use PHPUnit\Framework\TestCase;
+use Tailors\PHPUnit\ImplementsInterfaceTrait;
 
 /**
  * @author Paweł Tomulik <pawel@tomulik.pl>
@@ -37,6 +38,16 @@ use PHPUnit\Framework\TestCase;
  */
 final class ContainerTest extends TestCase
 {
+    use ImplementsInterfaceTrait;
+
+    /**
+     * @psalm-suppress MissingThrowsDocblock
+     */
+    public function testImplementsContainerInterface(): void
+    {
+        $this->assertImplementsInterface(ContainerInterface::class, Container::class);
+    }
+
     /**
      * @psalm-return iterable<array-key,list{
      *  TAliases,

@@ -3,6 +3,12 @@
 namespace Tailors\Lib\Injector;
 
 /**
+ * @author Paweł Tomulik <pawel@tomulik.pl>
+ *
+ * @internal this class is not covered by backward compatibility promise
+ *
+ * @psalm-internal Tailors\Lib\Injector
+ *
  * @psalm-type TAliases array{
  *      class?:     array<string,array<string,string>>,
  *      namespace?: array<string,array<string,string>>,
@@ -25,7 +31,7 @@ namespace Tailors\Lib\Injector;
  *      global?:    class-string-map<T,FactoryInterface<T>>
  * }
  */
-final class Container
+final class Container implements ContainerInterface
 {
     /**
      * @psalm-var TAliases

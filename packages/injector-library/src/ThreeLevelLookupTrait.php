@@ -34,6 +34,21 @@ trait ThreeLevelLookupTrait
     abstract private static function twoLevelInstanceMapLookup(array $skeys, ?array $array, string $class): ?object;
 
     /**
+     * @psalm-template TObj of object
+     *
+     * @psalm-param array<string> $skeys
+     * @psalm-param null|array<string,class-string-map<T,FactoryInterface<T>>> $array
+     * @psalm-param class-string<TObj> $class
+     *
+     * @psalm-return ?FactoryInterface<TObj>
+     */
+    abstract private static function twoLevelFactoryMapLookup(
+        array $skeys,
+        ?array $array,
+        string $class
+    ): ?FactoryInterface;
+
+    /**
      * @psalm-template TKey of string
      * @psalm-template TVal of string
      *

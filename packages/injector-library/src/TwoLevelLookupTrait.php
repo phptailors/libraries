@@ -27,6 +27,16 @@ trait TwoLevelLookupTrait
     abstract private static function oneLevelInstanceMapLookup(?array $array, string $class): ?object;
 
     /**
+     * @psalm-template TObj of object
+     *
+     * @psalm-param null|class-string-map<T,FactoryInterface<T>> $array
+     * @psalm-param class-string<TObj> $class
+     *
+     * @psalm-return ?FactoryInterface<TObj>
+     */
+    abstract private static function oneLevelFactoryMapLookup(?array $array, string $class): ?FactoryInterface;
+
+    /**
      * @psalm-template TKey of string
      * @psalm-template TVal of mixed
      *

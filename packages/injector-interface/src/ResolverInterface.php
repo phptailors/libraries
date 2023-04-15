@@ -16,11 +16,11 @@ interface ResolverInterface
      *
      * @param string $type a class or interface name of the object to be resolved
      *
-     * @psalm-template C
+     * @psalm-template TObj
      *
-     * @psalm-param class-string<C> $type
+     * @psalm-param class-string<TObj> $type
      *
-     * @psalm-return C
+     * @psalm-return TObj
      */
     public function resolveObject(string $type): object;
 }
