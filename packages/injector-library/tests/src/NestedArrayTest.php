@@ -63,8 +63,8 @@ final class NestedArrayTest extends TestCase
             ],
             '#08' => [
                 ['a' => 'A', 'b' => ['b.a' => 'B.A', 'b.b' => 'B.B']],
-                ['b', 'b.b'],
-                [true, 'B.B'],
+                ['b', 'x.z'],
+                [false],
             ],
             '#09' => [
                 ['a' => 'A', 'b' => ['b.a' => 'B.A', 'b.b' => 'B.B']],
@@ -360,5 +360,77 @@ final class NestedArrayTest extends TestCase
         } else {
             $this->assertSame($expected[0], NestedArray::lookup($array, $lookup));
         }
+    }
+
+    /**
+     * @psalm-return iterable<array-key, list{array, list<array-key>,  mixed}>
+     */
+    public static function provNestedArrayDel(): iterable
+    {
+        return [
+            '#00' => [
+                [],
+                [],
+                [],
+            ],
+            '#01' => [
+                ['a' => 'A'],
+                [],
+                ['a' => 'A'],
+            ],
+            '#02' => [
+                ['a' => 'A'],
+                [0],
+                ['a' => 'A'],
+            ],
+            '#03' => [
+                ['a' => 'A'],
+                ['b'],
+                ['a' => 'A'],
+            ],
+            '#04' => [
+                ['a' => 'A', 'b' => 'B'],
+                ['a'],
+                ['b' => 'B'],
+            ],
+            '#05' => [
+                ['a' => 'A', 'b' => 'B'],
+                ['b'],
+                ['a' => 'A'],
+            ],
+            '#06' => [
+                ['a' => 'A', 'b' => ['b.a' => 'B.A', 'b.b' => 'B.B']],
+                ['b', 'b.a'],
+                ['a' => 'A', 'b' => ['b.b' => 'B.B']],
+            ],
+            '#07' => [
+                ['a' => 'A', 'b' => ['b.a' => 'B.A', 'b.b' => 'B.B']],
+                ['b', 'b.b'],
+                ['a' => 'A', 'b' => ['b.a' => 'B.A']],
+            ],
+            '#08' => [
+                ['a' => 'A', 'b' => ['b.a' => 'B.A', 'b.b' => 'B.B']],
+                ['b', 'x.y'],
+                ['a' => 'A', 'b' => ['b.a' => 'B.A', 'b.b' => 'B.B']],
+            ],
+            '#09' => [
+                ['a' => 'A', 'b' => ['b.a' => 'B.A', 'b.b' => 'B.B']],
+                ['b', 'b.b', 'c.b.a'],
+                ['a' => 'A', 'b' => ['b.a' => 'B.A', 'b.b' => 'B.B']],
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider provNestedArrayDel
+     *
+     * @psalm-suppress MissingThrowsDocblock
+     *
+     * @psalm-param list<array-key> $path
+     */
+    public function testNestedArrayDel(array $array, array $path, mixed $expected): void
+    {
+        NestedArray::del($array, $path);
+        $this->assertSame($expected, $array);
     }
 }

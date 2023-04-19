@@ -61,6 +61,39 @@ final class NestedArray
         $current = $value;
     }
 
+
+    /**
+     * @psalm-param array<array-key> $path
+     */
+    public static function del(array &$array, array $path): void
+    {
+        if (empty($path)) {
+            return;
+        }
+        $key = array_pop($path);
+        self::del2($array, $path, $key);
+    }
+
+    /**
+     * @psalm-param array<array-key> $path
+     * @psalm-param array-key $key
+     */
+    public static function del2(array &$array, array $path, mixed $key): void
+    {
+        $current = &$array;
+        foreach ($path as $p) {
+            if (!is_array($current) || !array_key_exists($p, $current)) {
+                return;
+            }
+
+            $current = &$current[$p];
+        }
+
+        if (is_array($current)) {
+            unset($current[$key]);
+        }
+    }
+
     /**
      * @psalm-param array<array-key|array> $lookup
      *
