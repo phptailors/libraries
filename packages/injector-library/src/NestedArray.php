@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Tailors\Lib\Injector;
 
@@ -21,11 +21,14 @@ final class NestedArray
             if (!is_array($current) || !array_key_exists($key, $current)) {
                 return false;
             }
+
             /** @psalm-var array|mixed */
             $current = $current[$key];
         }
+
         /** @psalm-var mixed */
         $retval = $current;
+
         return true;
     }
 
@@ -33,7 +36,9 @@ final class NestedArray
      * @psalm-template T
      *
      * @psalm-param T $value
+     *
      * @psalm-param-out array|T $array
+     *
      * @psalm-param array<array-key> $path
      *
      * @psalm-suppress UnusedParam
@@ -43,17 +48,22 @@ final class NestedArray
     {
         $current = &$array;
         foreach ($path as $key) {
-            if (!array_key_exists($key, $current) || !is_array($current[$key])) {
+            if (!array_key_exists($key, $current)) {
                 $current[$key] = [];
             }
             $current = &$current[$key];
+            if (!is_array($current)) {
+                $current = [];
+            }
         }
+
         /** @psalm-var mixed */
         $current = $value;
     }
 
     /**
      * @psalm-param array<array-key|array> $lookup
+     *
      * @psalm-return ?list<array-key>
      */
     public static function lookup(array $array, array $lookup, mixed &$retval = null): ?array
@@ -71,6 +81,7 @@ final class NestedArray
     {
         if (empty($lookup)) {
             $retval = $array;
+
             return $stack;
         }
 
@@ -104,12 +115,14 @@ final class NestedArray
         if (empty($remainder)) {
             /** @psalm-var mixed */
             $retval = $array[$head];
+
             return $stack;
         }
 
         if (!is_array($array[$head])) {
             return null;
         }
+
         return self::lookupRecursion($array[$head], $stack, $remainder, $retval);
     }
 
@@ -126,7 +139,6 @@ final class NestedArray
         array $remainder,
         mixed &$retval
     ): ?array {
-
         if (empty($head)) {
             return self::lookupRecursion($array, $stack, $remainder, $retval);
         }
@@ -150,7 +162,7 @@ final class NestedArray
     ): ?array {
         foreach ($head as $entry) {
             if (is_string($entry) || is_int($entry)) {
-                $entry = (array)$entry;
+                $entry = (array) $entry;
             }
             if (!is_array($entry)) {
                 continue;
@@ -165,6 +177,7 @@ final class NestedArray
                 return $path;
             }
         }
+
         return null;
     }
 }
