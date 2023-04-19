@@ -152,7 +152,7 @@ final class NestedArray
             if (is_string($entry) || is_int($entry)) {
                 $entry = (array)$entry;
             }
-            if (is_array($entry)) {
+            if (!is_array($entry)) {
                 continue;
             }
             // Psalm does not support recursive array types
