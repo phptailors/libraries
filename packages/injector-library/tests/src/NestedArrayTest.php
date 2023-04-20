@@ -418,6 +418,16 @@ final class NestedArrayTest extends TestCase
                 ['b', 'b.b', 'c.b.a'],
                 ['a' => 'A', 'b' => ['b.a' => 'B.A', 'b.b' => 'B.B']],
             ],
+            '#10' => [
+                ['a' => 'A'],
+                ['b', 'a'],
+                ['a' => 'A'],
+            ],
+            '#11' => [
+                ['a' => 'A'],
+                ['a', 'b', 'c'],
+                ['a' => 'A'],
+            ],
         ];
     }
 
