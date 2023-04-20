@@ -61,7 +61,6 @@ final class NestedArray
         $current = $value;
     }
 
-
     /**
      * @psalm-param array<array-key> $path
      */

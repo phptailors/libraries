@@ -16,7 +16,6 @@ use Tailors\PHPUnit\ImplementsInterfaceTrait;
  *
  * @psalm-type TScopeType "class"|"function"|"global"|"method"|"namespace"
  * @psalm-type TScopePath list{0: TScopeType, 1?: string, 2?:string, 3?: string}
- *
  * @psalm-type TAliases array{
  *      class?:     array<string,array<string,string>>,
  *      namespace?: array<string,array<string,string>>,
@@ -61,10 +60,13 @@ final class ContainerTest extends TestCase
     {
         /** @psalm-var TAliases */
         $aliases = ['global' => ['a' => 'b']];
+
         /** @psalm-var TInstances */
         $instances = ['global' => [\Exception::class => new \Exception('e')]];
+
         /** @psalm-var TFactories */
         $factories = ['global' => [\Exception::class => $this->createStub(FactoryInterface::class)]];
+
         return [
             '#00' => [[], []],
             '#01' => [[[]], []],
@@ -97,10 +99,13 @@ final class ContainerTest extends TestCase
     {
         /** @psalm-var TAliases */
         $aliases = ['global' => ['a' => 'b']];
+
         /** @psalm-var TInstances */
         $instances = ['global' => [\Exception::class => new \Exception('e')]];
+
         /** @psalm-var TFactories */
         $factories = ['global' => [\Exception::class => $this->createStub(FactoryInterface::class)]];
+
         return [
             '#00' => [[], []],
             '#01' => [[$aliases], []],
@@ -133,16 +138,19 @@ final class ContainerTest extends TestCase
     {
         /** @psalm-var TAliases */
         $aliases = ['global' => ['a' => 'b']];
+
         /** @psalm-var TInstances */
         $instances = ['global' => [\Exception::class => new \Exception('e')]];
+
         /** @psalm-var TFactories */
         $factories = ['global' => [\Exception::class => $this->createStub(FactoryInterface::class)]];
+
         return [
             '#00' => [[], []],
-            '#01' => [ [$aliases], []],
-            '#02' => [ [$aliases, $instances], []],
-            '#03' => [ [$aliases, $instances, []], []],
-            '#04' => [ [$aliases, $instances, $factories], $factories],
+            '#01' => [[$aliases], []],
+            '#02' => [[$aliases, $instances], []],
+            '#03' => [[$aliases, $instances, []], []],
+            '#04' => [[$aliases, $instances, $factories], $factories],
         ];
     }
 
@@ -158,7 +166,6 @@ final class ContainerTest extends TestCase
         $container = new Container(...$args);
         $this->assertSame($expected, $container->getFactories());
     }
-
 
     /**
      * @psalm-return iterable<array-key, list{
@@ -203,24 +210,24 @@ final class ContainerTest extends TestCase
             '#05' => [
                 [[
                     'global' => ['a' => 'g.A'],
-                    'class' => ['X' => ['a' => 'X.a'], 'C' => ['b' => 'C.b']]
+                    'class'  => ['X' => ['a' => 'X.a'], 'C' => ['b' => 'C.b']],
                 ]],
                 ['C.a', 'a', ['class', 'C']],
                 [
                     'global' => ['a' => 'g.A'],
-                    'class' => ['X' => ['a' => 'X.a'], 'C' => ['b' => 'C.b', 'a' => 'C.a']]
+                    'class'  => ['X' => ['a' => 'X.a'], 'C' => ['b' => 'C.b', 'a' => 'C.a']],
                 ],
             ],
 
             '#06' => [
                 [[
                     'global' => ['a' => 'g.A'],
-                    'class' => ['X' => ['a' => 'X.a'], 'C' => ['a' => '?']]
+                    'class'  => ['X' => ['a' => 'X.a'], 'C' => ['a' => '?']],
                 ]],
                 ['C.a', 'a', ['class', 'C']],
                 [
                     'global' => ['a' => 'g.A'],
-                    'class' => ['X' => ['a' => 'X.a'], 'C' => ['a' => 'C.a']]
+                    'class'  => ['X' => ['a' => 'X.a'], 'C' => ['a' => 'C.a']],
                 ],
             ],
         ];
@@ -241,7 +248,7 @@ final class ContainerTest extends TestCase
 
         $expected = array_shift($args);
 
-        $this->assertSame($expected,  $container->getAlias(...$args));
+        $this->assertSame($expected, $container->getAlias(...$args));
 
         $this->assertSame($aliases, $container->getAliases());
     }
@@ -300,7 +307,7 @@ final class ContainerTest extends TestCase
             '#05' => [
                 [[], [
                     'global' => [\Exception::class => $e1],
-                    'class' => [
+                    'class'  => [
                         'X' => [\Exception::class => $e2],
                         'C' => [\RuntimeException::class => $r1],
                     ],
@@ -308,9 +315,9 @@ final class ContainerTest extends TestCase
                 [$e3, \Exception::class, ['class', 'C']],
                 [
                     'global' => [\Exception::class => $e1],
-                    'class' => [
+                    'class'  => [
                         'X' => [\Exception::class => $e2],
-                        'C' => [\RuntimeException::class => $r1, \Exception::class => $e3]
+                        'C' => [\RuntimeException::class => $r1, \Exception::class => $e3],
                     ],
                 ],
             ],
@@ -318,12 +325,12 @@ final class ContainerTest extends TestCase
             '#06' => [
                 [[], [
                     'global' => [\Exception::class => $e1],
-                    'class' => ['X' => [\Exception::class => $e2], 'C' => [\Exception::class => $e]],
+                    'class'  => ['X' => [\Exception::class => $e2], 'C' => [\Exception::class => $e]],
                 ]],
                 [$e3, \Exception::class, ['class', 'C']],
                 [
                     'global' => [\Exception::class => $e1],
-                    'class' => ['X' => [\Exception::class => $e2], 'C' => [\Exception::class => $e3]],
+                    'class'  => ['X' => [\Exception::class => $e2], 'C' => [\Exception::class => $e3]],
                 ],
             ],
         ];
@@ -344,7 +351,7 @@ final class ContainerTest extends TestCase
 
         $expected = array_shift($args);
 
-        $this->assertSame($expected,  $container->getInstance(...$args));
+        $this->assertSame($expected, $container->getInstance(...$args));
 
         $this->assertSame($instances, $container->getInstances());
     }
@@ -403,7 +410,7 @@ final class ContainerTest extends TestCase
             '#05' => [
                 [[], [], [
                     'global' => [\Exception::class => $f2],
-                    'class' => [
+                    'class'  => [
                         'X' => [\Exception::class => $f3],
                         'C' => [\RuntimeException::class => $f5],
                     ],
@@ -411,9 +418,9 @@ final class ContainerTest extends TestCase
                 [$f4, \Exception::class, ['class', 'C']],
                 [
                     'global' => [\Exception::class => $f2],
-                    'class' => [
+                    'class'  => [
                         'X' => [\Exception::class => $f3],
-                        'C' => [\RuntimeException::class => $f5, \Exception::class => $f4]
+                        'C' => [\RuntimeException::class => $f5, \Exception::class => $f4],
                     ],
                 ],
             ],
@@ -421,12 +428,12 @@ final class ContainerTest extends TestCase
             '#06' => [
                 [[], [], [
                     'global' => [\Exception::class => $f2],
-                    'class' => ['X' => [\Exception::class => $f3], 'C' => [\Exception::class => $f1]],
+                    'class'  => ['X' => [\Exception::class => $f3], 'C' => [\Exception::class => $f1]],
                 ]],
                 [$f4, \Exception::class, ['class', 'C']],
                 [
                     'global' => [\Exception::class => $f2],
-                    'class' => ['X' => [\Exception::class => $f3], 'C' => [\Exception::class => $f4]],
+                    'class'  => ['X' => [\Exception::class => $f3], 'C' => [\Exception::class => $f4]],
                 ],
             ],
         ];
@@ -447,7 +454,7 @@ final class ContainerTest extends TestCase
 
         $expected = array_shift($args);
 
-        $this->assertSame($expected,  $container->getFactory(...$args));
+        $this->assertSame($expected, $container->getFactory(...$args));
 
         $this->assertSame($factories, $container->getFactories());
     }

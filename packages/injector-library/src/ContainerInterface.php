@@ -11,7 +11,6 @@ namespace Tailors\Lib\Injector;
  *
  * @psalm-type TScopeType "class"|"function"|"global"|"method"|"namespace"
  * @psalm-type TScopePath list{0: TScopeType, 1?: string, 2?: string, 3?: string}
- *
  * @psalm-type TAliases array{
  *      class?:     array<string,array<string,string>>,
  *      namespace?: array<string,array<string,string>>,
@@ -75,6 +74,7 @@ interface ContainerInterface
      *
      * @psalm-param class-string<TObj> $class
      * @psalm-param TScopePath $scope
+     *
      * @psalm-return ?TObj
      */
     public function getInstance(string $class, array $scope = null): ?object;
@@ -93,6 +93,7 @@ interface ContainerInterface
      *
      * @psalm-param class-string<TObj> $class
      * @psalm-param TScopePath $scope
+     *
      * @psalm-return ?FactoryInterface<TObj>
      */
     public function getFactory(string $class, array $scope = null): ?FactoryInterface;

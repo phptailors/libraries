@@ -19,14 +19,15 @@ final class Container implements ContainerInterface
 {
     /**
      * @psalm-readonly
+     *
      * @psalm-var array<TScopeType,int>
      */
     private static array $scopeDepth = [
-        'class' => 2,
-        'function' => 2,
-        'method' => 3,
+        'class'     => 2,
+        'function'  => 2,
+        'method'    => 3,
         'namespace' => 2,
-        'global' => 1,
+        'global'    => 1,
     ];
 
     /**
@@ -116,6 +117,7 @@ final class Container implements ContainerInterface
      *
      * @psalm-param class-string<TObj> $class
      * @psalm-param TScopePath $scope
+     *
      * @psalm-return ?TObj
      */
     public function getInstance(string $class, array $scope = null): ?object
@@ -142,6 +144,7 @@ final class Container implements ContainerInterface
      *
      * @psalm-param class-string<TObj> $class
      * @psalm-param TScopePath $scope
+     *
      * @psalm-return ?FactoryInterface<TObj>
      */
     public function getFactory(string $class, array $scope = null): ?FactoryInterface
@@ -210,6 +213,7 @@ final class Container implements ContainerInterface
         if (!NestedArray::get($array, [...$scope, $key], $result)) {
             return null;
         }
+
         return $result;
     }
 
