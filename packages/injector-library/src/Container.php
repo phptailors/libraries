@@ -60,7 +60,7 @@ final class Container implements ContainerInterface
     }
 
     /**
-     * @pslam-return TAliases
+     * @psalm-return TAliases
      */
     public function getAliases(): array
     {
@@ -68,7 +68,7 @@ final class Container implements ContainerInterface
     }
 
     /**
-     * @pslam-return TInstances
+     * @psalm-return TInstances
      */
     public function getInstances(): array
     {
@@ -76,7 +76,7 @@ final class Container implements ContainerInterface
     }
 
     /**
-     * @pslam-return TFactories
+     * @psalm-return TFactories
      */
     public function getFactories(): array
     {

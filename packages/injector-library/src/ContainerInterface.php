@@ -38,17 +38,17 @@ namespace Tailors\Lib\Injector;
 interface ContainerInterface
 {
     /**
-     * @pslam-return TAliases
+     * @psalm-return TAliases
      */
     public function getAliases(): array;
 
     /**
-     * @pslam-return TInstances
+     * @psalm-return TInstances
      */
     public function getInstances(): array;
 
     /**
-     * @pslam-return TFactories
+     * @psalm-return TFactories
      */
     public function getFactories(): array;
 
