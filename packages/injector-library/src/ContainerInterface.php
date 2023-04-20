@@ -9,11 +9,48 @@ namespace Tailors\Lib\Injector;
  *
  * @psalm-internal Tailors\Lib\Injector
  *
- * @psalm-type TScopeType ("class"|"function"|"method"|"namespace"|"global")
+ * @psalm-type TScopeType "class"|"function"|"global"|"method"|"namespace"
  * @psalm-type TScopePath list{0: TScopeType, 1?: string, 2?: string, 3?: string}
+ *
+ * @psalm-type TAliases array{
+ *      class?:     array<string,array<string,string>>,
+ *      namespace?: array<string,array<string,string>>,
+ *      function?:  array<string,array<string,string>>,
+ *      method?:    array<string,array<string, array<string,string>>>,
+ *      global?:    array<string,string>
+ * }
+ * @psalm-type TInstances array{
+ *      class?:     array<string,class-string-map<T,T>>,
+ *      namespace?: array<string,class-string-map<T,T>>,
+ *      function?:  array<string,class-string-map<T,T>>,
+ *      method?:    array<string,array<string, class-string-map<T,T>>>,
+ *      global?:    class-string-map<T,T>
+ * }
+ * @psalm-type TFactories array{
+ *      class?:     array<string,class-string-map<T,FactoryInterface<T>>>,
+ *      namespace?: array<string,class-string-map<T,FactoryInterface<T>>>,
+ *      function?:  array<string,class-string-map<T,FactoryInterface<T>>>,
+ *      method?:    array<string,array<string, class-string-map<T,FactoryInterface<T>>>>,
+ *      global?:    class-string-map<T,FactoryInterface<T>>
+ * }
  */
 interface ContainerInterface
 {
+    /**
+     * @pslam-return TAliases
+     */
+    public function getAliases(): array;
+
+    /**
+     * @pslam-return TInstances
+     */
+    public function getInstances(): array;
+
+    /**
+     * @pslam-return TFactories
+     */
+    public function getFactories(): array;
+
     /**
      * @psalm-param TScopePath $scope
      */
@@ -27,11 +64,11 @@ interface ContainerInterface
     /**
      * @psalm-template TObj of object
      *
-     * @psalm-param class-string<TObj> $class
      * @psalm-param TObj $object
+     * @psalm-param class-string<TObj> $class
      * @psalm-param TScopePath $scope
      */
-    public function setInstance(string $class, object $object, array $scope = null): void;
+    public function setInstance(object $object, string $class, array $scope = null): void;
 
     /**
      * @psalm-template TObj of object
@@ -45,11 +82,11 @@ interface ContainerInterface
     /**
      * @psalm-template TObj of object
      *
-     * @psalm-param class-string<TObj> $class
      * @psalm-param FactoryInterface<TObj> $factory
+     * @psalm-param class-string<TObj> $class
      * @psalm-param TScopePath $scope
      */
-    public function setFactory(string $class, FactoryInterface $factory, array $scope = null): void;
+    public function setFactory(FactoryInterface $factory, string $class, array $scope = null): void;
 
     /**
      * @psalm-template TObj of object

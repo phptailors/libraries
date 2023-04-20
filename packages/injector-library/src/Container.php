@@ -11,34 +11,15 @@ namespace Tailors\Lib\Injector;
  *
  * @psalm-import-type TScopeType from ContainerInterface
  * @psalm-import-type TScopePath from ContainerInterface
- *
- * @psalm-type TAliases array{
- *      class?:     array<string,array<string,string>>,
- *      namespace?: array<string,array<string,string>>,
- *      function?:  array<string,array<string,string>>,
- *      method?:    array<string,array<string, array<string,string>>>,
- *      global?:    array<string,string>
- * }
- * @psalm-type TInstances array{
- *      class?:     array<string,class-string-map<T,T>>,
- *      namespace?: array<string,class-string-map<T,T>>,
- *      function?:  array<string,class-string-map<T,T>>,
- *      method?:    array<string,array<string, class-string-map<T,T>>>,
- *      global?:    class-string-map<T,T>
- * }
- * @psalm-type TFactories array{
- *      class?:     array<string,class-string-map<T,FactoryInterface<T>>>,
- *      namespace?: array<string,class-string-map<T,FactoryInterface<T>>>,
- *      function?:  array<string,class-string-map<T,FactoryInterface<T>>>,
- *      method?:    array<string,array<string, class-string-map<T,FactoryInterface<T>>>>,
- *      global?:    class-string-map<T,FactoryInterface<T>>
- * }
+ * @psalm-import-type TAliases from ContainerInterface
+ * @psalm-import-type TInstances from ContainerInterface
+ * @psalm-import-type TFactories from ContainerInterface
  */
 final class Container implements ContainerInterface
 {
     /**
      * @psalm-readonly
-     * @psalm-var array<key-of<TAliases>,int>
+     * @psalm-var array<TScopeType,int>
      */
     private static array $scopeDepth = [
         'class' => 2,
@@ -76,6 +57,30 @@ final class Container implements ContainerInterface
     }
 
     /**
+     * @pslam-return TAliases
+     */
+    public function getAliases(): array
+    {
+        return $this->aliases;
+    }
+
+    /**
+     * @pslam-return TInstances
+     */
+    public function getInstances(): array
+    {
+        return $this->instances;
+    }
+
+    /**
+     * @pslam-return TFactories
+     */
+    public function getFactories(): array
+    {
+        return $this->factories;
+    }
+
+    /**
      * @psalm-param TScopePath $scope
      */
     public function setAlias(string $abstract, string $alias, array $scope = null): void
@@ -96,11 +101,11 @@ final class Container implements ContainerInterface
     /**
      * @psalm-template TObj of object
      *
-     * @psalm-param class-string<TObj> $class
      * @psalm-param TObj $object
+     * @psalm-param class-string<TObj> $class
      * @psalm-param TScopePath $scope
      */
-    public function setInstance(string $class, object $object, array $scope = null): void
+    public function setInstance(object $object, string $class, array $scope = null): void
     {
         /** @psalm-suppress MixedPropertyTypeCoercion */
         self::arraySet($this->instances, $class, $object, $scope);
@@ -122,11 +127,11 @@ final class Container implements ContainerInterface
     /**
      * @psalm-template TObj of object
      *
-     * @psalm-param class-string<TObj> $class
      * @psalm-param FactoryInterface<TObj> $factory
+     * @psalm-param class-string<TObj> $class
      * @psalm-param TScopePath $scope
      */
-    public function setFactory(string $class, FactoryInterface $factory, array $scope = null): void
+    public function setFactory(FactoryInterface $factory, string $class, array $scope = null): void
     {
         /** @psalm-suppress MixedPropertyTypeCoercion */
         self::arraySet($this->factories, $class, $factory, $scope);

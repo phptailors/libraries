@@ -14,6 +14,9 @@ use Tailors\PHPUnit\ImplementsInterfaceTrait;
  *
  * @psalm-internal Tailors\Lib\Injector
  *
+ * @psalm-type TScopeType "class"|"function"|"global"|"method"|"namespace"
+ * @psalm-type TScopePath list{0: TScopeType, 1?: string, 2?:string, 3?: string}
+ *
  * @psalm-type TAliases array{
  *      class?:     array<string,array<string,string>>,
  *      namespace?: array<string,array<string,string>>,
@@ -46,6 +49,407 @@ final class ContainerTest extends TestCase
     public function testImplementsContainerInterface(): void
     {
         $this->assertImplementsInterface(ContainerInterface::class, Container::class);
+    }
+
+    /**
+     * @psalm-return iterable<array-key, list{
+     *      list{0?: TAliases, 1?: TInstances, 2?: TFactories},
+     *      mixed
+     * }>
+     */
+    public function provGetAliases(): iterable
+    {
+        /** @psalm-var TAliases */
+        $aliases = ['global' => ['a' => 'b']];
+        /** @psalm-var TInstances */
+        $instances = ['global' => [\Exception::class => new \Exception('e')]];
+        /** @psalm-var TFactories */
+        $factories = ['global' => [\Exception::class => $this->createStub(FactoryInterface::class)]];
+        return [
+            '#00' => [[], []],
+            '#01' => [[[]], []],
+            '#02' => [[$aliases], $aliases],
+            '#03' => [[$aliases, $instances], $aliases],
+            '#04' => [[$aliases, $instances, $factories], $aliases],
+        ];
+    }
+
+    /**
+     * @dataProvider provGetAliases
+     *
+     * @psalm-suppress MissingThrowsDocblock
+     *
+     * @psalm-param list{0?: TAliases, 1?: TInstances, 2?: TFactories} $args
+     */
+    public function testGetAliases(array $args, mixed $expected): void
+    {
+        $container = new Container(...$args);
+        $this->assertSame($expected, $container->getAliases());
+    }
+
+    /**
+     * @psalm-return iterable<array-key, list{
+     *      list{0?: TAliases, 1?: TInstances, 2?: TFactories},
+     *      mixed
+     * }>
+     */
+    public function provGetInstances(): iterable
+    {
+        /** @psalm-var TAliases */
+        $aliases = ['global' => ['a' => 'b']];
+        /** @psalm-var TInstances */
+        $instances = ['global' => [\Exception::class => new \Exception('e')]];
+        /** @psalm-var TFactories */
+        $factories = ['global' => [\Exception::class => $this->createStub(FactoryInterface::class)]];
+        return [
+            '#00' => [[], []],
+            '#01' => [[$aliases], []],
+            '#02' => [[$aliases, []], []],
+            '#03' => [[$aliases, $instances], $instances],
+            '#04' => [[$aliases, $instances, $factories], $instances],
+        ];
+    }
+
+    /**
+     * @dataProvider provGetInstances
+     *
+     * @psalm-suppress MissingThrowsDocblock
+     *
+     * @psalm-param list{0?: TAliases, 1?: TInstances, 2?: TFactories} $args
+     */
+    public function testGetInstances(array $args, mixed $expected): void
+    {
+        $container = new Container(...$args);
+        $this->assertSame($expected, $container->getInstances());
+    }
+
+    /**
+     * @psalm-return iterable<array-key, list{
+     *      list{0?: TAliases, 1?: TInstances, 2?: TFactories},
+     *      mixed
+     * }>
+     */
+    public function provGetFactories(): iterable
+    {
+        /** @psalm-var TAliases */
+        $aliases = ['global' => ['a' => 'b']];
+        /** @psalm-var TInstances */
+        $instances = ['global' => [\Exception::class => new \Exception('e')]];
+        /** @psalm-var TFactories */
+        $factories = ['global' => [\Exception::class => $this->createStub(FactoryInterface::class)]];
+        return [
+            '#00' => [[], []],
+            '#01' => [ [$aliases], []],
+            '#02' => [ [$aliases, $instances], []],
+            '#03' => [ [$aliases, $instances, []], []],
+            '#04' => [ [$aliases, $instances, $factories], $factories],
+        ];
+    }
+
+    /**
+     * @dataProvider provGetFactories
+     *
+     * @psalm-suppress MissingThrowsDocblock
+     *
+     * @psalm-param list{0?: TAliases, 1?: TInstances, 2?: TFactories} $args
+     */
+    public function testGetFactories(array $args, mixed $expected): void
+    {
+        $container = new Container(...$args);
+        $this->assertSame($expected, $container->getFactories());
+    }
+
+
+    /**
+     * @psalm-return iterable<array-key, list{
+     *      list{0?: TAliases, 1?: TInstances, 2?: TFactories},
+     *      list{0: string, 1: string, 2?: TScopePath},
+     *      mixed
+     * }>
+     */
+    public static function provAccessAlias(): iterable
+    {
+        return [
+            '#00' => [
+                [],
+                ['A', 'a'],
+                ['global' => ['a' => 'A']],
+            ],
+
+            '#01' => [
+                [],
+                ['A', 'a', ['class', 'C']],
+                ['class' => ['C' => ['a' => 'A']]],
+            ],
+
+            '#02' => [
+                [],
+                ['A', 'a', ['function', 'F']],
+                ['function' => ['F' => ['a' => 'A']]],
+            ],
+
+            '#03' => [
+                [],
+                ['A', 'a', ['global']],
+                ['global' => ['a' => 'A']],
+            ],
+
+            '#04' => [
+                [],
+                ['A', 'a', ['method', 'm', 'C']],
+                ['method' => ['m' => ['C' => ['a' => 'A']]]],
+            ],
+
+            '#05' => [
+                [[
+                    'global' => ['a' => 'g.A'],
+                    'class' => ['X' => ['a' => 'X.a'], 'C' => ['b' => 'C.b']]
+                ]],
+                ['C.a', 'a', ['class', 'C']],
+                [
+                    'global' => ['a' => 'g.A'],
+                    'class' => ['X' => ['a' => 'X.a'], 'C' => ['b' => 'C.b', 'a' => 'C.a']]
+                ],
+            ],
+
+            '#06' => [
+                [[
+                    'global' => ['a' => 'g.A'],
+                    'class' => ['X' => ['a' => 'X.a'], 'C' => ['a' => '?']]
+                ]],
+                ['C.a', 'a', ['class', 'C']],
+                [
+                    'global' => ['a' => 'g.A'],
+                    'class' => ['X' => ['a' => 'X.a'], 'C' => ['a' => 'C.a']]
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider provAccessAlias
+     *
+     * @psalm-param list{0?: TAliases, 1?: TInstances, 2?: TFactories} $ctorArgs
+     * @psalm-param list{0: string, 1: string, 2?: TScopePath} $args
+     *
+     * @psalm-suppress MissingThrowsDocblock
+     */
+    public function testAccessAlias(array $ctorArgs, array $args, mixed $aliases): void
+    {
+        $container = new Container(...$ctorArgs);
+        $container->setAlias(...$args);
+
+        $expected = array_shift($args);
+
+        $this->assertSame($expected,  $container->getAlias(...$args));
+
+        $this->assertSame($aliases, $container->getAliases());
+    }
+
+    /**
+     * @psalm-return iterable<array-key, list{
+     *      list{0?: TAliases, 1?: TInstances, 2?: TFactories},
+     *      list{0: object, 1: class-string, 2?: TScopePath},
+     *      mixed
+     * }>
+     */
+    public static function provAccessInstance(): iterable
+    {
+        $e = new \Exception('e');
+        $e1 = new \Exception('e1');
+        $e2 = new \Exception('e2');
+        $e3 = new \Exception('e3');
+        $r1 = new \RuntimeException('r1');
+
+        /** @psalm-var array<list{
+         *      list{0?: TAliases, 1?: TInstances, 2?: TFactories},
+         *      list{0: object, 1: class-string, 2?: TScopePath},
+         *      mixed
+         * }> */
+        return [
+            '#00' => [
+                [],
+                [$e1, \Exception::class],
+                ['global' => [\Exception::class => $e1]],
+            ],
+
+            '#01' => [
+                [],
+                [$e1, \Exception::class, ['class', 'C']],
+                ['class' => ['C' => [\Exception::class => $e1]]],
+            ],
+
+            '#02' => [
+                [],
+                [$e1, \Exception::class, ['function', 'F']],
+                ['function' => ['F' => [\Exception::class => $e1]]],
+            ],
+
+            '#03' => [
+                [],
+                [$e1, \Exception::class, ['global']],
+                ['global' => [\Exception::class => $e1]],
+            ],
+
+            '#04' => [
+                [],
+                [$e1, \Exception::class, ['method', 'm', 'C']],
+                ['method' => ['m' => ['C' => [\Exception::class => $e1]]]],
+            ],
+
+            '#05' => [
+                [[], [
+                    'global' => [\Exception::class => $e1],
+                    'class' => [
+                        'X' => [\Exception::class => $e2],
+                        'C' => [\RuntimeException::class => $r1],
+                    ],
+                ]],
+                [$e3, \Exception::class, ['class', 'C']],
+                [
+                    'global' => [\Exception::class => $e1],
+                    'class' => [
+                        'X' => [\Exception::class => $e2],
+                        'C' => [\RuntimeException::class => $r1, \Exception::class => $e3]
+                    ],
+                ],
+            ],
+
+            '#06' => [
+                [[], [
+                    'global' => [\Exception::class => $e1],
+                    'class' => ['X' => [\Exception::class => $e2], 'C' => [\Exception::class => $e]],
+                ]],
+                [$e3, \Exception::class, ['class', 'C']],
+                [
+                    'global' => [\Exception::class => $e1],
+                    'class' => ['X' => [\Exception::class => $e2], 'C' => [\Exception::class => $e3]],
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider provAccessInstance
+     *
+     * @psalm-param list{0?: TAliases, 1?: TInstances, 2?: TFactories} $ctorArgs
+     * @psalm-param list{0: object, 1: class-string, 2?: TScopePath} $args
+     *
+     * @psalm-suppress MissingThrowsDocblock
+     */
+    public function testAccessInstance(array $ctorArgs, array $args, mixed $instances): void
+    {
+        $container = new Container(...$ctorArgs);
+        $container->setInstance(...$args);
+
+        $expected = array_shift($args);
+
+        $this->assertSame($expected,  $container->getInstance(...$args));
+
+        $this->assertSame($instances, $container->getInstances());
+    }
+
+    /**
+     * @psalm-return iterable<array-key, list{
+     *      list{0?: TAliases, 1?: TInstances, 2?: TFactories},
+     *      list{0: FactoryInterface<object>, 1: class-string, 2?: TScopePath},
+     *      mixed
+     * }>
+     */
+    public function provAccessFactory(): iterable
+    {
+        $f1 = $this->createStub(FactoryInterface::class);
+        $f2 = $this->createStub(FactoryInterface::class);
+        $f3 = $this->createStub(FactoryInterface::class);
+        $f4 = $this->createStub(FactoryInterface::class);
+        $f5 = $this->createStub(FactoryInterface::class);
+
+        /** @psalm-var array<list{
+         *      list{0?: TAliases, 1?: TInstances, 2?: TFactories},
+         *      list{0: FactoryInterface<object>, 1: class-string, 2?: TScopePath},
+         *      mixed
+         * }> */
+        return [
+            '#00' => [
+                [],
+                [$f2, \Exception::class],
+                ['global' => [\Exception::class => $f2]],
+            ],
+
+            '#01' => [
+                [],
+                [$f2, \Exception::class, ['class', 'C']],
+                ['class' => ['C' => [\Exception::class => $f2]]],
+            ],
+
+            '#02' => [
+                [],
+                [$f2, \Exception::class, ['function', 'F']],
+                ['function' => ['F' => [\Exception::class => $f2]]],
+            ],
+
+            '#03' => [
+                [],
+                [$f2, \Exception::class, ['global']],
+                ['global' => [\Exception::class => $f2]],
+            ],
+
+            '#04' => [
+                [],
+                [$f2, \Exception::class, ['method', 'm', 'C']],
+                ['method' => ['m' => ['C' => [\Exception::class => $f2]]]],
+            ],
+
+            '#05' => [
+                [[], [], [
+                    'global' => [\Exception::class => $f2],
+                    'class' => [
+                        'X' => [\Exception::class => $f3],
+                        'C' => [\RuntimeException::class => $f5],
+                    ],
+                ]],
+                [$f4, \Exception::class, ['class', 'C']],
+                [
+                    'global' => [\Exception::class => $f2],
+                    'class' => [
+                        'X' => [\Exception::class => $f3],
+                        'C' => [\RuntimeException::class => $f5, \Exception::class => $f4]
+                    ],
+                ],
+            ],
+
+            '#06' => [
+                [[], [], [
+                    'global' => [\Exception::class => $f2],
+                    'class' => ['X' => [\Exception::class => $f3], 'C' => [\Exception::class => $f1]],
+                ]],
+                [$f4, \Exception::class, ['class', 'C']],
+                [
+                    'global' => [\Exception::class => $f2],
+                    'class' => ['X' => [\Exception::class => $f3], 'C' => [\Exception::class => $f4]],
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider provAccessFactory
+     *
+     * @psalm-param list{0?: TAliases, 1?: TInstances, 2?: TFactories} $ctorArgs
+     * @psalm-param list{0: FactoryInterface<object>, 1: class-string, 2?: TScopePath} $args
+     *
+     * @psalm-suppress MissingThrowsDocblock
+     */
+    public function testAccessFactory(array $ctorArgs, array $args, mixed $factories): void
+    {
+        $container = new Container(...$ctorArgs);
+        $container->setFactory(...$args);
+
+        $expected = array_shift($args);
+
+        $this->assertSame($expected,  $container->getFactory(...$args));
+
+        $this->assertSame($factories, $container->getFactories());
     }
 
     /**

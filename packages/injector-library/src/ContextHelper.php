@@ -11,9 +11,9 @@ namespace Tailors\Lib\Injector;
  */
 final class ContextHelper
 {
-    public static function getNamespaceOf(string $fqdn_name): string
+    public static function getNamespaceOf(string $fqdn): string
     {
-        $pieces = array_filter(explode('\\', $fqdn_name));
+        $pieces = array_filter(explode('\\', $fqdn));
 
         return implode('\\', array_slice($pieces, 0, -1));
     }
