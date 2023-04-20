@@ -104,112 +104,110 @@ final class NestedArray
     }
 
     /**
-     * @psalm-param list<array-key> $stack
-     * @psalm-param array<array-key|array> $lookup
+     * @psalm-param list<array-key> $behind
+     * @psalm-param array<array-key|array> $ahead
      *
      * @psalm-return ?list<array-key>
      */
-    private static function lookupRecursion(array $array, array $stack, array $lookup, mixed &$retval): ?array
+    private static function lookupRecursion(array $array, array $behind, array $ahead, mixed &$retval): ?array
     {
-        if (empty($lookup)) {
+        if (empty($ahead)) {
             $retval = $array;
 
-            return $stack;
+            return $behind;
         }
 
-        $head = array_shift($lookup);
+        $head = array_shift($ahead);
         if (!is_array($head)) {
-            return self::lookupScalarHead($array, $stack, $head, $lookup, $retval);
+            return self::lookupWithScalarHead($array, $behind, $head, $ahead, $retval);
         }
 
-        return self::lookupArrayHead($array, $stack, $head, $lookup, $retval);
+        return self::lookupWithArrayHead($array, $behind, $head, $ahead, $retval);
     }
 
     /**
-     * @psalm-param list<array-key> $stack
+     * @psalm-param list<array-key> $behind
      * @psalm-param array-key $head
-     * @psalm-param array<array-key|array> $remainder
+     * @psalm-param array<array-key|array> $ahead
      *
      * @psalm-return ?list<array-key>
      */
-    private static function lookupScalarHead(
+    private static function lookupWithScalarHead(
         array $array,
-        array $stack,
-        string|int $head,
-        array $remainder,
+        array $behind,
+        mixed $head,
+        array $ahead,
         mixed &$retval
     ): ?array {
         if (!array_key_exists($head, $array)) {
             return null;
         }
 
-        $stack[] = $head;
-        if (empty($remainder)) {
+        $behind[] = $head;
+        if (empty($ahead)) {
             /** @psalm-var mixed */
             $retval = $array[$head];
 
-            return $stack;
+            return $behind;
         }
 
         if (!is_array($array[$head])) {
             return null;
         }
 
-        return self::lookupRecursion($array[$head], $stack, $remainder, $retval);
+        return self::lookupRecursion($array[$head], $behind, $ahead, $retval);
     }
 
     /**
-     * @psalm-param list<array-key> $stack
-     * @psalm-param array<array-key|array> $remainder
+     * @psalm-param list<array-key> $behind
+     * @psalm-param array<array-key|array> $ahead
      *
      * @psalm-return ?list<array-key>
      */
-    private static function lookupArrayHead(
+    private static function lookupWithArrayHead(
         array $array,
-        array $stack,
+        array $behind,
         array $head,
-        array $remainder,
+        array $ahead,
         mixed &$retval
     ): ?array {
         if (empty($head)) {
-            return self::lookupRecursion($array, $stack, $remainder, $retval);
+            return self::lookupRecursion($array, $behind, $ahead, $retval);
         }
 
-        return self::lookupNonEmptyArrayHead($array, $stack, $head, $remainder, $retval);
-    }
-
-    /**
-     * @psalm-param list<array-key> $stack
-     * @psalm-param non-empty-array $head
-     * @psalm-param array<array-key|array> $remainder
-     *
-     * @psalm-return ?list<array-key>
-     */
-    private static function lookupNonemptyArrayHead(
-        array $array,
-        array $stack,
-        array $head,
-        array $remainder,
-        mixed &$retval
-    ): ?array {
+        /** @psalm-var mixed*/
         foreach ($head as $entry) {
-            if (is_string($entry) || is_int($entry)) {
-                $entry = (array) $entry;
-            }
-            if (!is_array($entry)) {
-                continue;
-            }
-            // Psalm does not support recursive array types
-            // (https://github.com/vimeo/psalm/issues/1892),
-            // so we have to cheat it somehow.
-            /** @psalm-var array<array-key|array> */
-            $lookup = [...$entry, ...$remainder];
-            $path = self::lookupRecursion($array, $stack, $lookup, $retval);
-            if (null !== $path) {
+            if (null !== ($path = self::lookupWithMixedHead($array, $behind, $entry, $ahead, $retval))) {
                 return $path;
             }
         }
-
         return null;
+    }
+
+    /**
+     * @psalm-param list<array-key> $behind
+     * @psalm-param array<array-key|array> $ahead
+     *
+     * @psalm-return ?list<array-key>
+     */
+    private static function lookupWithMixedHead(
+        array $array,
+        array $behind,
+        mixed $head,
+        array $ahead,
+        mixed &$retval
+    ): ?array {
+        if (is_string($head) || is_int($head)) {
+            $head = (array) $head;
+        }
+        if (!is_array($head)) {
+            return null;
+        }
+        // Psalm does not support recursive array types
+        // (https://github.com/vimeo/psalm/issues/1892),
+        // so we lie to it here (without costly runtime checks).
+        /** @psalm-var array<array-key|array> */
+        $lookup = [...$head, ...$ahead];
+        return self::lookupRecursion($array, $behind, $lookup, $retval);
     }
 }
