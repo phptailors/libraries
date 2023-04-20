@@ -9,8 +9,10 @@ namespace Tailors\Lib\Injector;
  *
  * @psalm-internal Tailors\Lib\Injector
  *
+ * @psalm-import-type TLookupArray from ContainerInterface
  * @psalm-import-type TScopeType from ContainerInterface
  * @psalm-import-type TScopePath from ContainerInterface
+ * @psalm-import-type TItemPath from ContainerInterface
  * @psalm-import-type TAliases from ContainerInterface
  * @psalm-import-type TInstances from ContainerInterface
  * @psalm-import-type TFactories from ContainerInterface
@@ -153,51 +155,49 @@ final class Container implements ContainerInterface
         return self::arrayGet($this->factories, $class, $scope);
     }
 
-    public function lookupAlias(string $key, ContextInterface $context): ?string
+    /**
+     * @psalm-param TLookupArray $lookup
+     *
+     * @psalm-param-out ?string $abstract
+     *
+     * @psalm-return ?TItemPath
+     */
+    public function lookupAlias(string $alias, array $lookup, mixed &$abstract = null): ?array
     {
-        foreach ($context->getLookupScopes() as $lookup) {
-            if ($lookup->lookupScopedArray($this->aliases, $key, $retval)) {
-                return $retval;
-            }
-        }
-
-        return null;
+        /** @psalm-var ?TItemPath */
+        return self::arrayLookup($this->aliases, [$lookup, $alias], $abstract);
     }
 
     /**
      * @psalm-template TObj of object
      *
      * @psalm-param class-string<TObj> $class
+     * @psalm-param TLookupArray $lookup
      *
-     * @psalm-return ?TObj
+     * @psalm-param-out ?TObj $instance
+     *
+     * @psalm-return ?TItemPath
      */
-    public function lookupInstance(string $class, ContextInterface $context): ?object
+    public function lookupInstance(string $class, array $lookup, mixed &$instance = null): ?array
     {
-        foreach ($context->getLookupScopes() as $lookup) {
-            if (null !== ($instance = $lookup->lookupScopedInstanceMap($this->instances, $class))) {
-                return $instance;
-            }
-        }
-
-        return null;
+        /** @psalm-var ?TItemPath */
+        return self::arrayLookup($this->instances, [$lookup, $class], $instance);
     }
 
     /**
      * @psalm-template TObj of object
      *
      * @psalm-param class-string<TObj> $class
+     * @psalm-param TLookupArray $lookup
      *
-     * @psalm-return ?FactoryInterface<TObj>
+     * @psalm-param-out ?FactoryInterface<TObj> $factory
+     *
+     * @psalm-return ?TItemPath
      */
-    public function lookupFactory(string $class, ContextInterface $context): ?FactoryInterface
+    public function lookupFactory(string $class, array $lookup, mixed &$factory = null): ?array
     {
-        foreach ($context->getLookupScopes() as $lookup) {
-            if (null !== ($factory = $lookup->lookupScopedFactoryMap($this->factories, $class))) {
-                return $factory;
-            }
-        }
-
-        return null;
+        /** @psalm-var ?TItemPath */
+        return self::arrayLookup($this->factories, [$lookup, $class], $factory);
     }
 
     /**
@@ -229,5 +229,27 @@ final class Container implements ContainerInterface
         }
 
         NestedArray::set($array, [...$scope, $key], $value);
+    }
+
+    /**
+     * @psalm-param non-empty-array<array-key|array> $lookup
+     */
+    private static function arrayLookup(array $array, array $lookup, mixed &$retval): ?array
+    {
+        /** @psalm-var ?non-empty-list<string> */
+        $path = NestedArray::lookup($array, $lookup, $temp);
+        if (null === $path) {
+            return null;
+        }
+
+        $scopeType = $path[0];
+        if ((count($path) - 1) !== (self::$scopeDepth[$scopeType] ?? null)) {
+            return null;
+        }
+
+        /** @psalm-var mixed */
+        $retval = $temp;
+
+        return $path;
     }
 }

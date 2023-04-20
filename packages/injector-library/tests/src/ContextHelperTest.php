@@ -44,7 +44,7 @@ final class ContextHelperTest extends TestCase
     /**
      * @psalm-return iterable<array-key, list{string,array<string>}>
      */
-    public static function provGetNamespaceScopeLookup(): iterable
+    public static function provGetNamespaceLookupArray(): iterable
     {
         return [
             ''              => ['', []],
@@ -58,19 +58,19 @@ final class ContextHelperTest extends TestCase
     }
 
     /**
-     * @dataProvider provGetNamespaceScopeLookup
+     * @dataProvider provGetNamespaceLookupArray
      *
      * @psalm-suppress MissingThrowsDocblock
      */
-    public function testGetNamespaceScopeLookup(string $name, array $scopes): void
+    public function testGetNamespaceLookupArray(string $name, array $scopes): void
     {
-        $this->assertSame($scopes, ContextHelper::getNamespaceScopeLookup($name));
+        $this->assertSame($scopes, ContextHelper::getNamespaceLookupArray($name));
     }
 
     /**
      * @psalm-return iterable<array-key, list{class-string, array}>
      */
-    public static function provGetClassScopeLookup(): iterable
+    public static function provGetClassLookupArray(): iterable
     {
         return [
             // #0
@@ -94,14 +94,14 @@ final class ContextHelperTest extends TestCase
     }
 
     /**
-     * @dataProvider provGetClassScopeLookup
+     * @dataProvider provGetClassLookupArray
      *
      * @psalm-param class-string $class
      *
      * @psalm-suppress MissingThrowsDocblock
      */
-    public function testGetClassScopeLookup(string $class, array $scopes): void
+    public function testGetClassLookupArray(string $class, array $scopes): void
     {
-        $this->assertSame($scopes, ContextHelper::getClassScopeLookup($class));
+        $this->assertSame($scopes, ContextHelper::getClassLookupArray($class));
     }
 }

@@ -8,6 +8,8 @@ namespace Tailors\Lib\Injector;
  * @internal this class is not covered by backward compatibility promise
  *
  * @psalm-internal Tailors\Lib\Injector
+ *
+ * @psalm-type TLookupArray array<array-key|array>
  */
 final class NestedArray
 {
@@ -94,7 +96,7 @@ final class NestedArray
     }
 
     /**
-     * @psalm-param array<array-key|array> $lookup
+     * @psalm-param TLookupArray $lookup
      *
      * @psalm-return ?list<array-key>
      */
@@ -105,7 +107,7 @@ final class NestedArray
 
     /**
      * @psalm-param list<array-key> $behind
-     * @psalm-param array<array-key|array> $ahead
+     * @psalm-param TLookupArray $ahead
      *
      * @psalm-return ?list<array-key>
      */
@@ -118,17 +120,17 @@ final class NestedArray
         }
 
         $head = array_shift($ahead);
-        if (!is_array($head)) {
-            return self::lookupWithScalarHead($array, $behind, $head, $ahead, $retval);
+        if (is_array($head)) {
+            return self::lookupWithArrayHead($array, $behind, $head, $ahead, $retval);
         }
 
-        return self::lookupWithArrayHead($array, $behind, $head, $ahead, $retval);
+        return self::lookupWithScalarHead($array, $behind, $head, $ahead, $retval);
     }
 
     /**
      * @psalm-param list<array-key> $behind
      * @psalm-param array-key $head
-     * @psalm-param array<array-key|array> $ahead
+     * @psalm-param TLookupArray $ahead
      *
      * @psalm-return ?list<array-key>
      */
@@ -160,7 +162,7 @@ final class NestedArray
 
     /**
      * @psalm-param list<array-key> $behind
-     * @psalm-param array<array-key|array> $ahead
+     * @psalm-param TLookupArray $ahead
      *
      * @psalm-return ?list<array-key>
      */
@@ -181,12 +183,13 @@ final class NestedArray
                 return $path;
             }
         }
+
         return null;
     }
 
     /**
      * @psalm-param list<array-key> $behind
-     * @psalm-param array<array-key|array> $ahead
+     * @psalm-param TLookupArray $ahead
      *
      * @psalm-return ?list<array-key>
      */
@@ -206,8 +209,9 @@ final class NestedArray
         // Psalm does not support recursive array types
         // (https://github.com/vimeo/psalm/issues/1892),
         // so we lie to it here (without costly runtime checks).
-        /** @psalm-var array<array-key|array> */
+        /** @psalm-var TLookupArray */
         $lookup = [...$head, ...$ahead];
+
         return self::lookupRecursion($array, $behind, $lookup, $retval);
     }
 }

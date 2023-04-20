@@ -21,7 +21,7 @@ final class ContextHelper
     /**
      * @psalm-return list<string>
      */
-    public static function getNamespaceScopeLookup(string $namespace): array
+    public static function getNamespaceLookupArray(string $namespace): array
     {
         $pieces = array_filter(explode('\\', $namespace));
         $lookup = [];
@@ -38,18 +38,18 @@ final class ContextHelper
      *
      * @psalm-return list<class-string>
      */
-    public static function getClassScopeLookup(string $class): array
+    public static function getClassLookupArray(string $class): array
     {
-        $scopes = [$class];
+        $lookup = [$class];
         if (!empty($parents = class_parents($class))) {
-            $scopes = array_merge($scopes, array_values($parents));
+            $lookup = array_merge($lookup, array_values($parents));
         }
         if (!empty($ifaces = class_implements($class))) {
             $ifaces = array_values($ifaces);
             sort($ifaces);
-            $scopes = array_merge($scopes, $ifaces);
+            $lookup = array_merge($lookup, $ifaces);
         }
 
-        return $scopes;
+        return $lookup;
     }
 }

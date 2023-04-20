@@ -7,14 +7,14 @@ namespace Tailors\Lib\Injector;
  *
  * @psalm-template TName of string
  *
- * @psalm-import-type TLookupScopes from ContextInterface
+ * @psalm-import-type TLookupArray from ContextInterface
  */
 abstract class AbstractContextBase
 {
     /**
-     * @psalm-var ?TLookupScopes
+     * @psalm-var ?TLookupArray
      */
-    private ?array $scopes = null;
+    private ?array $lookupArray = null;
 
     /**
      * @psalm-var TName
@@ -40,34 +40,34 @@ abstract class AbstractContextBase
     }
 
     /**
-     * @psalm-return TLookupScopes
+     * @psalm-return TLookupArray
      */
-    final public function getLookupScopes(): array
+    final public function getLookupArray(): array
     {
-        if (!isset($this->scopes)) {
-            $this->scopes = $this->makeLookupScopes();
+        if (!isset($this->lookupArray)) {
+            $this->lookupArray = $this->makeLookupArray();
         }
 
-        return $this->scopes;
+        return $this->lookupArray;
     }
 
     /**
-     * @psalm-return TLookupScopes
+     * @psalm-return TLookupArray
      */
-    abstract protected function makeLookupScopes(): array;
+    abstract protected function makeLookupArray(): array;
 
     /**
-     * @psalm-param TLookupScopes $scopes
+     * @psalm-param TLookupArray $lookup
      *
-     * @psalm-return TLookupScopes
+     * @psalm-return TLookupArray
      */
-    final protected function appendNamespaceAndGlobalLookupScopes(string $namespace, array $scopes): array
+    final protected function appendNamespaceAndGlobalLookups(string $namespace, array $lookup): array
     {
-        if (!empty($nsScopes = ContextHelper::getNamespaceScopeLookup($namespace))) {
-            $scopes[] = new NamespaceScopeLookup($nsScopes);
+        if (!empty($namespaces = ContextHelper::getNamespaceLookupArray($namespace))) {
+            $lookup[] = ['namespace', $namespaces];
         }
-        $scopes[] = new GlobalScopeLookup();
+        $lookup[] = ['global'];
 
-        return $scopes;
+        return $lookup;
     }
 }

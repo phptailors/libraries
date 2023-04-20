@@ -9,8 +9,10 @@ namespace Tailors\Lib\Injector;
  *
  * @psalm-internal Tailors\Lib\Injector
  *
+ * @psalm-type TLookupArray array<array-key|array>
  * @psalm-type TScopeType "class"|"function"|"global"|"method"|"namespace"
- * @psalm-type TScopePath list{0: TScopeType, 1?: string, 2?: string, 3?: string}
+ * @psalm-type TScopePath list{0: TScopeType, 1?: string, 2?: string}
+ * @psalm-type TItemPath list{0: TScopeType, 1: string, 2?: string, 3?: string}
  * @psalm-type TAliases array{
  *      class?:     array<string,array<string,string>>,
  *      namespace?: array<string,array<string,string>>,
@@ -98,23 +100,36 @@ interface ContainerInterface
      */
     public function getFactory(string $class, array $scope = null): ?FactoryInterface;
 
-    public function lookupAlias(string $key, ContextInterface $context): ?string;
+    /**
+     * @psalm-param TLookupArray $lookup
+     *
+     * @psalm-param-out ?string $abstract
+     *
+     * @psalm-return ?TItemPath
+     */
+    public function lookupAlias(string $alias, array $lookup, mixed &$abstract = null): ?array;
 
     /**
      * @psalm-template TObj of object
      *
      * @psalm-param class-string<TObj> $class
+     * @psalm-param TLookupArray $lookup
      *
-     * @psalm-return ?TObj
+     * @psalm-param-out ?TObj $instance
+     *
+     * @psalm-return ?TItemPath
      */
-    public function lookupInstance(string $class, ContextInterface $context): ?object;
+    public function lookupInstance(string $class, array $lookup, mixed &$instance = null): ?array;
 
     /**
      * @psalm-template TObj of object
      *
      * @psalm-param class-string<TObj> $class
+     * @psalm-param TLookupArray $lookup
      *
-     * @psalm-return ?FactoryInterface<TObj>
+     * @psalm-param-out ?FactoryInterface<TObj> $factory
+     *
+     * @psalm-return ?TItemPath
      */
-    public function lookupFactory(string $class, ContextInterface $context): ?FactoryInterface;
+    public function lookupFactory(string $class, array $lookup, mixed &$factory = null): ?array;
 }

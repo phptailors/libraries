@@ -49,14 +49,14 @@ final class FunctionContextTest extends TestCase
     /**
      * @psalm-return iterable<array-key, list{string, array}>
      */
-    public static function provGetLookupScopes(): iterable
+    public static function provGetLookupArray(): iterable
     {
         return [
             'foo' => [
                 'foo',
                 [
                     ['function', 'foo'],
-                    ['global', null],
+                    ['global'],
                 ],
             ],
             'Foo\\bar' => [
@@ -64,7 +64,7 @@ final class FunctionContextTest extends TestCase
                 [
                     ['function', 'Foo\\bar'],
                     ['namespace', ['Foo']],
-                    ['global', null],
+                    ['global'],
                 ],
             ],
             'Foo\\Bar\\baz' => [
@@ -72,24 +72,20 @@ final class FunctionContextTest extends TestCase
                 [
                     ['function', 'Foo\\Bar\\baz'],
                     ['namespace', ['Foo\\Bar', 'Foo']],
-                    ['global', null],
+                    ['global'],
                 ],
             ],
         ];
     }
 
     /**
-     * @dataProvider provGetLookupScopes
+     * @dataProvider provGetLookupArray
      *
      * @psalm-suppress MissingThrowsDocblock
      */
-    public function testGetLookupScopes(string $name, array $expected): void
+    public function testGetLookupArray(string $name, array $expected): void
     {
         $context = new FunctionContext($name);
-        $scopes = array_map(
-            fn (ScopeLookupInterface $scope): array => [$scope->getScopeType(), $scope->getScopeLookup()],
-            $context->getLookupScopes()
-        );
-        $this->assertSame($expected, $scopes);
+        $this->assertSame($expected, $context->getLookupArray());
     }
 }

@@ -14,8 +14,9 @@ use Tailors\PHPUnit\ImplementsInterfaceTrait;
  *
  * @psalm-internal Tailors\Lib\Injector
  *
+ * @psalm-type TLookupArray array<array-key|array>
  * @psalm-type TScopeType "class"|"function"|"global"|"method"|"namespace"
- * @psalm-type TScopePath list{0: TScopeType, 1?: string, 2?:string, 3?: string}
+ * @psalm-type TScopePath list{0: TScopeType, 1?: string, 2?:string}
  * @psalm-type TAliases array{
  *      class?:     array<string,array<string,string>>,
  *      namespace?: array<string,array<string,string>>,
@@ -462,17 +463,43 @@ final class ContainerTest extends TestCase
     /**
      * @psalm-return iterable<array-key,list{
      *  TAliases,
-     *  ContextInterface,
      *  string,
-     *  mixed
+     *  TLookupArray,
+     *  list{0: mixed, 1?: mixed}
      * }>
      */
     public static function provLookupAlias(): iterable
     {
+        $lookup = [
+            'class' => [
+                self::class => [
+                    ['class', [self::class, parent::class]],
+                    ['namespace', ['Tailors\\Lib\\Injector', 'Tailors\\Lib', 'Tailors']],
+                    ['global'],
+                ],
+                parent::class => [
+                    ['class', [parent::class]],
+                    ['namespace', ['Tailors\\Lib\\Injector', 'Tailors\\Lib', 'Tailors']],
+                    ['global'],
+                ],
+            ],
+            'method' => [
+                'testLookupAlias' => [
+                    self::class => [
+                        ['method', ['testLookupAlias', [self::class, parent::class]]],
+                        ['class', [self::class, parent::class]],
+                        ['namespace', ['Tailors\\Lib\\Injector', 'Tailors\\Lib', 'Tailors']],
+                        ['global'],
+                    ],
+                ],
+            ],
+        ];
+
         return [
             'class-#00' => [
-                [], new ClassContext(self::class),
-                'foo', null,
+                [],
+                'foo', $lookup['class'][self::class],
+                [null],
             ],
             'class-#01' => [
                 [
@@ -482,15 +509,15 @@ final class ContainerTest extends TestCase
                     'function'  => [],
                     'global'    => [],
                 ],
-                new ClassContext(self::class),
-                'foo', null,
+                'foo', $lookup['class'][self::class],
+                [null],
             ],
             'class-#02' => [
                 [
                     'global' => ['foo' => 'global:foo'],
                 ],
-                new ClassContext(self::class),
-                'foo', 'global:foo',
+                'foo', $lookup['class'][self::class],
+                [['global', 'foo'], 'global:foo'],
             ],
             'class-#03' => [
                 [
@@ -502,8 +529,8 @@ final class ContainerTest extends TestCase
                     ],
                     'global' => ['foo' => 'global:foo'],
                 ],
-                new ClassContext(self::class),
-                'foo', self::class.':foo',
+                'foo', $lookup['class'][self::class],
+                [['class', self::class, 'foo'], self::class.':foo'],
             ],
             'class-#04' => [
                 [
@@ -515,8 +542,8 @@ final class ContainerTest extends TestCase
                     ],
                     'global' => ['foo' => 'global:foo'],
                 ],
-                new ClassContext(self::class),
-                'foo', parent::class.':foo',
+                'foo', $lookup['class'][self::class],
+                [['class', parent::class, 'foo'], parent::class.':foo'],
             ],
             'class-#05' => [
                 [
@@ -532,8 +559,8 @@ final class ContainerTest extends TestCase
                     ],
                     'global' => ['foo' => 'global:foo'],
                 ],
-                new ClassContext(self::class),
-                'foo', self::class.':foo',
+                'foo', $lookup['class'][self::class],
+                [['class', self::class, 'foo'], self::class.':foo'],
             ],
             'class-#06' => [
                 [
@@ -549,8 +576,8 @@ final class ContainerTest extends TestCase
                     ],
                     'global' => ['foo' => 'global:foo'],
                 ],
-                new ClassContext(parent::class),
-                'foo', parent::class.':foo',
+                'foo', $lookup['class'][parent::class],
+                [['class', parent::class, 'foo'], parent::class.':foo'],
             ],
             'class-#07' => [
                 [
@@ -562,8 +589,8 @@ final class ContainerTest extends TestCase
                     ],
                     'global' => ['foo' => 'global:foo'],
                 ],
-                new ClassContext(self::class),
-                'foo', 'Tailors\\Lib\\Injector:foo',
+                'foo', $lookup['class'][self::class],
+                [['namespace', 'Tailors\\Lib\\Injector', 'foo'], 'Tailors\\Lib\\Injector:foo'],
             ],
             'class-#08' => [
                 [
@@ -577,8 +604,8 @@ final class ContainerTest extends TestCase
                     ],
                     'global' => ['foo' => 'global:foo'],
                 ],
-                new ClassContext(self::class),
-                'foo', 'Tailors\\Lib:foo',
+                'foo', $lookup['class'][self::class],
+                [['namespace', 'Tailors\\Lib', 'foo'], 'Tailors\\Lib:foo'],
             ],
             'class-#09' => [
                 [
@@ -595,8 +622,8 @@ final class ContainerTest extends TestCase
                     ],
                     'global' => ['foo' => 'global:foo'],
                 ],
-                new ClassContext(self::class),
-                'foo', 'Tailors:foo',
+                'foo', $lookup['class'][self::class],
+                [['namespace', 'Tailors', 'foo'], 'Tailors:foo'],
             ],
             'class-#10' => [
                 [
@@ -613,15 +640,15 @@ final class ContainerTest extends TestCase
                     ],
                     'global' => ['foo' => 'global:foo'],
                 ],
-                new ClassContext(self::class),
-                'bar', 'Tailors\\Lib:bar',
+                'bar', $lookup['class'][self::class],
+                [['namespace', 'Tailors\\Lib', 'bar'], 'Tailors\\Lib:bar'],
             ],
             'method-#01' => [
                 [
                     'global' => ['foo' => 'global:foo'],
                 ],
-                new MethodContext('testLookupAlias', self::class),
-                'foo', 'global:foo',
+                'foo', $lookup['method']['testLookupAlias'][self::class],
+                [['global', 'foo'], 'global:foo'],
             ],
             'method-#02' => [
                 [
@@ -632,8 +659,8 @@ final class ContainerTest extends TestCase
                     ],
                     'global' => ['foo' => 'global:foo'],
                 ],
-                new MethodContext('testLookupAlias', self::class),
-                'foo', 'Tailors:foo',
+                'foo', $lookup['method']['testLookupAlias'][self::class],
+                [['namespace', 'Tailors', 'foo'], 'Tailors:foo'],
             ],
             'method-#03' => [
                 [
@@ -644,8 +671,8 @@ final class ContainerTest extends TestCase
                     ],
                     'global' => ['foo' => 'global:foo'],
                 ],
-                new MethodContext('testLookupAlias', self::class),
-                'foo', 'Tailors\\Lib:foo',
+                'foo', $lookup['method']['testLookupAlias'][self::class],
+                [['namespace', 'Tailors\\Lib', 'foo'], 'Tailors\\Lib:foo'],
             ],
             'method-#04' => [
                 [
@@ -656,8 +683,20 @@ final class ContainerTest extends TestCase
                     ],
                     'global' => ['foo' => 'global:foo'],
                 ],
-                new MethodContext('testLookupAlias', self::class),
-                'foo', 'Tailors\\Lib\\Injector:foo',
+                'foo', $lookup['method']['testLookupAlias'][self::class],
+                [['namespace', 'Tailors\\Lib\\Injector', 'foo'], 'Tailors\\Lib\\Injector:foo'],
+            ],
+
+            'shallow-#99' => [
+                [
+                    'namespace' => [
+                        'Tailors' => [
+                            'foo' => 'FOO',
+                        ],
+                    ],
+                ],
+                'Tailors', ['namespace'],
+                [null],
             ],
         ];
     }
@@ -666,13 +705,20 @@ final class ContainerTest extends TestCase
      * @dataProvider provLookupAlias
      *
      * @psalm-param TAliases $aliases
+     * @psalm-param TLookupArray $lookup
+     * @psalm-param list{0: mixed, 1?: mixed} $expected
      *
      * @psalm-suppress MissingThrowsDocblock
      */
-    public function testLookupAlias(array $aliases, ContextInterface $context, string $key, mixed $expected): void
+    public function testLookupAlias(array $aliases, string $alias, array $lookup, array $expected): void
     {
         $container = new Container($aliases);
-        $this->assertSame($expected, $container->lookupAlias($key, $context));
+        if (count($expected) >= 2) {
+            $this->assertSame($expected[0], $container->lookupAlias($alias, $lookup, $abstract));
+            $this->assertSame($expected[1], $abstract);
+        } else {
+            $this->assertSame($expected[0], $container->lookupAlias($alias, $lookup));
+        }
     }
 
     /**
@@ -681,9 +727,9 @@ final class ContainerTest extends TestCase
      *
      * @psalm-return iterable<array-key,list{
      *  TInstances,
-     *  ContextInterface,
      *  class-string,
-     *  mixed
+     *  TLookupArray,
+     *  list{0: mixed, 1?: mixed}
      * }>
      */
     public static function provLookupInstance(): iterable
@@ -695,10 +741,36 @@ final class ContainerTest extends TestCase
         $r2 = new \RuntimeException('r2');
         $d1 = new \DivisionByZeroError('d1');
 
+        $lookup = [
+            'class' => [
+                self::class => [
+                    ['class', [self::class, parent::class]],
+                    ['namespace', ['Tailors\\Lib\\Injector', 'Tailors\\Lib', 'Tailors']],
+                    ['global'],
+                ],
+                parent::class => [
+                    ['class', [parent::class]],
+                    ['namespace', ['Tailors\\Lib\\Injector', 'Tailors\\Lib', 'Tailors']],
+                    ['global'],
+                ],
+            ],
+            'method' => [
+                'testLookupInstance' => [
+                    self::class => [
+                        ['method', ['testLookupInstance', [self::class, parent::class]]],
+                        ['class', [self::class, parent::class]],
+                        ['namespace', ['Tailors\\Lib\\Injector', 'Tailors\\Lib', 'Tailors']],
+                        ['global'],
+                    ],
+                ],
+            ],
+        ];
+
         return [
             'class-#00' => [
-                [], new ClassContext(self::class),
-                self::class, null,
+                [],
+                self::class, $lookup['class'][self::class],
+                [null],
             ],
             'class-#01' => [
                 [
@@ -708,15 +780,15 @@ final class ContainerTest extends TestCase
                     'function'  => [],
                     'global'    => [],
                 ],
-                new ClassContext(self::class),
-                self::class, null,
+                self::class, $lookup['class'][self::class],
+                [null],
             ],
             'class-#02' => [
                 [
                     'global' => [\Exception::class => $e1],
                 ],
-                new ClassContext(self::class),
-                \Exception::class, $e1,
+                \Exception::class, $lookup['class'][self::class],
+                [['global', \Exception::class], $e1],
             ],
             'class-#03' => [
                 [
@@ -728,8 +800,8 @@ final class ContainerTest extends TestCase
                     ],
                     'global' => [\Exception::class => $e2],
                 ],
-                new ClassContext(self::class),
-                \Exception::class, $e1,
+                \Exception::class, $lookup['class'][self::class],
+                [['class', self::class, \Exception::class], $e1],
             ],
             'class-#04' => [
                 [
@@ -741,8 +813,8 @@ final class ContainerTest extends TestCase
                     ],
                     'global' => [\Exception::class => $e2],
                 ],
-                new ClassContext(self::class),
-                \Exception::class, $e1,
+                \Exception::class, $lookup['class'][self::class],
+                [['class', parent::class, \Exception::class], $e1],
             ],
             'class-#05' => [
                 [
@@ -758,8 +830,8 @@ final class ContainerTest extends TestCase
                     ],
                     'global' => [\Exception::class => $e3],
                 ],
-                new ClassContext(self::class),
-                \Exception::class, $e2,
+                \Exception::class, $lookup['class'][self::class],
+                [['class', self::class, \Exception::class], $e2],
             ],
             'class-#06' => [
                 [
@@ -775,8 +847,8 @@ final class ContainerTest extends TestCase
                     ],
                     'global' => [\Exception::class => $e3],
                 ],
-                new ClassContext(parent::class),
-                \Exception::class, $e1,
+                \Exception::class, $lookup['class'][parent::class],
+                [['class', parent::class, \Exception::class], $e1],
             ],
             'class-#07' => [
                 [
@@ -788,8 +860,8 @@ final class ContainerTest extends TestCase
                     ],
                     'global' => [\Exception::class => $e2],
                 ],
-                new ClassContext(self::class),
-                \Exception::class, $e1,
+                \Exception::class, $lookup['class'][self::class],
+                [['namespace', 'Tailors\\Lib\\Injector', \Exception::class], $e1],
             ],
             'class-#08' => [
                 [
@@ -803,8 +875,8 @@ final class ContainerTest extends TestCase
                     ],
                     'global' => [\Exception::class => $e3],
                 ],
-                new ClassContext(self::class),
-                \Exception::class, $e2,
+                \Exception::class, $lookup['class'][self::class],
+                [['namespace', 'Tailors\\Lib', \Exception::class], $e2],
             ],
             'class-#09' => [
                 [
@@ -821,8 +893,8 @@ final class ContainerTest extends TestCase
                     ],
                     'global' => [\Exception::class => $e2],
                 ],
-                new ClassContext(self::class),
-                \Exception::class, $e1,
+                \Exception::class, $lookup['class'][self::class],
+                [['namespace', 'Tailors', \Exception::class], $e1],
             ],
             'class-#10' => [
                 [
@@ -839,15 +911,15 @@ final class ContainerTest extends TestCase
                     ],
                     'global' => [\Exception::class => $e2],
                 ],
-                new ClassContext(self::class),
-                \RuntimeException::class, $r1,
+                \RuntimeException::class, $lookup['class'][self::class],
+                [['namespace', 'Tailors\\Lib', \RuntimeException::class], $r1],
             ],
             'method-#01' => [
                 [
                     'global' => [\Exception::class => $e1],
                 ],
-                new MethodContext('testLookupInstance', self::class),
-                \Exception::class, $e1,
+                \Exception::class, $lookup['method']['testLookupInstance'][self::class],
+                [['global', \Exception::class], $e1],
             ],
             'method-#02' => [
                 [
@@ -858,8 +930,8 @@ final class ContainerTest extends TestCase
                     ],
                     'global' => [\Exception::class => $e2],
                 ],
-                new MethodContext('testLookupInstance', self::class),
-                \Exception::class, $e1,
+                \Exception::class, $lookup['method']['testLookupInstance'][self::class],
+                [['namespace', 'Tailors', \Exception::class], $e1],
             ],
             'method-#03' => [
                 [
@@ -870,8 +942,8 @@ final class ContainerTest extends TestCase
                     ],
                     'global' => [\Exception::class => $e2],
                 ],
-                new MethodContext('testLookupInstance', self::class),
-                \Exception::class, $e1,
+                \Exception::class, $lookup['method']['testLookupInstance'][self::class],
+                [['namespace', 'Tailors\\Lib', \Exception::class], $e1],
             ],
             'method-#04' => [
                 [
@@ -882,8 +954,20 @@ final class ContainerTest extends TestCase
                     ],
                     'global' => [\Exception::class => $e2],
                 ],
-                new MethodContext('testLookupInstance', self::class),
-                \Exception::class, $e1,
+                \Exception::class, $lookup['method']['testLookupInstance'][self::class],
+                [['namespace', 'Tailors\\Lib\\Injector', \Exception::class], $e1],
+            ],
+
+            'shallow-#99' => [
+                [
+                    'namespace' => [
+                        'Tailors' => [
+                            \Exception::class => $e1,
+                        ],
+                    ],
+                ],
+                'Tailors', ['namespace'],
+                [null],
             ],
         ];
     }
@@ -893,13 +977,20 @@ final class ContainerTest extends TestCase
      *
      * @psalm-param TInstances $instances
      * @psalm-param class-string $class
+     * @psalm-param TLookupArray $lookup
+     * @psalm-param list{0:mixed, 1?:mixed} $expected
      *
      * @psalm-suppress MissingThrowsDocblock
      */
-    public function testLookupInstance(array $instances, ContextInterface $context, string $class, mixed $expected): void
+    public function testLookupInstance(array $instances, string $class, array $lookup, array $expected): void
     {
         $container = new Container([], $instances);
-        $this->assertSame($expected, $container->lookupInstance($class, $context));
+        if (count($expected) >= 2) {
+            $this->assertSame($expected[0], $container->lookupInstance($class, $lookup, $instance));
+            $this->assertSame($expected[1], $instance);
+        } else {
+            $this->assertSame($expected[0], $container->lookupInstance($class, $lookup));
+        }
     }
 
     /**
@@ -908,9 +999,9 @@ final class ContainerTest extends TestCase
      *
      * @psalm-return iterable<array-key,list{
      *  TFactories,
-     *  ContextInterface,
      *  class-string,
-     *  mixed
+     *  TLookupArray,
+     *  list{0: mixed, 1?: mixed}
      * }>
      */
     public function provLookupFactory(): iterable
@@ -922,10 +1013,36 @@ final class ContainerTest extends TestCase
         $f5 = $this->createStub(FactoryInterface::class);
         $f6 = $this->createStub(FactoryInterface::class);
 
+        $lookup = [
+            'class' => [
+                self::class => [
+                    ['class', [self::class, parent::class]],
+                    ['namespace', ['Tailors\\Lib\\Injector', 'Tailors\\Lib', 'Tailors']],
+                    ['global'],
+                ],
+                parent::class => [
+                    ['class', [parent::class]],
+                    ['namespace', ['Tailors\\Lib\\Injector', 'Tailors\\Lib', 'Tailors']],
+                    ['global'],
+                ],
+            ],
+            'method' => [
+                'testLookupFactory' => [
+                    self::class => [
+                        ['method', ['testLookupFactory', [self::class, parent::class]]],
+                        ['class', [self::class, parent::class]],
+                        ['namespace', ['Tailors\\Lib\\Injector', 'Tailors\\Lib', 'Tailors']],
+                        ['global'],
+                    ],
+                ],
+            ],
+        ];
+
         return [
             'class-#00' => [
-                [], new ClassContext(self::class),
-                self::class, null,
+                [],
+                self::class, $lookup['class'][self::class],
+                [null],
             ],
             'class-#01' => [
                 [
@@ -935,15 +1052,15 @@ final class ContainerTest extends TestCase
                     'function'  => [],
                     'global'    => [],
                 ],
-                new ClassContext(self::class),
-                self::class, null,
+                self::class, $lookup['class'][self::class],
+                [null],
             ],
             'class-#02' => [
                 [
                     'global' => [\Exception::class => $f1],
                 ],
-                new ClassContext(self::class),
-                \Exception::class, $f1,
+                \Exception::class, $lookup['class'][self::class],
+                [['global', \Exception::class], $f1],
             ],
             'class-#03' => [
                 [
@@ -955,8 +1072,8 @@ final class ContainerTest extends TestCase
                     ],
                     'global' => [\Exception::class => $f2],
                 ],
-                new ClassContext(self::class),
-                \Exception::class, $f1,
+                \Exception::class, $lookup['class'][self::class],
+                [['class', self::class, \Exception::class], $f1],
             ],
             'class-#04' => [
                 [
@@ -968,8 +1085,8 @@ final class ContainerTest extends TestCase
                     ],
                     'global' => [\Exception::class => $f2],
                 ],
-                new ClassContext(self::class),
-                \Exception::class, $f1,
+                \Exception::class, $lookup['class'][self::class],
+                [['class', parent::class, \Exception::class], $f1],
             ],
             'class-#05' => [
                 [
@@ -985,8 +1102,8 @@ final class ContainerTest extends TestCase
                     ],
                     'global' => [\Exception::class => $f3],
                 ],
-                new ClassContext(self::class),
-                \Exception::class, $f2,
+                \Exception::class, $lookup['class'][self::class],
+                [['class', self::class, \Exception::class], $f2],
             ],
             'class-#06' => [
                 [
@@ -1002,8 +1119,8 @@ final class ContainerTest extends TestCase
                     ],
                     'global' => [\Exception::class => $f3],
                 ],
-                new ClassContext(parent::class),
-                \Exception::class, $f1,
+                \Exception::class, $lookup['class'][parent::class],
+                [['class', parent::class, \Exception::class], $f1],
             ],
             'class-#07' => [
                 [
@@ -1015,8 +1132,8 @@ final class ContainerTest extends TestCase
                     ],
                     'global' => [\Exception::class => $f2],
                 ],
-                new ClassContext(self::class),
-                \Exception::class, $f1,
+                \Exception::class, $lookup['class'][self::class],
+                [['namespace', 'Tailors\\Lib\\Injector', \Exception::class], $f1],
             ],
             'class-#08' => [
                 [
@@ -1030,8 +1147,8 @@ final class ContainerTest extends TestCase
                     ],
                     'global' => [\Exception::class => $f3],
                 ],
-                new ClassContext(self::class),
-                \Exception::class, $f2,
+                \Exception::class, $lookup['class'][self::class],
+                [['namespace', 'Tailors\\Lib', \Exception::class], $f2],
             ],
             'class-#09' => [
                 [
@@ -1048,8 +1165,8 @@ final class ContainerTest extends TestCase
                     ],
                     'global' => [\Exception::class => $f2],
                 ],
-                new ClassContext(self::class),
-                \Exception::class, $f1,
+                \Exception::class, $lookup['class'][self::class],
+                [['namespace', 'Tailors', \Exception::class], $f1],
             ],
             'class-#10' => [
                 [
@@ -1066,15 +1183,15 @@ final class ContainerTest extends TestCase
                     ],
                     'global' => [\Exception::class => $f2],
                 ],
-                new ClassContext(self::class),
-                \RuntimeException::class, $f4,
+                \RuntimeException::class, $lookup['class'][self::class],
+                [['namespace', 'Tailors\\Lib', \RuntimeException::class], $f4],
             ],
             'method-#01' => [
                 [
                     'global' => [\Exception::class => $f1],
                 ],
-                new MethodContext('testLookupFactory', self::class),
-                \Exception::class, $f1,
+                \Exception::class, $lookup['method']['testLookupFactory'][self::class],
+                [['global', \Exception::class], $f1],
             ],
             'method-#02' => [
                 [
@@ -1085,8 +1202,8 @@ final class ContainerTest extends TestCase
                     ],
                     'global' => [\Exception::class => $f2],
                 ],
-                new MethodContext('testLookupFactory', self::class),
-                \Exception::class, $f1,
+                \Exception::class, $lookup['method']['testLookupFactory'][self::class],
+                [['namespace', 'Tailors', \Exception::class], $f1],
             ],
             'method-#03' => [
                 [
@@ -1097,8 +1214,8 @@ final class ContainerTest extends TestCase
                     ],
                     'global' => [\Exception::class => $f2],
                 ],
-                new MethodContext('testLookupFactory', self::class),
-                \Exception::class, $f1,
+                \Exception::class, $lookup['method']['testLookupFactory'][self::class],
+                [['namespace', 'Tailors\\Lib', \Exception::class], $f1],
             ],
             'method-#04' => [
                 [
@@ -1109,8 +1226,20 @@ final class ContainerTest extends TestCase
                     ],
                     'global' => [\Exception::class => $f2],
                 ],
-                new MethodContext('testLookupFactory', self::class),
-                \Exception::class, $f1,
+                \Exception::class, $lookup['method']['testLookupFactory'][self::class],
+                [['namespace', 'Tailors\\Lib\\Injector', \Exception::class], $f1],
+            ],
+
+            'shallow-#99' => [
+                [
+                    'namespace' => [
+                        'Tailors' => [
+                            \Exception::class => $f1,
+                        ],
+                    ],
+                ],
+                'Tailors', ['namespace'],
+                [null],
             ],
         ];
     }
@@ -1120,12 +1249,19 @@ final class ContainerTest extends TestCase
      *
      * @psalm-param TFactories $factories
      * @psalm-param class-string $class
+     * @psalm-param TLookupArray $lookup
+     * @psalm-param list{0: mixed, 1?: mixed} $expected
      *
      * @psalm-suppress MissingThrowsDocblock
      */
-    public function testLookupFactory(array $factories, ContextInterface $context, string $class, mixed $expected): void
+    public function testLookupFactory(array $factories, string $class, array $lookup, array $expected): void
     {
         $container = new Container([], [], $factories);
-        $this->assertSame($expected, $container->lookupFactory($class, $context));
+        if (count($expected) >= 2) {
+            $this->assertSame($expected[0], $container->lookupFactory($class, $lookup, $factory));
+            $this->assertSame($expected[1], $factory);
+        } else {
+            $this->assertSame($expected[0], $container->lookupFactory($class, $lookup));
+        }
     }
 }

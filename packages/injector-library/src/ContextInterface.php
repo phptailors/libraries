@@ -5,18 +5,12 @@ namespace Tailors\Lib\Injector;
 /**
  * @author Paweł Tomulik <pawel@tomulik.pl>
  *
- * @psalm-type TLookupScopes list<
- *      MethodScopeLookupInterface |
- *      ClassScopeLookupInterface |
- *      FunctionScopeLookupInterface |
- *      NamespaceScopeLookupInterface |
- *      GlobalScopeLookupInterface
- *  >
+ * @psalm-type TLookupArray array<array-key|array>
  */
 interface ContextInterface
 {
     /**
-     * @psalm-return TLookupScopes
+     * @psalm-return TLookupArray
      */
-    public function getLookupScopes(): array;
+    public function getLookupArray(): array;
 }

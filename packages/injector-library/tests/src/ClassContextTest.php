@@ -49,7 +49,7 @@ final class ClassContextTest extends TestCase
     /**
      * @psalm-return iterable<array-key, list{class-string, array}>
      */
-    public static function provGetLookupScopes(): iterable
+    public static function provGetLookupArray(): iterable
     {
         $parents = array_values(class_parents(self::class));
         $interfaces = array_values(class_implements(self::class));
@@ -67,7 +67,7 @@ final class ClassContextTest extends TestCase
                             \Throwable::class,
                         ],
                     ],
-                    ['global', null],
+                    ['global'],
                 ],
             ],
             'RuntimeException' => [
@@ -82,7 +82,7 @@ final class ClassContextTest extends TestCase
                             \Throwable::class,
                         ],
                     ],
-                    ['global', null],
+                    ['global'],
                 ],
             ],
             'LengthException' => [
@@ -98,7 +98,7 @@ final class ClassContextTest extends TestCase
                             \Throwable::class,
                         ],
                     ],
-                    ['global', null],
+                    ['global'],
                 ],
             ],
             self::class => [
@@ -116,26 +116,22 @@ final class ClassContextTest extends TestCase
                             'Tailors',
                         ],
                     ],
-                    ['global', null],
+                    ['global'],
                 ],
             ],
         ];
     }
 
     /**
-     * @dataProvider provGetLookupScopes
+     * @dataProvider provGetLookupArray
      *
      * @psalm-param class-string $name
      *
      * @psalm-suppress MissingThrowsDocblock
      */
-    public function testGetLookupScopes(string $name, array $expected): void
+    public function testGetLookupArray(string $name, array $expected): void
     {
         $context = new ClassContext($name);
-        $scopes = array_map(
-            fn (ScopeLookupInterface $scope): array => [$scope->getScopeType(), $scope->getScopeLookup()],
-            $context->getLookupScopes()
-        );
-        $this->assertSame($expected, $scopes);
+        $this->assertSame($expected, $context->getLookupArray());
     }
 }

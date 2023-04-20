@@ -50,7 +50,7 @@ final class MethodContextTest extends TestCase
     /**
      * @psalm-return iterable<array-key, list{list{string,class-string}, array}>
      */
-    public static function provGetLookupScopes(): iterable
+    public static function provGetLookupArray(): iterable
     {
         $parents = array_values(class_parents(self::class));
         $interfaces = array_values(class_implements(self::class));
@@ -79,7 +79,7 @@ final class MethodContextTest extends TestCase
                             \Throwable::class,
                         ],
                     ],
-                    ['global', null],
+                    ['global'],
                 ],
             ],
             'RuntimeException::foo' => [
@@ -106,7 +106,7 @@ final class MethodContextTest extends TestCase
                             \Throwable::class,
                         ],
                     ],
-                    ['global', null],
+                    ['global'],
                 ],
             ],
             'LengthException::foo' => [
@@ -135,7 +135,7 @@ final class MethodContextTest extends TestCase
                             \Throwable::class,
                         ],
                     ],
-                    ['global', null],
+                    ['global'],
                 ],
             ],
             self::class.'::foo' => [
@@ -160,26 +160,22 @@ final class MethodContextTest extends TestCase
                             'Tailors',
                         ],
                     ],
-                    ['global', null],
+                    ['global'],
                 ],
             ],
         ];
     }
 
     /**
-     * @dataProvider provGetLookupScopes
+     * @dataProvider provGetLookupArray
      *
      * @psalm-param list{string,class-string} $args
      *
      * @psalm-suppress MissingThrowsDocblock
      */
-    public function testGetLookupScopes(array $args, array $expected): void
+    public function testGetLookupArray(array $args, array $expected): void
     {
         $context = new MethodContext(...$args);
-        $scopes = array_map(
-            fn (ScopeLookupInterface $scope): array => [$scope->getScopeType(), $scope->getScopeLookup()],
-            $context->getLookupScopes()
-        );
-        $this->assertSame($expected, $scopes);
+        $this->assertSame($expected, $context->getLookupArray());
     }
 }
