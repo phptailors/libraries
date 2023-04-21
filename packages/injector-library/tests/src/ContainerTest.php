@@ -1264,4 +1264,77 @@ final class ContainerTest extends TestCase
             $this->assertSame($expected[0], $container->lookupFactory($class, $lookup));
         }
     }
+
+    /**
+     * @psalm-return iterable<array-key, list{TScopePath}>
+     */
+    public function provScopePathOfInvalidDepth(): iterable
+    {
+        return [
+            [['global', 'redundant']],
+            [['class', 'Foo', 'redundant']],
+            [['function', 'foo', 'redundant']],
+            [['namespace', 'Foo', 'redundant']],
+        ];
+    }
+
+    /**
+     * @dataProvider provScopePathOfInvalidDepth
+     *
+     * @psalm-param TScopePath $scope
+     *
+     * @psalm-suppress MissingThrowsDocblock
+     */
+    public function testSetAliasWithScopePathOfInvalidDepth(array $scope): void
+    {
+        $container = new Container();
+        $container->setAlias('X', 'x', $scope);
+        $this->assertSame([], $container->getAliases());
+    }
+
+    /**
+     * @dataProvider provScopePathOfInvalidDepth
+     *
+     * @psalm-param TScopePath $scope
+     *
+     * @psalm-suppress MissingThrowsDocblock
+     */
+    public function testGetAliasWithScopePathOfInvalidDepth(array $scope): void
+    {
+        $aliases = [
+            'global'    => ['x' => 'X'],
+            'class'     => ['Foo' => ['x' => 'X']],
+            'function'  => ['foo' => ['x' => 'X']],
+            'namespace' => ['Foo' => ['x' => 'X']],
+        ];
+        $container = new Container($aliases);
+        $this->assertNull($container->getAlias('x', $scope));
+    }
+
+    /**
+     * @psalm-suppress MissingThrowsDocblock
+     */
+    public function testGetAliasWithInexistentPath(): void
+    {
+        $container = new Container([]);
+        $this->assertNull($container->getAlias('x'));
+    }
+
+    /**
+     * @psalm-suppress MissingThrowsDocblock
+     */
+    public function testGetInstanceWithInexistentPath(): void
+    {
+        $container = new Container([]);
+        $this->assertNull($container->getInstance(\Exception::class));
+    }
+
+    /**
+     * @psalm-suppress MissingThrowsDocblock
+     */
+    public function testGetFactoryWithInexistentPath(): void
+    {
+        $container = new Container([]);
+        $this->assertNull($container->getFactory(\Exception::class));
+    }
 }
