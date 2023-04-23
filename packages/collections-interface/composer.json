@@ -1,6 +1,6 @@
 {
-    "name": "phptailors/injector-library",
-    "description": "Dependency injection library",
+    "name": "phptailors/collections-interface",
+    "description": "Objects and functions operating on collections",
     "type": "library",
     "minimum-stability": "dev",
     "prefer-stable": true,
@@ -19,21 +19,15 @@
     },
     "require": {
         "php": "^8.1",
-        "phptailors/injector-interface": "*",
-        "phptailors/collections-library": "*"
-    },
-    "provide": {
-        "phptailors/injector-implementation": "*",
-        "psr/container-implementation": "^2.0"
+        "psr/container": "^2.0"
     },
     "require-dev": {
         "phptailors/phpunit-inheritance": "dev-master",
-        "phptailors/phpunit-arrays": "dev-master",
         "phpunit/phpunit": "^9.5.10 || ^10"
     },
     "autoload": {
       "psr-4" : {
-        "Tailors\\Lib\\Injector\\" : "src/"
+        "Tailors\\Lib\\Collections\\" : "src/"
       },
       "exclude-from-classmap": [
         "/tests/"
@@ -41,7 +35,7 @@
     },
     "autoload-dev": {
       "psr-4" : {
-        "Tailors\\Lib\\Injector\\" : "tests/src/"
+        "Tailors\\Lib\\Collections\\" : "tests/src/"
       }
     }
 }

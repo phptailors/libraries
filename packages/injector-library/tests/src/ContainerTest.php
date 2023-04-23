@@ -175,7 +175,7 @@ final class ContainerTest extends TestCase
      *      mixed
      * }>
      */
-    public static function provAccessAlias(): iterable
+    public static function provSetAndGetAlias(): iterable
     {
         return [
             '#00' => [
@@ -235,14 +235,14 @@ final class ContainerTest extends TestCase
     }
 
     /**
-     * @dataProvider provAccessAlias
+     * @dataProvider provSetAndGetAlias
      *
      * @psalm-param list{0?: TAliases, 1?: TInstances, 2?: TFactories} $ctorArgs
      * @psalm-param list{0: string, 1: string, 2?: TScopePath} $args
      *
      * @psalm-suppress MissingThrowsDocblock
      */
-    public function testAccessAlias(array $ctorArgs, array $args, mixed $aliases): void
+    public function testSetAndGetAlias(array $ctorArgs, array $args, mixed $aliases): void
     {
         $container = new Container(...$ctorArgs);
         $container->setAlias(...$args);
@@ -261,7 +261,7 @@ final class ContainerTest extends TestCase
      *      mixed
      * }>
      */
-    public static function provAccessInstance(): iterable
+    public static function provSetAndGetInstance(): iterable
     {
         $e = new \Exception('e');
         $e1 = new \Exception('e1');
@@ -338,14 +338,14 @@ final class ContainerTest extends TestCase
     }
 
     /**
-     * @dataProvider provAccessInstance
+     * @dataProvider provSetAndGetInstance
      *
      * @psalm-param list{0?: TAliases, 1?: TInstances, 2?: TFactories} $ctorArgs
      * @psalm-param list{0: object, 1: class-string, 2?: TScopePath} $args
      *
      * @psalm-suppress MissingThrowsDocblock
      */
-    public function testAccessInstance(array $ctorArgs, array $args, mixed $instances): void
+    public function testSetAndGetInstance(array $ctorArgs, array $args, mixed $instances): void
     {
         $container = new Container(...$ctorArgs);
         $container->setInstance(...$args);
@@ -364,7 +364,7 @@ final class ContainerTest extends TestCase
      *      mixed
      * }>
      */
-    public function provAccessFactory(): iterable
+    public function provSetAndGetFactory(): iterable
     {
         $f1 = $this->createStub(FactoryInterface::class);
         $f2 = $this->createStub(FactoryInterface::class);
@@ -441,14 +441,14 @@ final class ContainerTest extends TestCase
     }
 
     /**
-     * @dataProvider provAccessFactory
+     * @dataProvider provSetAndGetFactory
      *
      * @psalm-param list{0?: TAliases, 1?: TInstances, 2?: TFactories} $ctorArgs
      * @psalm-param list{0: FactoryInterface<object>, 1: class-string, 2?: TScopePath} $args
      *
      * @psalm-suppress MissingThrowsDocblock
      */
-    public function testAccessFactory(array $ctorArgs, array $args, mixed $factories): void
+    public function testSetAndGetFactory(array $ctorArgs, array $args, mixed $factories): void
     {
         $container = new Container(...$ctorArgs);
         $container->setFactory(...$args);
@@ -1295,7 +1295,7 @@ final class ContainerTest extends TestCase
     /**
      * @dataProvider provScopePathOfInvalidDepth
      *
-     * @psalm-param TScopePath $scope
+     * @psalm-param non-empty-list<string> $scope
      *
      * @psalm-suppress MissingThrowsDocblock
      */
@@ -1336,5 +1336,234 @@ final class ContainerTest extends TestCase
     {
         $container = new Container([]);
         $this->assertNull($container->getFactory(\Exception::class));
+    }
+
+    /**
+     * @psalm-return iterable<array-key, list{TAliases, list{0: string, 1?: TScopePath}, mixed}>
+     */
+    public function provDelAlias(): iterable
+    {
+        return [
+            '#00' => [
+                [],
+                ['x'],
+                [],
+            ],
+
+            '#01' => [
+                [],
+                ['x', ['global']],
+                [],
+            ],
+
+            '#02' => [
+                [],
+                ['x', ['function', 'foo']],
+                [],
+            ],
+
+            '#03' => [
+                ['global' => ['x' => 'X', 'y' => 'Y']],
+                ['x'],
+                ['global' => ['y' => 'Y']],
+            ],
+
+            '#04' => [
+                ['global' => ['x' => 'X', 'y' => 'Y']],
+                ['x', ['global']],
+                ['global' => ['y' => 'Y']],
+            ],
+
+            '#05' => [
+                ['global' => ['x' => 'X', 'y' => 'Y'], 'function' => ['foo' => ['x' => 'X']]],
+                ['x', ['function', 'foo']],
+                ['global' => ['x' => 'X', 'y' => 'Y'], 'function' => ['foo' => []]],
+            ],
+
+            '#06' => [
+                ['global' => ['x' => 'X', 'y' => 'Y']],
+                ['x', ['global', 'foo']],
+                ['global' => ['x' => 'X', 'y' => 'Y']],
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider provDelAlias
+     *
+     * @psalm-suppress MissingThrowsDocblock
+     *
+     * @psalm-param TAliases $aliases,
+     * @psalm-param list{0: string, 1?:TScopePath} $args
+     */
+    public function testDelAlias(array $aliases, array $args, mixed $expected): void
+    {
+        $container = new Container($aliases);
+        $container->delAlias(...$args);
+        $this->assertSame($expected, $container->getAliases());
+    }
+
+    /**
+     * @psalm-return iterable<array-key, list{TInstances, list{0: class-string, 1?: TScopePath}, mixed}>
+     */
+    public function provDelInstance(): iterable
+    {
+        $e1 = new \Exception('e1');
+        $e2 = new \Exception('e2');
+        $r1 = new \RuntimeException('r1');
+
+        /** @psalm-var TInstances */
+        $instances1 = [
+            'global' => [\Exception::class => $e1, \RuntimeException::class => $r1],
+        ];
+
+        /** @psalm-var TInstances */
+        $instances2 = [
+            'global'   => [\Exception::class => $e1, \RuntimeException::class => $r1],
+            'function' => ['foo' => [\Exception::class => $e2]],
+        ];
+
+        return [
+            '#00' => [
+                [],
+                [\Exception::class],
+                [],
+            ],
+
+            '#01' => [
+                [],
+                [\Exception::class, ['global']],
+                [],
+            ],
+
+            '#02' => [
+                [],
+                [\Exception::class, ['function', 'foo']],
+                [],
+            ],
+
+            '#03' => [
+                $instances1,
+                [\RuntimeException::class],
+                ['global' => [\Exception::class => $e1]],
+            ],
+
+            '#04' => [
+                $instances1,
+                [\Exception::class, ['global']],
+                ['global' => [\RuntimeException::class => $r1]],
+            ],
+
+            '#05' => [
+                $instances2,
+                [\Exception::class, ['function', 'foo']],
+                [
+                    'global'   => [\Exception::class => $e1, \RuntimeException::class => $r1],
+                    'function' => ['foo' => []],
+                ],
+            ],
+
+            '#06' => [
+                $instances1,
+                [\Exception::class, ['global', 'foo']],
+                $instances1,
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider provDelInstance
+     *
+     * @psalm-suppress MissingThrowsDocblock
+     *
+     * @psalm-param TInstances $instances,
+     * @psalm-param list{0: string, 1?:TScopePath} $args
+     */
+    public function testDelInstance(array $instances, array $args, mixed $expected): void
+    {
+        $container = new Container([], $instances);
+        $container->delInstance(...$args);
+        $this->assertSame($expected, $container->getInstances());
+    }
+
+    /**
+     * @psalm-return iterable<array-key, list{TFactories, list{0: class-string, 1?: TScopePath}, mixed}>
+     */
+    public function provDelFactory(): iterable
+    {
+        $f1 = $this->createStub(FactoryInterface::class);
+        $f2 = $this->createStub(FactoryInterface::class);
+        $f3 = $this->createStub(FactoryInterface::class);
+
+        /** @psalm-var TFactories */
+        $factories1 = ['global' => [\Exception::class => $f1, \RuntimeException::class => $f3]];
+
+        /** @psalm-var TFactories */
+        $factories2 = [
+            'global'   => [\Exception::class => $f1, \RuntimeException::class => $f3],
+            'function' => ['foo' => [\Exception::class => $f2]],
+        ];
+
+        return [
+            '#00' => [
+                [],
+                [\Exception::class],
+                [],
+            ],
+
+            '#01' => [
+                [],
+                [\Exception::class, ['global']],
+                [],
+            ],
+
+            '#02' => [
+                [],
+                [\Exception::class, ['function', 'foo']],
+                [],
+            ],
+
+            '#03' => [
+                $factories1,
+                [\RuntimeException::class],
+                ['global' => [\Exception::class => $f1]],
+            ],
+
+            '#04' => [
+                $factories1,
+                [\Exception::class, ['global']],
+                ['global' => [\RuntimeException::class => $f3]],
+            ],
+
+            '#05' => [
+                $factories2,
+                [\Exception::class, ['function', 'foo']],
+                [
+                    'global'   => [\Exception::class => $f1, \RuntimeException::class => $f3],
+                    'function' => ['foo' => []],
+                ],
+            ],
+
+            '#06' => [
+                $factories1,
+                [\Exception::class, ['global', 'foo']],
+                $factories1,
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider provDelFactory
+     *
+     * @psalm-suppress MissingThrowsDocblock
+     *
+     * @psalm-param TFactories $factories,
+     * @psalm-param list{0: string, 1?:TScopePath} $args
+     */
+    public function testDelFactory(array $factories, array $args, mixed $expected): void
+    {
+        $container = new Container([], [], $factories);
+        $container->delFactory(...$args);
+        $this->assertSame($expected, $container->getFactories());
     }
 }

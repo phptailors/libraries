@@ -1,20 +1,44 @@
 <?php declare(strict_types=1);
 
-namespace Tailors\Lib\Injector;
+namespace Tailors\Lib\Collections;
 
 /**
+ * Provides static methods for accessing inner elements of nested arrays.
+ *
+ * A *nested array* is simply an array of arrays. For example:
+ *
+ *      $array = [
+ *          'foo' => [ 'baz' => 'FOO.BAZ' ],
+ *          'bar' => [ 'baz' => 'BAR.BAZ' ],
+ *      ];
+ *
+ * The inner elements can normally be accessed with multi-level indexing, for example:
+ *
+ *      $baz = $array['foo']['baz']
+ *
+ * The ``NestedArray`` allows accessing nested array elements using list of
+ * keys. For example:
+ *
+ *      NestedArray::get($array, ['foo', 'bar'], $baz);
+ *
+ * retrieves the ``$array['foo']['bar']`` and assigns it to ``$baz``.
+ *
  * @author Paweł Tomulik <pawel@tomulik.pl>
- *
- * @internal this class is not covered by backward compatibility promise
- *
- * @psalm-internal Tailors\Lib\Injector
  *
  * @psalm-type TLookupArray array<array-key|array>
  */
 final class NestedArray
 {
     /**
+     * Retrieve element of *$array* specified by *$path*.
+     *
+     * If *$array* has an element under *$path*, the method assigns its value
+     * to *$retval* and returns ``true``. If not, it returns ``false``.
+     *
      * @psalm-param array<array-key> $path
+     *
+     * @return bool ``true`` if *$array* has element specified by *$path*,
+     *              ``false`` otherwise
      */
     public static function get(array $array, array $path, mixed &$retval = null): bool
     {
@@ -35,6 +59,10 @@ final class NestedArray
     }
 
     /**
+     * Assigns *$value* to *$array* element specified by *$path*.
+     *
+     * Inner arrays are created if necessary.
+     *
      * @psalm-template T
      *
      * @psalm-param T $value
@@ -64,6 +92,12 @@ final class NestedArray
     }
 
     /**
+     * Unset *$array* element under *$path*.
+     *
+     * The (inner) array containing *$path* element may become empty due to
+     * deletion. Such an emptied array is left as is, i.e it's not
+     * automatically removed from the *$array*.
+     *
      * @psalm-param array<array-key> $path
      */
     public static function del(array &$array, array $path): void
@@ -96,9 +130,14 @@ final class NestedArray
     }
 
     /**
+     * Simple lookup algorithm, that searches for elements of nested array.
+     *
      * @psalm-param TLookupArray $lookup
      *
      * @psalm-return ?list<array-key>
+     *
+     * @return ?array returns the path to element found, or ``null`` if nothing
+     *                was found
      */
     public static function lookup(array $array, array $lookup, mixed &$retval = null): ?array
     {

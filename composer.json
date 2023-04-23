@@ -16,6 +16,8 @@
     },
     "autoload": {
         "exclude-from-classmap": [
+            "packages/collections-interface/tests/",
+            "packages/collections-library/tests/",
             "packages/context-interface/tests/",
             "packages/context-library/testing/",
             "packages/context-library/tests/",
@@ -36,6 +38,10 @@
             "packages/error-library/src/functions.php"
         ],
         "psr-4": {
+            "Tailors\\Lib\\Collections\\": [
+                "packages/collections-interface/src/",
+                "packages/collections-library/src/"
+            ],
             "Tailors\\Lib\\Context\\": [
                 "packages/context-interface/src/",
                 "packages/context-library/src/"
@@ -58,6 +64,10 @@
     "autoload-dev": {
         "psr-4": {
             "Tailors\\Docs\\Behat\\": "docs/sphinx/behat/",
+            "Tailors\\Lib\\Collections\\": [
+                "packages/collections-interface/tests/src/",
+                "packages/collections-library/tests/src/"
+            ],
             "Tailors\\Lib\\Context\\": [
                 "packages/context-interface/tests/src/",
                 "packages/context-library/tests/src/"
@@ -86,6 +96,8 @@
         "phpunit/phpunit": "^9.5.10 || ^10"
     },
     "replace": {
+        "phptailors/collections-interface": "self.version",
+        "phptailors/collections-library": "self.version",
         "phptailors/context-interface": "self.version",
         "phptailors/context-library": "self.version",
         "phptailors/error-interface": "self.version",
@@ -97,6 +109,7 @@
         "phptailors/singleton-testing": "self.version"
     },
     "provide": {
+        "phptailors/collections-implementation": "*",
         "phptailors/context-implementation": "*",
         "phptailors/error-implementation": "*",
         "phptailors/injector-implementation": "*",

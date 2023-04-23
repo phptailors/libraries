@@ -2,6 +2,8 @@
 
 namespace Tailors\Lib\Injector;
 
+use Tailors\Lib\Collections\NestedArray;
+
 /**
  * @author Paweł Tomulik <pawel@tomulik.pl>
  *
@@ -24,7 +26,7 @@ final class Container implements ContainerInterface
      *
      * @psalm-var array<TScopeType,int>
      */
-    private static array $scopeDepth = [
+    private static array $scopePathLength = [
         'class'     => 2,
         'function'  => 2,
         'method'    => 3,
@@ -93,12 +95,21 @@ final class Container implements ContainerInterface
     }
 
     /**
-     * @psalm-param TScopePath $scope
+     * @psalm-param non-empty-list<string> $scope
      */
     public function getAlias(string $alias, array $scope = null): ?string
     {
         /** @psalm-var ?string */
         return self::arrayGet($this->aliases, $alias, $scope);
+    }
+
+    /**
+     * @psalm-param non-empty-list<string> $scope
+     */
+    public function delAlias(string $alias, array $scope = null): void
+    {
+        /** @psalm-suppress MixedPropertyTypeCoercion */
+        self::arrayDel($this->aliases, $alias, $scope);
     }
 
     /**
@@ -118,7 +129,7 @@ final class Container implements ContainerInterface
      * @psalm-template TObj of object
      *
      * @psalm-param class-string<TObj> $class
-     * @psalm-param TScopePath $scope
+     * @psalm-param non-empty-list<string> $scope
      *
      * @psalm-return ?TObj
      */
@@ -126,6 +137,15 @@ final class Container implements ContainerInterface
     {
         /** @psalm-var ?TObj */
         return self::arrayGet($this->instances, $class, $scope);
+    }
+
+    /**
+     * @psalm-param non-empty-list<string> $scope
+     */
+    public function delInstance(string $class, array $scope = null): void
+    {
+        /** @psalm-suppress MixedPropertyTypeCoercion */
+        self::arrayDel($this->instances, $class, $scope);
     }
 
     /**
@@ -145,7 +165,7 @@ final class Container implements ContainerInterface
      * @psalm-template TObj of object
      *
      * @psalm-param class-string<TObj> $class
-     * @psalm-param TScopePath $scope
+     * @psalm-param non-empty-list<string> $scope
      *
      * @psalm-return ?FactoryInterface<TObj>
      */
@@ -153,6 +173,15 @@ final class Container implements ContainerInterface
     {
         /** @psalm-var ?FactoryInterface<TObj> */
         return self::arrayGet($this->factories, $class, $scope);
+    }
+
+    /**
+     * @psalm-param non-empty-list<string> $scope
+     */
+    public function delFactory(string $class, array $scope = null): void
+    {
+        /** @psalm-suppress MixedPropertyTypeCoercion */
+        self::arrayDel($this->factories, $class, $scope);
     }
 
     /**
@@ -201,13 +230,13 @@ final class Container implements ContainerInterface
     }
 
     /**
-     * @psalm-param TScopePath|null $scope
+     * @psalm-param non-empty-list<string>|null $scope
      */
     private static function arrayGet(array $array, string $key, ?array $scope): mixed
     {
         $scope ??= ['global'];
-        $scopeType = $scope[0];
-        if (count($scope) !== (self::$scopeDepth[$scopeType] ?? null)) {
+        $type = $scope[0];
+        if (count($scope) !== (self::$scopePathLength[$type] ?? null)) {
             return null; // FIXME: throw an exception instead?
         }
         if (!NestedArray::get($array, [...$scope, $key], $result)) {
@@ -223,12 +252,25 @@ final class Container implements ContainerInterface
     private static function arraySet(array &$array, string $key, mixed $value, ?array $scope): void
     {
         $scope ??= ['global'];
-        $scopeType = $scope[0];
-        if (count($scope) !== (self::$scopeDepth[$scopeType] ?? null)) {
+        $type = $scope[0];
+        if (count($scope) !== (self::$scopePathLength[$type] ?? null)) {
             return; // FIXME: throw an exception instead?
         }
 
         NestedArray::set($array, [...$scope, $key], $value);
+    }
+
+    /**
+     * @psalm-param non-empty-list<string>|null $scope
+     */
+    private static function arrayDel(array &$array, string $key, ?array $scope): void
+    {
+        $scope ??= ['global'];
+        $type = $scope[0];
+        if (count($scope) !== (self::$scopePathLength[$type] ?? null)) {
+            return; // FIXME: throw an exception instead?
+        }
+        NestedArray::del2($array, $scope, $key);
     }
 
     /**
@@ -242,8 +284,8 @@ final class Container implements ContainerInterface
             return null;
         }
 
-        $scopeType = $path[0];
-        if ((count($path) - 1) !== (self::$scopeDepth[$scopeType] ?? null)) {
+        $type = $path[0];
+        if ((count($path) - 1) !== (self::$scopePathLength[$type] ?? null)) {
             return null;
         }
 

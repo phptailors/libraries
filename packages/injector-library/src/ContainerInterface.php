@@ -58,9 +58,14 @@ interface ContainerInterface
     public function setAlias(string $abstract, string $alias, array $scope = null): void;
 
     /**
-     * @psalm-param TScopePath $scope
+     * @psalm-param non-empty-list<string> $scope
      */
     public function getAlias(string $alias, array $scope = null): ?string;
+
+    /**
+     * @psalm-param non-empty-list<string> $scope
+     */
+    public function delAlias(string $alias, array $scope = null): void;
 
     /**
      * @psalm-template TObj of object
@@ -75,11 +80,16 @@ interface ContainerInterface
      * @psalm-template TObj of object
      *
      * @psalm-param class-string<TObj> $class
-     * @psalm-param TScopePath $scope
+     * @psalm-param non-empty-list<string> $scope
      *
      * @psalm-return ?TObj
      */
     public function getInstance(string $class, array $scope = null): ?object;
+
+    /**
+     * @psalm-param non-empty-list<string> $scope
+     */
+    public function delInstance(string $class, array $scope = null): void;
 
     /**
      * @psalm-template TObj of object
@@ -94,11 +104,16 @@ interface ContainerInterface
      * @psalm-template TObj of object
      *
      * @psalm-param class-string<TObj> $class
-     * @psalm-param TScopePath $scope
+     * @psalm-param non-empty-list<string> $scope
      *
      * @psalm-return ?FactoryInterface<TObj>
      */
     public function getFactory(string $class, array $scope = null): ?FactoryInterface;
+
+    /**
+     * @psalm-param non-empty-list<string> $scope
+     */
+    public function delFactory(string $class, array $scope = null): void;
 
     /**
      * @psalm-param TLookupArray $lookup

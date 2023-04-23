@@ -1,17 +1,17 @@
 <?php declare(strict_types=1);
 
-namespace Tailors\Lib\Injector;
+namespace Tailors\Lib\Collections;
 
 use PHPUnit\Framework\TestCase;
 
 /**
  * @author Paweł Tomulik <pawel@tomulik.pl>
  *
- * @covers \Tailors\Lib\Injector\NestedArray
+ * @covers \Tailors\Lib\Collections\NestedArray
  *
  * @internal this class is not covered by backward compatibility promise
  *
- * @psalm-internal Tailors\Lib\Injector
+ * @psalm-internal Tailors\Lib\Collections
  */
 final class NestedArrayTest extends TestCase
 {
