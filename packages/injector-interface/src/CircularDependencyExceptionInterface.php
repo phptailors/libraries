@@ -2,6 +2,9 @@
 
 namespace Tailors\Lib\Injector;
 
-interface CircularDependencyExceptionInterface extends \Throwable
+/**
+ * @author Paweł Tomulik <pawel@tomulik.pl>
+ */
+interface CircularDependencyExceptionInterface extends ContainerExceptionInterface
 {
 }

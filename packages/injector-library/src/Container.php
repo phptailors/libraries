@@ -2,296 +2,162 @@
 
 namespace Tailors\Lib\Injector;
 
-use Tailors\Lib\Collections\NestedArray;
-
 /**
  * @author Paweł Tomulik <pawel@tomulik.pl>
  *
- * @internal this class is not covered by backward compatibility promise
- *
- * @psalm-internal Tailors\Lib\Injector
- *
- * @psalm-import-type TLookupArray from ContainerInterface
- * @psalm-import-type TScopeType from ContainerInterface
- * @psalm-import-type TScopePath from ContainerInterface
- * @psalm-import-type TItemPath from ContainerInterface
- * @psalm-import-type TAliases from ContainerInterface
- * @psalm-import-type TInstances from ContainerInterface
- * @psalm-import-type TFactories from ContainerInterface
+ * @psalm-type TContents array{
+ *      aliases?: array<string,string>,
+ *      instances?: array<string,object>,
+ *      bindings?: array<string,\Closure(ResolverInterface):mixed>,
+ *      singletons?: array<string,\Closure(ResolverInterface):object>
+ * }
  */
-final class Container implements ContainerInterface
+final class Container implements ContainerInterface, ResolverInterface
 {
     /**
-     * @psalm-readonly
-     *
-     * @psalm-var array<TScopeType,int>
+     * @psalm-var array{
+     *  aliases: class-string<AliasItem>,
+     *  instances: class-string<InstanceItem>,
+     *  bindings: class-string<BindingItem>,
+     *  singletons: class-string<SingletonItem>,
+     * }
      */
-    private static array $scopePathLength = [
-        'class'     => 2,
-        'function'  => 2,
-        'method'    => 3,
-        'namespace' => 2,
-        'global'    => 1,
+    private const ITEM_CLASSES = [
+        'aliases'    => AliasItem::class,
+        'instances'  => InstanceItem::class,
+        'bindings'   => BindingItem::class,
+        'singletons' => SingletonItem::class,
     ];
 
-    /**
-     * @psalm-var TAliases
-     */
-    private array $aliases;
+    /** @psalm-var TContents */
+    private array $contents;
+
+    private ResolverFactoryInterface $resolverFactory;
 
     /**
-     * @psalm-var TInstances
+     * @psalm-param TContents $contents
      */
-    private array $instances;
-
-    /**
-     * @psalm-var TFactories
-     */
-    private array $factories;
-
-    /**
-     * @psalm-param TAliases $aliases
-     * @psalm-param TInstances $instances
-     * @psalm-param TFactories $factories
-     */
-    public function __construct(array $aliases = [], array $instances = [], array $factories = [])
+    public function __construct(array $contents = [], ResolverFactoryInterface $resolverFactory = null)
     {
-        $this->aliases = $aliases;
-        $this->instances = $instances;
-        $this->factories = $factories;
+        $this->contents = $contents;
+        $this->resolverFactory = $resolverFactory ?? new ResolverFactory();
     }
 
     /**
-     * @psalm-return TAliases
+     * @psalm-return TContents
      */
-    public function getAliases(): array
+    public function getContents(): array
     {
-        return $this->aliases;
+        return $this->contents;
+    }
+
+    public function getResolverFactory(): ResolverFactoryInterface
+    {
+        return $this->resolverFactory;
     }
 
     /**
-     * @psalm-return TInstances
-     */
-    public function getInstances(): array
-    {
-        return $this->instances;
-    }
-
-    /**
-     * @psalm-return TFactories
-     */
-    public function getFactories(): array
-    {
-        return $this->factories;
-    }
-
-    /**
-     * @psalm-param TScopePath $scope
-     */
-    public function setAlias(string $abstract, string $alias, array $scope = null): void
-    {
-        /** @psalm-suppress MixedPropertyTypeCoercion */
-        self::arraySet($this->aliases, $alias, $abstract, $scope);
-    }
-
-    /**
-     * @psalm-param non-empty-list<string> $scope
-     */
-    public function getAlias(string $alias, array $scope = null): ?string
-    {
-        /** @psalm-var ?string */
-        return self::arrayGet($this->aliases, $alias, $scope);
-    }
-
-    /**
-     * @psalm-param non-empty-list<string> $scope
-     */
-    public function delAlias(string $alias, array $scope = null): void
-    {
-        /** @psalm-suppress MixedPropertyTypeCoercion */
-        self::arrayDel($this->aliases, $alias, $scope);
-    }
-
-    /**
-     * @psalm-template TObj of object
+     * Finds an entry of the container by its identifier and returns it.
      *
-     * @psalm-param TObj $object
-     * @psalm-param class-string<TObj> $class
-     * @psalm-param TScopePath $scope
+     * @param string $id identifier of the entry to look for
+     *
+     * @throws NotFoundExceptionInterface
+     * @throws ContainerExceptionInterface
      */
-    public function setInstance(object $object, string $class, array $scope = null): void
+    public function get(string $id): mixed
     {
-        /** @psalm-suppress MixedPropertyTypeCoercion */
-        self::arraySet($this->instances, $class, $object, $scope);
+        return $this->resolve($id);
     }
 
     /**
-     * @psalm-template TObj of object
-     *
-     * @psalm-param class-string<TObj> $class
-     * @psalm-param non-empty-list<string> $scope
-     *
-     * @psalm-return ?TObj
+     * @throws NotFoundExceptionInterface
+     * @throws ContainerExceptionInterface
      */
-    public function getInstance(string $class, array $scope = null): ?object
+    public function resolve(string $id): mixed
     {
-        /** @psalm-var ?TObj */
-        return self::arrayGet($this->instances, $class, $scope);
+        return $this->resolverFactory->getResolver($this)->resolve($id);
     }
 
     /**
-     * @psalm-param non-empty-list<string> $scope
+     * Returns true if the container can return an entry for the given
+     * identifier. Returns false otherwise.
+     *
+     * `has($id)` returning true does not mean that `get($id)` will not throw an exception.
+     * It does however mean that `get($id)` will not throw a `NotFoundExceptionInterface`.
+     *
+     * @param string $id identifier of the entry to look for
      */
-    public function delInstance(string $class, array $scope = null): void
+    public function has(string $id): bool
     {
-        /** @psalm-suppress MixedPropertyTypeCoercion */
-        self::arrayDel($this->instances, $class, $scope);
+        // FIXME: implement deeper inspection (walk through aliases, etc.).
+        return $this->hasItem($id);
     }
 
-    /**
-     * @psalm-template TObj of object
-     *
-     * @psalm-param FactoryInterface<TObj> $factory
-     * @psalm-param class-string<TObj> $class
-     * @psalm-param TScopePath $scope
-     */
-    public function setFactory(FactoryInterface $factory, string $class, array $scope = null): void
+    public function hasItem(string $id): bool
     {
-        /** @psalm-suppress MixedPropertyTypeCoercion */
-        self::arraySet($this->factories, $class, $factory, $scope);
-    }
-
-    /**
-     * @psalm-template TObj of object
-     *
-     * @psalm-param class-string<TObj> $class
-     * @psalm-param non-empty-list<string> $scope
-     *
-     * @psalm-return ?FactoryInterface<TObj>
-     */
-    public function getFactory(string $class, array $scope = null): ?FactoryInterface
-    {
-        /** @psalm-var ?FactoryInterface<TObj> */
-        return self::arrayGet($this->factories, $class, $scope);
-    }
-
-    /**
-     * @psalm-param non-empty-list<string> $scope
-     */
-    public function delFactory(string $class, array $scope = null): void
-    {
-        /** @psalm-suppress MixedPropertyTypeCoercion */
-        self::arrayDel($this->factories, $class, $scope);
-    }
-
-    /**
-     * @psalm-param TLookupArray $lookup
-     *
-     * @psalm-param-out ?string $abstract
-     *
-     * @psalm-return ?TItemPath
-     */
-    public function lookupAlias(string $alias, array $lookup, mixed &$abstract = null): ?array
-    {
-        /** @psalm-var ?TItemPath */
-        return self::arrayLookup($this->aliases, [$lookup, $alias], $abstract);
-    }
-
-    /**
-     * @psalm-template TObj of object
-     *
-     * @psalm-param class-string<TObj> $class
-     * @psalm-param TLookupArray $lookup
-     *
-     * @psalm-param-out ?TObj $instance
-     *
-     * @psalm-return ?TItemPath
-     */
-    public function lookupInstance(string $class, array $lookup, mixed &$instance = null): ?array
-    {
-        /** @psalm-var ?TItemPath */
-        return self::arrayLookup($this->instances, [$lookup, $class], $instance);
-    }
-
-    /**
-     * @psalm-template TObj of object
-     *
-     * @psalm-param class-string<TObj> $class
-     * @psalm-param TLookupArray $lookup
-     *
-     * @psalm-param-out ?FactoryInterface<TObj> $factory
-     *
-     * @psalm-return ?TItemPath
-     */
-    public function lookupFactory(string $class, array $lookup, mixed &$factory = null): ?array
-    {
-        /** @psalm-var ?TItemPath */
-        return self::arrayLookup($this->factories, [$lookup, $class], $factory);
-    }
-
-    /**
-     * @psalm-param non-empty-list<string>|null $scope
-     */
-    private static function arrayGet(array $array, string $key, ?array $scope): mixed
-    {
-        $scope ??= ['global'];
-        $type = $scope[0];
-        if (count($scope) !== (self::$scopePathLength[$type] ?? null)) {
-            return null; // FIXME: throw an exception instead?
-        }
-        if (!NestedArray::get($array, [...$scope, $key], $result)) {
-            return null;
+        foreach (self::ITEM_CLASSES as $key => $_) {
+            if (isset($this->contents[$key][$id])) {
+                return true;
+            }
         }
 
-        return $result;
+        return false;
     }
 
     /**
-     * @psalm-param TScopePath|null $scope
+     * @throws NotFoundExceptionInterface
      */
-    private static function arraySet(array &$array, string $key, mixed $value, ?array $scope): void
+    public function getItem(string $id): ItemInterface
     {
-        $scope ??= ['global'];
-        $type = $scope[0];
-        if (count($scope) !== (self::$scopePathLength[$type] ?? null)) {
-            return; // FIXME: throw an exception instead?
+        foreach (self::ITEM_CLASSES as $key => $class) {
+            if (isset($this->contents[$key][$id])) {
+                return new $class($this->contents[$key][$id]);
+            }
         }
 
-        NestedArray::set($array, [...$scope, $key], $value);
+        throw new NotFoundException(sprintf('%s not found', var_export($id, true)));
     }
 
     /**
-     * @psalm-param non-empty-list<string>|null $scope
+     * Remove item stored under key $id from the container.
      */
-    private static function arrayDel(array &$array, string $key, ?array $scope): void
+    public function unsetItem(string $id): void
     {
-        $scope ??= ['global'];
-        $type = $scope[0];
-        if (count($scope) !== (self::$scopePathLength[$type] ?? null)) {
-            return; // FIXME: throw an exception instead?
+        foreach (self::ITEM_CLASSES as $key => $_) {
+            if (isset($this->contents[$key][$id])) {
+                unset($this->contents[$key][$id]);
+            }
         }
-        NestedArray::del2($array, $scope, $key);
     }
 
     /**
-     * @psalm-param non-empty-array<array-key|array> $lookup
+     * Create $alias for $target.
      */
-    private static function arrayLookup(array $array, array $lookup, mixed &$retval): ?array
+    public function alias(string $alias, string $target): void
     {
-        /** @psalm-var ?non-empty-list<string> */
-        $path = NestedArray::lookup($array, $lookup, $temp);
-        if (null === $path) {
-            return null;
-        }
+        $this->contents['aliases'][$alias] = $target;
+    }
 
-        $type = $path[0];
-        if ((count($path) - 1) !== (self::$scopePathLength[$type] ?? null)) {
-            return null;
-        }
+    /**
+     * Store the $instance under key $id.
+     */
+    public function instance(string $id, object $instance): void
+    {
+        $this->contents['instances'][$id] = $instance;
+    }
 
-        /** @psalm-var mixed */
-        $retval = $temp;
+    public function bind(string $id, \Closure $callback): void
+    {
+        $this->contents['bindings'][$id] = $callback;
+    }
 
-        return $path;
+    /**
+     * Lazily create single instance and store under key $id.
+     *
+     * @psalm-param \Closure(ResolverInterface):object $callback
+     */
+    public function singleton(string $id, \Closure $callback): void
+    {
+        $this->contents['singletons'][$id] = $callback;
     }
 }

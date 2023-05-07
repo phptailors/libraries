@@ -5,6 +5,7 @@ namespace Tailors\Lib\Injector;
 /**
  * @author Paweł Tomulik <pawel@tomulik.pl>
  */
-trait NotFoundExceptionInterfaceTrait
+interface ResolverFactoryInterface
 {
+    public function getResolver(ContainerInterface $container): ResolverInterface;
 }

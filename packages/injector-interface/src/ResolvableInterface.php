@@ -5,11 +5,11 @@ namespace Tailors\Lib\Injector;
 /**
  * @author Paweł Tomulik <pawel@tomulik.pl>
  */
-interface ResolverInterface
+interface ResolvableInterface
 {
     /**
      * @throws NotFoundExceptionInterface
      * @throws ContainerExceptionInterface
      */
-    public function resolve(string $id): mixed;
+    public function resolve(ResolverInterface $resolver): mixed;
 }

@@ -5,6 +5,6 @@ namespace Tailors\Lib\Injector;
 /**
  * @author Paweł Tomulik <pawel@tomulik.pl>
  */
-interface NotFoundExceptionInterface extends \Psr\Container\NotFoundExceptionInterface
+interface ContainerExceptionInterface extends \Psr\Container\ContainerExceptionInterface
 {
 }
