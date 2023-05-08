@@ -43,7 +43,7 @@ final class CircularDependencyExceptionTest extends TestCase
      *  array{message: mixed, code?: mixed, previous?: mixed}
      * }>
      */
-    public static function provFromSeenAndFound(): iterable
+    public static function provFromBacktrace(): iterable
     {
         $previous = new \Exception();
 
@@ -69,12 +69,24 @@ final class CircularDependencyExceptionTest extends TestCase
                 ],
             ],
             '#03' => [
+                [['b', 'b', 'c', 'd'], 'b'],
+                [
+                    'message' => 'circular dependency: \'b\' -> \'b\'',
+                ],
+            ],
+            '#04' => [
                 [['b', 'b', 'c', 'd'], 'c'],
                 [
                     'message' => 'circular dependency: \'c\' -> \'d\' -> \'c\'',
                 ],
             ],
-            '#04' => [
+            '#05' => [
+                [['b', 'b', 'c', 'd', 'c', 'e'], 'c'],
+                [
+                    'message' => 'circular dependency: \'c\' -> \'d\' -> \'c\'',
+                ],
+            ],
+            '#06' => [
                 [[], '', 123, $previous],
                 [
                     'message'  => 'circular dependency',
@@ -86,16 +98,16 @@ final class CircularDependencyExceptionTest extends TestCase
     }
 
     /**
-     * @dataProvider provFromSeenAndFound
+     * @dataProvider provFromBacktrace
      *
      * @psalm-param list{0: array<string>, 1: string, 2?: int, 3?: \Throwable} $args
      * @psalm-param array{message: mixed, code?: mixed, previous?: mixed} $expected
      *
      * @psalm-suppress MissingThrowsDocblock
      */
-    public function testFromSeenAndFound(array $args, array $expected): void
+    public function testFromBacktrace(array $args, array $expected): void
     {
-        $exception = CircularDependencyException::fromSeenAndFound(...$args);
+        $exception = CircularDependencyException::fromBacktrace(...$args);
         $this->assertSame($expected['message'], $exception->getMessage());
         if (array_key_exists('code', $expected)) {
             $this->assertSame($expected['code'], $exception->getCode());

@@ -50,7 +50,7 @@ final class Resolver implements ResolverInterface
     {
         try {
             if (isset($this->resolving[$id])) {
-                throw CircularDependencyException::fromSeenAndFound(array_keys($this->resolving), $id);
+                throw CircularDependencyException::fromBacktrace(array_keys($this->resolving), $id);
             }
 
             $this->resolving[$id] = true;

@@ -5,23 +5,23 @@ namespace Tailors\Lib\Injector;
 final class CircularDependencyException extends \Exception implements CircularDependencyExceptionInterface
 {
     /**
-     * @psalm-param array<string> $seen
+     * @psalm-param array<string> $trace
      */
-    public static function fromSeenAndFound(
-        array $seen,
-        string $found,
+    public static function fromBacktrace(
+        array $trace,
+        string $repeating,
         int $code = 0,
         ?\Throwable $previous = null
     ): self {
-        return new self(self::messageFromSeenAndFound($seen, $found), $code, $previous);
+        return new self(self::messageFromBacktrace($trace, $repeating), $code, $previous);
     }
 
     /**
-     * @psalm-param array<string> $seen
+     * @psalm-param array<string> $trace
      */
-    private static function messageFromSeenAndFound(array $seen, string $found): string
+    private static function messageFromBacktrace(array $trace, string $repeating): string
     {
-        $circle = self::circle([...$seen, $found], $found);
+        $circle = self::circle([...$trace, $repeating], $repeating);
 
         if (count($circle) < 2) {
             return 'circular dependency';
@@ -33,26 +33,24 @@ final class CircularDependencyException extends \Exception implements CircularDe
     }
 
     /**
-     * @psalm-param array<string> $path
+     * @psalm-param array<string> $trace
      *
      * @psalm-return list<string>
      */
-    private static function circle(array $path, string $found): array
+    private static function circle(array $trace, string $delimiter): array
     {
-        $circle = [];
-        foreach ($path as $p) {
-            if (empty($circle)) {
-                if ($p === $found) {
-                    $circle[] = $p;
-                }
-            } else {
-                $circle[] = $p;
-                if ($p === $found) {
-                    break;
-                }
-            }
+        $list = array_values($trace);
+
+        if (false === ($start = array_search($delimiter, $list, true))) {
+            return [];
         }
 
-        return $circle;
+        $tail = array_slice($list, 1 + $start);
+
+        if (false === ($end = array_search($delimiter, $tail, true))) {
+            return $tail;
+        }
+
+        return [$delimiter, ...array_slice($tail, 0, $end), $delimiter];
     }
 }
