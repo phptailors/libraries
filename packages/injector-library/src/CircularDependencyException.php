@@ -21,7 +21,7 @@ final class CircularDependencyException extends \Exception implements CircularDe
      */
     private static function messageFromBacktrace(array $trace, string $repeating): string
     {
-        $circle = self::circle([...$trace, $repeating], $repeating);
+        $circle = self::circle($trace, $repeating);
 
         if (count($circle) < 2) {
             return 'circular dependency';
@@ -48,7 +48,7 @@ final class CircularDependencyException extends \Exception implements CircularDe
         $tail = array_slice($list, 1 + $start);
 
         if (false === ($end = array_search($delimiter, $tail, true))) {
-            return $tail;
+            return [$delimiter, ...$tail, $delimiter];
         }
 
         return [$delimiter, ...array_slice($tail, 0, $end), $delimiter];

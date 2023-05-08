@@ -29,6 +29,19 @@ final class BindingItemTest extends TestCase
     /**
      * @psalm-suppress MissingThrowsDocblock
      */
+    public function testConstructor(): void
+    {
+        /** @psalm-suppress UnusedClosureParam */
+        $callback = fn (ResolverInterface $resolver): \stdClass => (new \stdClass());
+
+        $bindingItem = new BindingItem($callback);
+
+        $this->assertSame($callback, $bindingItem->getCallback());
+    }
+
+    /**
+     * @psalm-suppress MissingThrowsDocblock
+     */
     public function testResolve(): void
     {
         $resolver = $this->getMockBuilder(ResolverInterface::class)->getMock();
@@ -38,10 +51,10 @@ final class BindingItemTest extends TestCase
         ;
 
         /** @psalm-suppress UnusedClosureParam */
-        $singleton = new BindingItem(fn (ResolverInterface $resolver): \stdClass => (new \stdClass()));
+        $binding = new BindingItem(fn (ResolverInterface $resolver): \stdClass => (new \stdClass()));
 
-        $instance = $singleton->resolve($resolver);
+        $instance = $binding->resolve($resolver);
         $this->assertInstanceOf(\stdClass::class, $instance);
-        $this->assertNotSame($instance, $singleton->resolve($resolver));
+        $this->assertNotSame($instance, $binding->resolve($resolver));
     }
 }
