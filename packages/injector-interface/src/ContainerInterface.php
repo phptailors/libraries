@@ -37,7 +37,7 @@ interface ContainerInterface extends \Psr\Container\ContainerInterface
     /**
      * Store the $instance under key $id.
      */
-    public function instance(string $id, object $instance): void;
+    public function instance(string $id, mixed $instance): void;
 
     /**
      * Bind a callback that returns values and store the callback under $id.
@@ -49,7 +49,7 @@ interface ContainerInterface extends \Psr\Container\ContainerInterface
     /**
      * Lazily create single instance and store under key $id.
      *
-     * @psalm-param \Closure(ResolverInterface):object $callback
+     * @psalm-param \Closure(ResolverInterface):mixed $callback
      */
     public function singleton(string $id, \Closure $callback): void;
 }

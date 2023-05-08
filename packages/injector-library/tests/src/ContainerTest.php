@@ -16,9 +16,9 @@ use Tailors\PHPUnit\ImplementsInterfaceTrait;
  *
  * @psalm-type TContents array{
  *      aliases?: array<string,string>,
- *      instances?: array<string,object>,
+ *      instances?: array<string,mixed>,
  *      bindings?: array<string,\Closure(ResolverInterface):mixed>,
- *      singletons?: array<string,\Closure(ResolverInterface):object>
+ *      singletons?: array<string,\Closure(ResolverInterface):mixed>
  * }
  */
 final class ContainerTest extends TestCase
@@ -44,10 +44,10 @@ final class ContainerTest extends TestCase
         $bar = new \stdClass();
 
         /** @psalm-suppress UnusedClosureParam */
-        $baz = fn (ResolverInterface $resolver): object => new \stdClass();
+        $baz = fn (ResolverInterface $resolver): mixed => new \stdClass();
 
         /** @psalm-suppress UnusedClosureParam */
-        $gez = fn (ResolverInterface $resolver): object => new \stdClass();
+        $gez = fn (ResolverInterface $resolver): mixed => new \stdClass();
 
         $factory = $this->createStub(ResolverFactoryInterface::class);
 
@@ -213,30 +213,58 @@ final class ContainerTest extends TestCase
     }
 
     /**
-     * @psalm-suppress MissingThrowsDocblock
+     * @psalm-return iterable<array-key, list{list{0?: TContents}, mixed}>
      */
-    public function testUnsetItemUnsetsAllContentsWithGivenId(): void
+    public static function provUnsetItemUnsetsAllContentsWithGivenId(): iterable
     {
         $instance = new \stdClass();
 
         /** @psalm-suppress UnusedClosureParam */
         $callback = fn (ResolverInterface $resolver): \stdClass => (new \stdClass());
 
-        $container = new Container([
-            'aliases'    => ['foo' => 'FOO'],
-            'instances'  => ['foo' => $instance],
-            'bindings'   => ['foo' => $callback],
-            'singletons' => ['foo' => $callback],
-        ]);
+        return [
+            '#00' => [
+                [],
+                [],
+            ],
+            '#01' => [
+                [[
+                    'aliases'    => ['foo' => 'FOO'],
+                    'instances'  => ['foo' => $instance],
+                    'bindings'   => ['foo' => $callback],
+                    'singletons' => ['foo' => $callback],
+                ]],
+                [
+                    'aliases'    => [],
+                    'instances'  => [],
+                    'bindings'   => [],
+                    'singletons' => [],
+                ],
+            ],
+            '#02' => [
+                [[
+                    'aliases' => ['foo' => 'FOO'],
+                ]],
+                [
+                    'aliases' => [],
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider provUnsetItemUnsetsAllContentsWithGivenId
+     *
+     * @psalm-param list{0?:TContents} $args
+     *
+     * @psalm-suppress MissingThrowsDocblock
+     */
+    public function testUnsetItemUnsetsAllContentsWithGivenId(array $args, mixed $expected): void
+    {
+        $container = new Container(...$args);
 
         $container->unsetItem('foo');
 
-        $expected = [
-            'aliases'    => [],
-            'instances'  => [],
-            'bindings'   => [],
-            'singletons' => [],
-        ];
         $this->assertSame($expected, $container->getContents());
     }
 
@@ -302,9 +330,13 @@ final class ContainerTest extends TestCase
 
         $this->assertNull($container->singleton('foo', $callback));
 
-        $fooItem = $container->getItem('foo');
+        // Unresolved singleton: it's essentially a callback (lazy construction)
+        $this->assertInstanceOf(BindingItem::class, $container->getItem('foo'));
 
-        $this->assertInstanceOf(SingletonItem::class, $fooItem);
-        $this->assertSame($callback, $fooItem->getCallback());
+        $foo = $container->resolve('foo');
+        $this->assertInstanceOf(\stdClass::class, $foo);
+
+        // Resolved singleton: now it's a real instance
+        $this->assertInstanceOf(InstanceItem::class, $container->getItem('foo'));
     }
 }

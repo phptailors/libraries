@@ -10,19 +10,19 @@ final class InstanceItem implements ItemInterface
     /**
      * @psalm-readonly
      */
-    private object $instance;
+    private mixed $instance;
 
-    public function __construct(object $instance)
+    public function __construct(mixed $instance)
     {
         $this->instance = $instance;
     }
 
-    public function getInstance(): object
+    public function getInstance(): mixed
     {
         return $this->instance;
     }
 
-    public function resolve(ResolverInterface $resolver): object
+    public function resolve(ResolverInterface $resolver): mixed
     {
         return $this->instance;
     }

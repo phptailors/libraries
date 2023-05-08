@@ -7,26 +7,21 @@ namespace Tailors\Lib\Injector;
  *
  * @psalm-type TContents array{
  *      aliases?: array<string,string>,
- *      instances?: array<string,object>,
+ *      instances?: array<string,mixed>,
  *      bindings?: array<string,\Closure(ResolverInterface):mixed>,
- *      singletons?: array<string,\Closure(ResolverInterface):object>
+ *      singletons?: array<string,\Closure(ResolverInterface):mixed>
  * }
  */
 final class Container implements ContainerInterface, ResolverInterface
 {
     /**
-     * @psalm-var array{
-     *  aliases: class-string<AliasItem>,
-     *  instances: class-string<InstanceItem>,
-     *  bindings: class-string<BindingItem>,
-     *  singletons: class-string<SingletonItem>,
-     * }
+     * @psalm-var array{'aliases', 'instances', 'bindings', 'singletons'}
      */
-    private const ITEM_CLASSES = [
-        'aliases'    => AliasItem::class,
-        'instances'  => InstanceItem::class,
-        'bindings'   => BindingItem::class,
-        'singletons' => SingletonItem::class,
+    private const CONTENTS = [
+        'aliases',
+        'instances',
+        'bindings',
+        'singletons',
     ];
 
     /** @psalm-var TContents */
@@ -89,13 +84,16 @@ final class Container implements ContainerInterface, ResolverInterface
      */
     public function has(string $id): bool
     {
-        // FIXME: implement deeper inspection (walk through aliases, etc.).
+        // FIXME: ensure exceptions are thrown as specified in PSR-11
+        // For example, an EXISTING, but UNRESOLVABLE alias $id, should yield
+        // ``has($id) === true``, but ``get($id)`` must throw
+        // ``ContainerExceptionInterface``, not ``NotFoundExceptionInterface``.
         return $this->hasItem($id);
     }
 
     public function hasItem(string $id): bool
     {
-        foreach (self::ITEM_CLASSES as $key => $_) {
+        foreach (self::CONTENTS as $key) {
             if (isset($this->contents[$key][$id])) {
                 return true;
             }
@@ -109,10 +107,20 @@ final class Container implements ContainerInterface, ResolverInterface
      */
     public function getItem(string $id): ItemInterface
     {
-        foreach (self::ITEM_CLASSES as $key => $class) {
-            if (isset($this->contents[$key][$id])) {
-                return new $class($this->contents[$key][$id]);
-            }
+        if (isset($this->contents['aliases'][$id])) {
+            return new AliasItem($this->contents['aliases'][$id]);
+        }
+
+        if (isset($this->contents['instances'][$id])) {
+            return new InstanceItem($this->contents['instances'][$id]);
+        }
+
+        if (isset($this->contents['bindings'][$id])) {
+            return new BindingItem($this->contents['bindings'][$id]);
+        }
+
+        if (isset($this->contents['singletons'][$id])) {
+            return new BindingItem($this->singletonCallback($id, $this->contents['singletons'][$id]));
         }
 
         throw new NotFoundException(sprintf('%s not found', var_export($id, true)));
@@ -123,10 +131,8 @@ final class Container implements ContainerInterface, ResolverInterface
      */
     public function unsetItem(string $id): void
     {
-        foreach (self::ITEM_CLASSES as $key => $_) {
-            if (isset($this->contents[$key][$id])) {
-                unset($this->contents[$key][$id]);
-            }
+        foreach (self::CONTENTS as $key) {
+            unset($this->contents[$key][$id]);
         }
     }
 
@@ -136,28 +142,58 @@ final class Container implements ContainerInterface, ResolverInterface
     public function alias(string $alias, string $target): void
     {
         $this->contents['aliases'][$alias] = $target;
+        $this->unsetItemExceptFor('aliases', $alias);
     }
 
     /**
      * Store the $instance under key $id.
      */
-    public function instance(string $id, object $instance): void
+    public function instance(string $id, mixed $instance): void
     {
         $this->contents['instances'][$id] = $instance;
+        $this->unsetItemExceptFor('instances', $id);
     }
 
     public function bind(string $id, \Closure $callback): void
     {
         $this->contents['bindings'][$id] = $callback;
+        $this->unsetItemExceptFor('bindings', $id);
     }
 
     /**
      * Lazily create single instance and store under key $id.
      *
-     * @psalm-param \Closure(ResolverInterface):object $callback
+     * @psalm-param \Closure(ResolverInterface):mixed $callback
      */
     public function singleton(string $id, \Closure $callback): void
     {
         $this->contents['singletons'][$id] = $callback;
+        $this->unsetItemExceptFor('singletons', $id);
+    }
+
+    /**
+     * @psalm-template T of mixed
+     *
+     * @psalm-param \Closure(ResolverInterface):T $callback
+     *
+     * @psalm-return \Closure(ResolverInterface):T
+     */
+    private function singletonCallback(string $id, \Closure $callback): \Closure
+    {
+        return function (ResolverInterface $resolver) use ($id, $callback): mixed {
+            $instance = $callback($resolver);
+            $this->instance($id, $instance);
+
+            return $instance;
+        };
+    }
+
+    private function unsetItemExceptFor(string $type, string $id): void
+    {
+        foreach (self::CONTENTS as $key) {
+            if ($key !== $type) {
+                unset($this->contents[$key][$id]);
+            }
+        }
     }
 }
