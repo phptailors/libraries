@@ -17,12 +17,12 @@ final class Resolver implements ResolverInterface
     /**
      * @psalm-var array<string,mixed>
      */
-    private array $resolving;
+    private array $backtrace;
 
     public function __construct(ItemContainerInterface $container)
     {
         $this->container = $container;
-        $this->resolving = [];
+        $this->backtrace = [];
     }
 
     public function getContainer(): ItemContainerInterface
@@ -33,9 +33,9 @@ final class Resolver implements ResolverInterface
     /**
      * @return array<string,mixed>
      */
-    public function getResolving(): array
+    public function getBacktrace(): array
     {
-        return $this->resolving;
+        return $this->backtrace;
     }
 
     /**
@@ -49,16 +49,16 @@ final class Resolver implements ResolverInterface
     public function resolve(string $id): mixed
     {
         try {
-            if (isset($this->resolving[$id])) {
-                throw CircularDependencyException::fromBacktrace(array_keys($this->resolving), $id);
+            if (isset($this->backtrace[$id])) {
+                throw CircularDependencyException::fromBacktrace(array_keys($this->backtrace), $id);
             }
 
-            $this->resolving[$id] = true;
+            $this->backtrace[$id] = true;
 
             /** @psalm-var mixed */
             $value = $this->container->getItem($id)->resolve($this);
         } finally {
-            unset($this->resolving[$id]);
+            unset($this->backtrace[$id]);
         }
 
         return $value;

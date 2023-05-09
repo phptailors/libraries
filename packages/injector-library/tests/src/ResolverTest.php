@@ -36,7 +36,7 @@ final class ResolverTest extends TestCase
         $resolver = new Resolver($container);
 
         $this->assertSame($container, $resolver->getContainer());
-        $this->assertSame([], $resolver->getResolving());
+        $this->assertSame([], $resolver->getBacktrace());
     }
 
     /**
