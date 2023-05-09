@@ -282,9 +282,9 @@ final class ContainerTest extends TestCase
     public function testAlias(): void
     {
         $container = new Container([
-            'instances' => ['foo' => null],
-            'bindings' => ['foo' => fn(): mixed => null],
-            'singletons' => ['foo' => fn(): mixed => null],
+            'instances'  => ['foo' => null],
+            'bindings'   => ['foo' => fn (): mixed => null],
+            'singletons' => ['foo' => fn (): mixed => null],
         ]);
 
         $this->assertNull($container->alias('foo', 'bar'));
@@ -312,13 +312,13 @@ final class ContainerTest extends TestCase
         $object = new \stdClass();
 
         return [
-            '#00' => [['object', $object], $object ],
+            '#00' => [['object', $object], $object],
             '#01' => [['bool', true], true],
             '#02' => [['bool', false], false],
             '#03' => [['int', 123], 123],
             '#04' => [['float', 1.23], 1.23],
             '#05' => [['string', 'FOO'], 'FOO'],
-            '#06' => [['array', [1,2,3]], [1,2,3]],
+            '#06' => [['array', [1, 2, 3]], [1, 2, 3]],
             '#07' => [['null', null], null],
         ];
     }
@@ -334,9 +334,9 @@ final class ContainerTest extends TestCase
     {
         $id = $args[0];
         $container = new Container([
-            'aliases' => [$id => $id.'-target'],
-            'bindings' => [$id => fn(): mixed => null],
-            'singletons' => [$id => fn(): mixed => null],
+            'aliases'    => [$id => $id.'-target'],
+            'bindings'   => [$id => fn (): mixed => null],
+            'singletons' => [$id => fn (): mixed => null],
         ]);
 
         $this->assertNull($container->instance(...$args));
@@ -359,9 +359,9 @@ final class ContainerTest extends TestCase
     public function testBind(): void
     {
         $container = new Container([
-            'aliases' => ['foo' => 'bar'],
-            'instances' => ['foo' => null],
-            'singletons' => ['foo' => fn(): mixed => null],
+            'aliases'    => ['foo' => 'bar'],
+            'instances'  => ['foo' => null],
+            'singletons' => ['foo' => fn (): mixed => null],
         ]);
 
         /** @psalm-suppress UnusedClosureParam */
@@ -387,9 +387,9 @@ final class ContainerTest extends TestCase
     public function testSingleton(): void
     {
         $container = new Container([
-            'aliases' => ['foo' => 'bar'],
+            'aliases'   => ['foo' => 'bar'],
             'instances' => ['foo' => null],
-            'bindings' => ['foo' => fn(): mixed => null],
+            'bindings'  => ['foo' => fn (): mixed => null],
         ]);
 
         /** @psalm-suppress UnusedClosureParam */
