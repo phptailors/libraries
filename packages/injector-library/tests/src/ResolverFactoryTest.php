@@ -31,7 +31,7 @@ final class ResolverFactoryTest extends TestCase
      */
     public function testGetResolver(): void
     {
-        $container = $this->createStub(ContainerInterface::class);
+        $container = $this->createStub(ItemContainerInterface::class);
 
         $factory = new ResolverFactory();
 

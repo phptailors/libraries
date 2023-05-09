@@ -4,30 +4,49 @@ namespace Tailors\Lib\Injector;
 
 /**
  * @author Paweł Tomulik <pawel@tomulik.pl>
+ *
+ * @internal this trait is not covered by backward compatibility promise
+ *
+ * @psalm-internal Tailors\Lib\Injector
  */
-interface ContainerInterface extends \Psr\Container\ContainerInterface
+trait ContainerInterfaceTrait
 {
+    public mixed $get;
+
+    public mixed $has;
+
     /**
-     * Finds an entry of the container by its identifier and returns it.
-     *
-     * @param string $id identifier of the entry to look for
-     *
      * @throws NotFoundExceptionInterface
      * @throws ContainerExceptionInterface
      */
-    public function get(string $id): mixed;
+    public function get(string $id): mixed
+    {
+        return $this->get;
+    }
+
+    /**
+     * @psalm-suppress MixedInferredReturnType
+     */
+    public function has(string $id): bool
+    {
+        return $this->has;
+    }
 
     /**
      * Create *$alias* for *$target*.
      */
-    public function alias(string $alias, string $target): void;
+    public function alias(string $alias, string $target): void
+    {
+    }
 
     /**
      * Store the *$instance* under key *$id*.
      *
      * Calling *instance($id, $instance)* makes *get($id)$ to return the *$instance*.
      */
-    public function instance(string $id, mixed $instance): void;
+    public function instance(string $id, mixed $instance): void
+    {
+    }
 
     /**
      * Bind *$callback* to *$id* to be used as a factory.
@@ -37,7 +56,9 @@ interface ContainerInterface extends \Psr\Container\ContainerInterface
      *
      * @psalm-param \Closure(ResolverInterface):mixed $callback
      */
-    public function bind(string $id, \Closure $callback): void;
+    public function bind(string $id, \Closure $callback): void
+    {
+    }
 
     /**
      * Lazily create an instance using *$callback*.
@@ -48,5 +69,7 @@ interface ContainerInterface extends \Psr\Container\ContainerInterface
      *
      * @psalm-param \Closure(ResolverInterface):mixed $callback
      */
-    public function singleton(string $id, \Closure $callback): void;
+    public function singleton(string $id, \Closure $callback): void
+    {
+    }
 }

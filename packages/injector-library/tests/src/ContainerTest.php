@@ -34,6 +34,14 @@ final class ContainerTest extends TestCase
     }
 
     /**
+     * @psalm-suppress MissingThrowsDocblock
+     */
+    public function testImplementsItemContainerInterface(): void
+    {
+        $this->assertImplementsInterface(ItemContainerInterface::class, Container::class);
+    }
+
+    /**
      * @psalm-return iterable<array-key, list{
      *      list{0?: TContents, 1?: ResolverFactoryInterface},
      *      array{contents: TContents, resolverFactory?: mixed}

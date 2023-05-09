@@ -31,7 +31,7 @@ final class ResolverTest extends TestCase
      */
     public function testConstruct(): void
     {
-        $container = $this->createStub(ContainerInterface::class);
+        $container = $this->createStub(ItemContainerInterface::class);
 
         $resolver = new Resolver($container);
 
@@ -44,7 +44,7 @@ final class ResolverTest extends TestCase
      */
     public function testResolveCallsContainerGetItemResolve(): void
     {
-        $container = $this->getMockBuilder(ContainerInterface::class)
+        $container = $this->getMockBuilder(ItemContainerInterface::class)
             ->getMock()
         ;
 
@@ -74,7 +74,7 @@ final class ResolverTest extends TestCase
      */
     public function testResolveThrowsCircularDependencyException(): void
     {
-        $container = $this->getMockBuilder(ContainerInterface::class)
+        $container = $this->getMockBuilder(ItemContainerInterface::class)
             ->getMock()
         ;
 

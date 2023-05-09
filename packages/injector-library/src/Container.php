@@ -12,7 +12,7 @@ namespace Tailors\Lib\Injector;
  *      singletons?: array<string,\Closure(ResolverInterface):mixed>
  * }
  */
-final class Container implements ContainerInterface, ResolverInterface
+final class Container implements ContainerInterface, ItemContainerInterface, ResolverInterface
 {
     /**
      * @psalm-var array{'aliases', 'instances', 'bindings', 'singletons'}
@@ -39,6 +39,8 @@ final class Container implements ContainerInterface, ResolverInterface
     }
 
     /**
+     * Returns the container contents array (for testing, tooling, debuging).
+     *
      * @psalm-return TContents
      */
     public function getContents(): array
@@ -46,6 +48,9 @@ final class Container implements ContainerInterface, ResolverInterface
         return $this->contents;
     }
 
+    /**
+     * Returns the containers resolver factory.
+     */
     public function getResolverFactory(): ResolverFactoryInterface
     {
         return $this->resolverFactory;

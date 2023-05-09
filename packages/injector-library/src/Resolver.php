@@ -12,20 +12,20 @@ final class Resolver implements ResolverInterface
     /**
      * @psalm-readonly
      */
-    private ContainerInterface $container;
+    private ItemContainerInterface $container;
 
     /**
      * @psalm-var array<string,mixed>
      */
     private array $resolving;
 
-    public function __construct(ContainerInterface $container)
+    public function __construct(ItemContainerInterface $container)
     {
         $this->container = $container;
         $this->resolving = [];
     }
 
-    public function getContainer(): ContainerInterface
+    public function getContainer(): ItemContainerInterface
     {
         return $this->container;
     }
