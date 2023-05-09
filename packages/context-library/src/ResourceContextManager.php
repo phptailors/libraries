@@ -125,14 +125,14 @@ final class ResourceContextManager implements ContextManagerInterface
      *
      * @psalm-readonly
      */
-    private mixed $resource;
+    private readonly mixed $resource;
 
     /**
      * @psalm-readonly
      *
      * @psalm-var string|callable|null
      */
-    private mixed $destructor;
+    private readonly mixed $destructor;
 
     /**
      * Initializes the context manager.

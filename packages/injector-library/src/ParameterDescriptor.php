@@ -21,35 +21,35 @@ final class ParameterDescriptor implements ParameterDescriptorInterface
      *
      * @psalm-var non-negative-int
      */
-    private int $position;
+    private readonly int $position;
 
     /**
      * @psalm-readonly
      *
      * @psalm-var non-empty-string
      */
-    private string $name;
+    private readonly string $name;
 
     /**
      * @psalm-readonly
      *
      * @psalm-var non-empty-string
      */
-    private string $function;
+    private readonly string $function;
 
     /**
      * @psalm-readonly
      *
      * @psalm-var ?class-string
      */
-    private ?string $class;
+    private readonly ?string $class;
 
     /**
      * @psalm-readonly
      *
      * @psalm-var ?non-empty-string
      */
-    private ?string $type;
+    private readonly ?string $type;
 
     /**
      * @psalm-param non-negative-int $position

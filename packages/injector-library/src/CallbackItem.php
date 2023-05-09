@@ -12,7 +12,7 @@ final class CallbackItem implements ItemInterface
      *
      * @psalm-var \Closure(ResolverInterface):mixed
      */
-    private \Closure $callback;
+    private readonly \Closure $callback;
 
     /**
      * @psalm-param \Closure(ResolverInterface):mixed $callback

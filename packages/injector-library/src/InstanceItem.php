@@ -10,7 +10,7 @@ final class InstanceItem implements ItemInterface
     /**
      * @psalm-readonly
      */
-    private mixed $instance;
+    private readonly mixed $instance;
 
     public function __construct(mixed $instance)
     {

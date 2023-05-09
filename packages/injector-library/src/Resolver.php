@@ -12,7 +12,7 @@ final class Resolver implements ResolverInterface
     /**
      * @psalm-readonly
      */
-    private ItemContainerInterface $container;
+    private readonly ItemContainerInterface $container;
 
     /**
      * @psalm-var array<string,mixed>

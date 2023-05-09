@@ -24,10 +24,15 @@ final class Container implements ContainerInterface, ItemContainerInterface, Res
         'singletons',
     ];
 
-    /** @psalm-var TContents */
+    /**
+     * @psalm-var TContents
+     */
     private array $contents;
 
-    private ResolverFactoryInterface $resolverFactory;
+    /**
+     * @psalm-readonly
+     */
+    private readonly ResolverFactoryInterface $resolverFactory;
 
     /**
      * @psalm-param TContents $contents

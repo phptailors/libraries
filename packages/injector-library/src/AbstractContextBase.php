@@ -21,7 +21,7 @@ abstract class AbstractContextBase
      *
      * @psalm-readonly
      */
-    private string $name;
+    private readonly string $name;
 
     /**
      * @psalm-param TName $name

@@ -16,7 +16,7 @@ class ExceptionErrorHandler extends AbstractManagedErrorHandler
      *
      * @psalm-readonly
      */
-    protected mixed $exceptionGenerator;
+    protected readonly mixed $exceptionGenerator;
 
     /**
      * Initializes the object.

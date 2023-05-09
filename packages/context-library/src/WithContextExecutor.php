@@ -12,7 +12,7 @@ final class WithContextExecutor implements ExecutorInterface
      *
      * @psalm-readonly
      */
-    private array $context;
+    private readonly array $context;
 
     /**
      * Initializes the object.

@@ -10,7 +10,7 @@ final class AliasItem implements ItemInterface
     /**
      * @psalm-readonly
      */
-    private string $target;
+    private readonly string $target;
 
     public function __construct(string $target)
     {
