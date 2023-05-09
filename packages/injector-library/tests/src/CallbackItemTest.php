@@ -8,22 +8,22 @@ use Tailors\PHPUnit\ImplementsInterfaceTrait;
 /**
  * @author Paweł Tomulik <pawel@tomulik.pl>
  *
- * @covers \Tailors\Lib\Injector\BindingItem
+ * @covers \Tailors\Lib\Injector\CallbackItem
  *
  * @internal this class is not covered by backward compatibility promise
  *
  * @psalm-internal Tailors\Lib\Injector
  */
-final class BindingItemTest extends TestCase
+final class CallbackItemTest extends TestCase
 {
     use ImplementsInterfaceTrait;
 
     /**
      * @psalm-suppress MissingThrowsDocblock
      */
-    public function testImplementsBindingItemInterface(): void
+    public function testImplementsCallbackItemInterface(): void
     {
-        $this->assertImplementsInterface(ItemInterface::class, BindingItem::class);
+        $this->assertImplementsInterface(ItemInterface::class, CallbackItem::class);
     }
 
     /**
@@ -34,9 +34,9 @@ final class BindingItemTest extends TestCase
         /** @psalm-suppress UnusedClosureParam */
         $callback = fn (ResolverInterface $resolver): \stdClass => (new \stdClass());
 
-        $bindingItem = new BindingItem($callback);
+        $callbackItem = new CallbackItem($callback);
 
-        $this->assertSame($callback, $bindingItem->getCallback());
+        $this->assertSame($callback, $callbackItem->getCallback());
     }
 
     /**
@@ -51,10 +51,10 @@ final class BindingItemTest extends TestCase
         ;
 
         /** @psalm-suppress UnusedClosureParam */
-        $binding = new BindingItem(fn (ResolverInterface $resolver): \stdClass => (new \stdClass()));
+        $callbackItem = new CallbackItem(fn (ResolverInterface $resolver): \stdClass => (new \stdClass()));
 
-        $instance = $binding->resolve($resolver);
+        $instance = $callbackItem->resolve($resolver);
         $this->assertInstanceOf(\stdClass::class, $instance);
-        $this->assertNotSame($instance, $binding->resolve($resolver));
+        $this->assertNotSame($instance, $callbackItem->resolve($resolver));
     }
 }

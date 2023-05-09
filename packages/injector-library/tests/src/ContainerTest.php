@@ -17,7 +17,7 @@ use Tailors\PHPUnit\ImplementsInterfaceTrait;
  * @psalm-type TContents array{
  *      aliases?: array<string,string>,
  *      instances?: array<string,mixed>,
- *      bindings?: array<string,\Closure(ResolverInterface):mixed>,
+ *      factories?: array<string,\Closure(ResolverInterface):mixed>,
  *      singletons?: array<string,\Closure(ResolverInterface):mixed>
  * }
  */
@@ -76,14 +76,14 @@ final class ContainerTest extends TestCase
                 [[
                     'aliases'    => ['foo' => 'bar'],
                     'instances'  => ['bar' => $bar],
-                    'bindings'   => ['baz' => $baz],
+                    'factories'  => ['baz' => $baz],
                     'singletons' => ['gez' => $gez],
                 ]],
                 [
                     'contents' => [
                         'aliases'    => ['foo' => 'bar'],
                         'instances'  => ['bar' => $bar],
-                        'bindings'   => ['baz' => $baz],
+                        'factories'  => ['baz' => $baz],
                         'singletons' => ['gez' => $gez],
                     ],
                 ],
@@ -110,7 +110,6 @@ final class ContainerTest extends TestCase
     {
         $container = new Container(...$args);
 
-        // FIXME: test contents of the container...
         $this->assertSame($expected['contents'], $container->getContents());
 
         if (count($args) < 2) {
@@ -239,13 +238,13 @@ final class ContainerTest extends TestCase
                 [[
                     'aliases'    => ['foo' => 'FOO'],
                     'instances'  => ['foo' => $instance],
-                    'bindings'   => ['foo' => $callback],
+                    'factories'  => ['foo' => $callback],
                     'singletons' => ['foo' => $callback],
                 ]],
                 [
                     'aliases'    => [],
                     'instances'  => [],
-                    'bindings'   => [],
+                    'factories'  => [],
                     'singletons' => [],
                 ],
             ],
@@ -283,7 +282,7 @@ final class ContainerTest extends TestCase
     {
         $container = new Container([
             'instances'  => ['foo' => null],
-            'bindings'   => ['foo' => fn (): mixed => null],
+            'factories'  => ['foo' => fn (): mixed => null],
             'singletons' => ['foo' => fn (): mixed => null],
         ]);
 
@@ -297,7 +296,7 @@ final class ContainerTest extends TestCase
         $contents = $container->getContents();
 
         $this->assertArrayNotHasKey('foo', $contents['instances'] ?? []);
-        $this->assertArrayNotHasKey('foo', $contents['bindings'] ?? []);
+        $this->assertArrayNotHasKey('foo', $contents['factories'] ?? []);
         $this->assertArrayNotHAsKey('foo', $contents['singletons'] ?? []);
     }
 
@@ -335,7 +334,7 @@ final class ContainerTest extends TestCase
         $id = $args[0];
         $container = new Container([
             'aliases'    => [$id => $id.'-target'],
-            'bindings'   => [$id => fn (): mixed => null],
+            'factories'  => [$id => fn (): mixed => null],
             'singletons' => [$id => fn (): mixed => null],
         ]);
 
@@ -349,14 +348,14 @@ final class ContainerTest extends TestCase
         $contents = $container->getContents();
 
         $this->assertArrayNotHasKey($id, $contents['aliases'] ?? []);
-        $this->assertArrayNotHasKey($id, $contents['bindings'] ?? []);
+        $this->assertArrayNotHasKey($id, $contents['factories'] ?? []);
         $this->assertArrayNotHAsKey($id, $contents['singletons'] ?? []);
     }
 
     /**
      * @psalm-suppress MissingThrowsDocblock
      */
-    public function testBind(): void
+    public function testFactory(): void
     {
         $container = new Container([
             'aliases'    => ['foo' => 'bar'],
@@ -367,11 +366,11 @@ final class ContainerTest extends TestCase
         /** @psalm-suppress UnusedClosureParam */
         $callback = fn (ResolverInterface $resolver): \stdClass => new \stdClass();
 
-        $this->assertNull($container->bind('foo', $callback));
+        $this->assertNull($container->factory('foo', $callback));
 
         $fooItem = $container->getItem('foo');
 
-        $this->assertInstanceOf(BindingItem::class, $fooItem);
+        $this->assertInstanceOf(CallbackItem::class, $fooItem);
         $this->assertSame($callback, $fooItem->getCallback());
 
         $contents = $container->getContents();
@@ -389,7 +388,7 @@ final class ContainerTest extends TestCase
         $container = new Container([
             'aliases'   => ['foo' => 'bar'],
             'instances' => ['foo' => null],
-            'bindings'  => ['foo' => fn (): mixed => null],
+            'factories' => ['foo' => fn (): mixed => null],
         ]);
 
         /** @psalm-suppress UnusedClosureParam */
@@ -401,10 +400,10 @@ final class ContainerTest extends TestCase
 
         $this->assertArrayNotHasKey('foo', $contents['aliases'] ?? []);
         $this->assertArrayNotHasKey('foo', $contents['instances'] ?? []);
-        $this->assertArrayNotHAsKey('foo', $contents['bindings'] ?? []);
+        $this->assertArrayNotHAsKey('foo', $contents['factories'] ?? []);
 
         // Unresolved singleton: it's essentially a callback (lazy construction)
-        $this->assertInstanceOf(BindingItem::class, $container->getItem('foo'));
+        $this->assertInstanceOf(CallbackItem::class, $container->getItem('foo'));
 
         $foo = $container->resolve('foo');
         $this->assertInstanceOf(\stdClass::class, $foo);
@@ -415,7 +414,7 @@ final class ContainerTest extends TestCase
         $contents = $container->getContents();
 
         $this->assertArrayNotHasKey('foo', $contents['aliases'] ?? []);
-        $this->assertArrayNotHAsKey('foo', $contents['bindings'] ?? []);
+        $this->assertArrayNotHAsKey('foo', $contents['factories'] ?? []);
         $this->assertArrayNotHasKey('foo', $contents['singletons'] ?? []);
     }
 }

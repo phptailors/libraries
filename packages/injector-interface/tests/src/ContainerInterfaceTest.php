@@ -323,17 +323,17 @@ final class ContainerInterfaceTest extends TestCase
     /**
      * @psalm-suppress MissingThrowsDocblock
      */
-    public function testBindReturnsNull(): void
+    public function testFactoryReturnsNull(): void
     {
         $dummy = $this->createDummyInstance();
 
-        $this->assertNull($dummy->bind('', fn (): string => ''));
+        $this->assertNull($dummy->factory('', fn (): string => ''));
     }
 
     /**
      * @psalm-return iterable<array-key, list{list{mixed,mixed},string}>
      */
-    public static function provBindWithInvalidParamType(): iterable
+    public static function provFactoryWithInvalidParamType(): iterable
     {
         $nonStringSamples = [
             'null'   => null,
@@ -366,13 +366,13 @@ final class ContainerInterfaceTest extends TestCase
     }
 
     /**
-     * @dataProvider provBindWithInvalidParamType
+     * @dataProvider provFactoryWithInvalidParamType
      *
      * @psalm-param list{mixed,mixed} $args
      *
      * @psalm-suppress MissingThrowsDocblock
      */
-    public function testBindWithInvalidParamType(array $args, string $message): void
+    public function testFactoryWithInvalidParamType(array $args, string $message): void
     {
         $dummy = $this->createDummyInstance();
 
@@ -380,7 +380,7 @@ final class ContainerInterfaceTest extends TestCase
         $this->expectExceptionMessage($message);
 
         /** @psalm-suppress MixedArgument */
-        $dummy->bind(...$args);
+        $dummy->factory(...$args);
     }
 
     /**

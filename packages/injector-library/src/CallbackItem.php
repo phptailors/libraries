@@ -5,7 +5,7 @@ namespace Tailors\Lib\Injector;
 /**
  * @author Paweł Tomulik <pawel@tomulik.pl>
  */
-final class BindingItem implements ItemInterface
+final class CallbackItem implements ItemInterface
 {
     /**
      * @psalm-readonly

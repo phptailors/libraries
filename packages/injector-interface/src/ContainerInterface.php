@@ -30,14 +30,15 @@ interface ContainerInterface extends \Psr\Container\ContainerInterface
     public function instance(string $id, mixed $instance): void;
 
     /**
-     * Bind *$callback* to *$id* to be used as a factory.
+     * Store *$callback* under *$id* to be used as a factory.
      *
-     * Calling *bind($id, $callback)* makes *get($id)* to return the result of
-     * calling *$callback*.
+     * Calling *factory($id, $callback)* makes *get($id)* to return the result
+     * of calling *$callback*. The *$callback* is called every time *$id$ is
+     * requested.
      *
      * @psalm-param \Closure(ResolverInterface):mixed $callback
      */
-    public function bind(string $id, \Closure $callback): void;
+    public function factory(string $id, \Closure $callback): void;
 
     /**
      * Lazily create an instance using *$callback*.

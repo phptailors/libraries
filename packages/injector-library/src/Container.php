@@ -8,19 +8,19 @@ namespace Tailors\Lib\Injector;
  * @psalm-type TContents array{
  *      aliases?: array<string,string>,
  *      instances?: array<string,mixed>,
- *      bindings?: array<string,\Closure(ResolverInterface):mixed>,
+ *      factories?: array<string,\Closure(ResolverInterface):mixed>,
  *      singletons?: array<string,\Closure(ResolverInterface):mixed>
  * }
  */
 final class Container implements ContainerInterface, ItemContainerInterface, ResolverInterface
 {
     /**
-     * @psalm-var array{'aliases', 'instances', 'bindings', 'singletons'}
+     * @psalm-var array{'aliases', 'instances', 'factories', 'singletons'}
      */
     private const CONTENTS = [
         'aliases',
         'instances',
-        'bindings',
+        'factories',
         'singletons',
     ];
 
@@ -120,12 +120,12 @@ final class Container implements ContainerInterface, ItemContainerInterface, Res
             return new InstanceItem($this->contents['instances'][$id]);
         }
 
-        if (isset($this->contents['bindings'][$id])) {
-            return new BindingItem($this->contents['bindings'][$id]);
+        if (isset($this->contents['factories'][$id])) {
+            return new CallbackItem($this->contents['factories'][$id]);
         }
 
         if (isset($this->contents['singletons'][$id])) {
-            return new BindingItem($this->singletonCallback($id, $this->contents['singletons'][$id]));
+            return new CallbackItem($this->singletonCallback($id, $this->contents['singletons'][$id]));
         }
 
         throw new NotFoundException(sprintf('%s not found', var_export($id, true)));
@@ -159,10 +159,10 @@ final class Container implements ContainerInterface, ItemContainerInterface, Res
         $this->unsetItemExceptFor('instances', $id);
     }
 
-    public function bind(string $id, \Closure $callback): void
+    public function factory(string $id, \Closure $callback): void
     {
-        $this->contents['bindings'][$id] = $callback;
-        $this->unsetItemExceptFor('bindings', $id);
+        $this->contents['factories'][$id] = $callback;
+        $this->unsetItemExceptFor('factories', $id);
     }
 
     /**
