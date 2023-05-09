@@ -99,7 +99,7 @@ final class Container implements ContainerInterface, ItemContainerInterface, Res
     public function hasItem(string $id): bool
     {
         foreach (self::CONTENTS as $key) {
-            if (isset($this->contents[$key][$id])) {
+            if (isset($this->contents[$key]) && array_key_exists($id, $this->contents[$key])) {
                 return true;
             }
         }
@@ -116,7 +116,7 @@ final class Container implements ContainerInterface, ItemContainerInterface, Res
             return new AliasItem($this->contents['aliases'][$id]);
         }
 
-        if (isset($this->contents['instances'][$id])) {
+        if (isset($this->contents['instances']) && array_key_exists($id, $this->contents['instances'])) {
             return new InstanceItem($this->contents['instances'][$id]);
         }
 

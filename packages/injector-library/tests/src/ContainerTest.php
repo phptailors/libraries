@@ -281,7 +281,11 @@ final class ContainerTest extends TestCase
      */
     public function testAlias(): void
     {
-        $container = new Container();
+        $container = new Container([
+            'instances' => ['foo' => null],
+            'bindings' => ['foo' => fn(): mixed => null],
+            'singletons' => ['foo' => fn(): mixed => null],
+        ]);
 
         $this->assertNull($container->alias('foo', 'bar'));
 
@@ -289,23 +293,64 @@ final class ContainerTest extends TestCase
 
         $this->assertInstanceOf(AliasItem::class, $fooItem);
         $this->assertSame('bar', $fooItem->getTarget());
+
+        $contents = $container->getContents();
+
+        $this->assertArrayNotHasKey('foo', $contents['instances'] ?? []);
+        $this->assertArrayNotHasKey('foo', $contents['bindings'] ?? []);
+        $this->assertArrayNotHAsKey('foo', $contents['singletons'] ?? []);
     }
 
     /**
+     * @psalm-return iterable<array-key, list{
+     *      list{string,mixed},
+     *      mixed
+     *  }>
+     */
+    public static function provInstance(): iterable
+    {
+        $object = new \stdClass();
+
+        return [
+            '#00' => [['object', $object], $object ],
+            '#01' => [['bool', true], true],
+            '#02' => [['bool', false], false],
+            '#03' => [['int', 123], 123],
+            '#04' => [['float', 1.23], 1.23],
+            '#05' => [['string', 'FOO'], 'FOO'],
+            '#06' => [['array', [1,2,3]], [1,2,3]],
+            '#07' => [['null', null], null],
+        ];
+    }
+
+    /**
+     * @dataProvider provInstance
+     *
+     * @psalm-param list{string,mixed} $args
+     *
      * @psalm-suppress MissingThrowsDocblock
      */
-    public function testInstance(): void
+    public function testInstance(array $args, mixed $instance): void
     {
-        $foo = new \stdClass();
+        $id = $args[0];
+        $container = new Container([
+            'aliases' => [$id => $id.'-target'],
+            'bindings' => [$id => fn(): mixed => null],
+            'singletons' => [$id => fn(): mixed => null],
+        ]);
 
-        $container = new Container();
+        $this->assertNull($container->instance(...$args));
 
-        $this->assertNull($container->instance('foo', $foo));
+        $item = $container->getItem($id);
 
-        $fooItem = $container->getItem('foo');
+        $this->assertInstanceOf(InstanceItem::class, $item);
+        $this->assertSame($instance, $item->getInstance());
 
-        $this->assertInstanceOf(InstanceItem::class, $fooItem);
-        $this->assertSame($foo, $fooItem->getInstance());
+        $contents = $container->getContents();
+
+        $this->assertArrayNotHasKey($id, $contents['aliases'] ?? []);
+        $this->assertArrayNotHasKey($id, $contents['bindings'] ?? []);
+        $this->assertArrayNotHAsKey($id, $contents['singletons'] ?? []);
     }
 
     /**
@@ -313,7 +358,11 @@ final class ContainerTest extends TestCase
      */
     public function testBind(): void
     {
-        $container = new Container();
+        $container = new Container([
+            'aliases' => ['foo' => 'bar'],
+            'instances' => ['foo' => null],
+            'singletons' => ['foo' => fn(): mixed => null],
+        ]);
 
         /** @psalm-suppress UnusedClosureParam */
         $callback = fn (ResolverInterface $resolver): \stdClass => new \stdClass();
@@ -324,6 +373,12 @@ final class ContainerTest extends TestCase
 
         $this->assertInstanceOf(BindingItem::class, $fooItem);
         $this->assertSame($callback, $fooItem->getCallback());
+
+        $contents = $container->getContents();
+
+        $this->assertArrayNotHasKey('foo', $contents['aliases'] ?? []);
+        $this->assertArrayNotHasKey('foo', $contents['instances'] ?? []);
+        $this->assertArrayNotHAsKey('foo', $contents['singletons'] ?? []);
     }
 
     /**
@@ -331,12 +386,22 @@ final class ContainerTest extends TestCase
      */
     public function testSingleton(): void
     {
-        $container = new Container();
+        $container = new Container([
+            'aliases' => ['foo' => 'bar'],
+            'instances' => ['foo' => null],
+            'bindings' => ['foo' => fn(): mixed => null],
+        ]);
 
         /** @psalm-suppress UnusedClosureParam */
         $callback = fn (ResolverInterface $resolver): \stdClass => new \stdClass();
 
         $this->assertNull($container->singleton('foo', $callback));
+
+        $contents = $container->getContents();
+
+        $this->assertArrayNotHasKey('foo', $contents['aliases'] ?? []);
+        $this->assertArrayNotHasKey('foo', $contents['instances'] ?? []);
+        $this->assertArrayNotHAsKey('foo', $contents['bindings'] ?? []);
 
         // Unresolved singleton: it's essentially a callback (lazy construction)
         $this->assertInstanceOf(BindingItem::class, $container->getItem('foo'));
@@ -346,5 +411,11 @@ final class ContainerTest extends TestCase
 
         // Resolved singleton: now it's a real instance
         $this->assertInstanceOf(InstanceItem::class, $container->getItem('foo'));
+
+        $contents = $container->getContents();
+
+        $this->assertArrayNotHasKey('foo', $contents['aliases'] ?? []);
+        $this->assertArrayNotHAsKey('foo', $contents['bindings'] ?? []);
+        $this->assertArrayNotHasKey('foo', $contents['singletons'] ?? []);
     }
 }
