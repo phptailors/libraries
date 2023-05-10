@@ -12,4 +12,17 @@ interface ResolverInterface
      * @throws ContainerExceptionInterface
      */
     public function resolve(string $id): mixed;
+
+    /**
+     * @psalm-template T of object
+     *
+     * @psalm-param class-string<T> $class
+     *
+     * @psalm-return T
+     *
+     * @throws NotFoundExceptionInterface
+     * @throws ContainerExceptionInterface
+     * @throws TypeExceptionInterface
+     */
+    public function resolveClass(string $class): object;
 }

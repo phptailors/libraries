@@ -13,6 +13,8 @@ trait ResolverInterfaceTrait
 {
     public mixed $resolve;
 
+    public mixed $resolveClass;
+
     /**
      * @throws NotFoundExceptionInterface
      * @throws ContainerExceptionInterface
@@ -20,6 +22,24 @@ trait ResolverInterfaceTrait
     public function resolve(string $id): mixed
     {
         return $this->resolve;
+    }
+
+    /**
+     * @psalm-template T of object
+     *
+     * @psalm-param class-string<T> $class
+     *
+     * @psalm-return T
+     *
+     * @throws NotFoundExceptionInterface
+     * @throws ContainerExceptionInterface
+     * @throws TypeExceptionInterface
+     *
+     * @psalm-suppress MixedInferredReturnType
+     */
+    public function resolveClass(string $class): object
+    {
+        return $this->resolveClass;
     }
 }
 

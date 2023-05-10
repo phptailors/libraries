@@ -5,23 +5,26 @@ namespace Tailors\Lib\Injector;
 /**
  * @author Paweł Tomulik <pawel@tomulik.pl>
  *
- * This Resolver, once used, should not be reused.
+ * This resolver, once used, should not be reused.
  */
-final class Resolver implements ResolverInterface
+final class Resolver implements ContextAwareResolverInterface
 {
     /**
      * @psalm-readonly
      */
     private readonly ItemContainerInterface $container;
 
+    private ContextInterface $context;
+
     /**
      * @psalm-var array<string,mixed>
      */
     private array $backtrace;
 
-    public function __construct(ItemContainerInterface $container)
+    public function __construct(ItemContainerInterface $container, ContextInterface $context)
     {
         $this->container = $container;
+        $this->context = $context;
         $this->backtrace = [];
     }
 
@@ -38,9 +41,17 @@ final class Resolver implements ResolverInterface
         return $this->backtrace;
     }
 
+    public function setContext(ContextInterface $context): void
+    {
+        $this->context = $context;
+    }
+
+    public function getContext(): ContextInterface
+    {
+        return $this->context;
+    }
+
     /**
-     * Finds an entry of the container by its identifier and returns it.
-     *
      * @param string $id identifier of the entry to look for
      *
      * @throws NotFoundExceptionInterface
@@ -62,5 +73,26 @@ final class Resolver implements ResolverInterface
         }
 
         return $value;
+    }
+
+    /**
+     * @psalm-template T of object
+     *
+     * @psalm-param class-string<T> $class
+     *
+     * @psalm-return T
+     *
+     * @throws NotFoundExceptionInterface
+     * @throws ContainerExceptionInterface
+     * @throws TypeExceptionInterface
+     */
+    public function resolveClass(string $class): object
+    {
+        $instance = $this->resolve($class);
+        if (!is_a($instance, $class)) {
+            throw TypeException::fromTypeAndValue($class, $instance);
+        }
+        // For non-object instace the return statement will throw TypeError.
+        return $instance;
     }
 }

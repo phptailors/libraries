@@ -29,6 +29,14 @@ final class ResolverTest extends TestCase
     /**
      * @psalm-suppress MissingThrowsDocblock
      */
+    public function testImplementsContextAwareResolverInterface(): void
+    {
+        $this->assertImplementsInterface(ContextAwareResolverInterface::class, Resolver::class);
+    }
+
+    /**
+     * @psalm-suppress MissingThrowsDocblock
+     */
     public function testConstruct(): void
     {
         $container = $this->createStub(ItemContainerInterface::class);
