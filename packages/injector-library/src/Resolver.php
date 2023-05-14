@@ -7,24 +7,21 @@ namespace Tailors\Lib\Injector;
  *
  * This resolver, once used, should not be reused.
  */
-final class Resolver implements ContextAwareResolverInterface
+final class Resolver implements ResolverInterface
 {
     /**
      * @psalm-readonly
      */
     private readonly ItemContainerInterface $container;
 
-    private ContextInterface $context;
-
     /**
      * @psalm-var array<string,mixed>
      */
     private array $backtrace;
 
-    public function __construct(ItemContainerInterface $container, ContextInterface $context)
+    public function __construct(ItemContainerInterface $container)
     {
         $this->container = $container;
-        $this->context = $context;
         $this->backtrace = [];
     }
 
@@ -39,16 +36,6 @@ final class Resolver implements ContextAwareResolverInterface
     public function getBacktrace(): array
     {
         return $this->backtrace;
-    }
-
-    public function setContext(ContextInterface $context): void
-    {
-        $this->context = $context;
-    }
-
-    public function getContext(): ContextInterface
-    {
-        return $this->context;
     }
 
     /**

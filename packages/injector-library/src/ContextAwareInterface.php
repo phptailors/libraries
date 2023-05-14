@@ -12,5 +12,6 @@ namespace Tailors\Lib\Injector;
 interface ContextAwareInterface
 {
     public function setContext(ContextInterface $context): void;
+
     public function getContext(): ContextInterface;
 }

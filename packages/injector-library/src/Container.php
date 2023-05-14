@@ -12,7 +12,7 @@ namespace Tailors\Lib\Injector;
  *      singletons?: array<string,\Closure(ResolverInterface):mixed>
  * }
  */
-final class Container implements ContainerInterface, ItemContainerInterface, ResolverInterface
+final class Container implements ContainerInterface, ItemContainerInterface, ResolutionInterface
 {
     /**
      * @psalm-var array{'aliases', 'instances', 'factories', 'singletons'}

@@ -9,7 +9,7 @@ namespace Tailors\Lib\Injector;
  *
  * @psalm-internal Tailors\Lib\Injector
  */
-trait ResolverInterfaceTrait
+trait ResolutionInterfaceTrait
 {
     public mixed $resolve;
 
