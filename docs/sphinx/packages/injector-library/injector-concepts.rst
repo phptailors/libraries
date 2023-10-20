@@ -25,8 +25,8 @@ the binding will have a form of a Closure_ responsible for creation of an
 object or retrieval of a requested value.
 
 There are several ways that clients typically use to specify their
-requirements. Probably, the most popular, is type hinting function and method
-parameters. So, for example, every time
+requirements. Probably, the most popular, is type hinting of function and
+method parameters.
 
 .. _Closure: https://www.php.net/manual/en/class.closure.php
 

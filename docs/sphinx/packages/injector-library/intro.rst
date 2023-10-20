@@ -28,7 +28,7 @@ Introduction
 ============
 
 According to wiki definition, `Dependency Injection`_ is a design pattern
-in which an object or function receives other objects of functions that it
+in which an object or function receives other objects or functions that it
 depends on. As a form of inversion of control, dependency injection aims to
 separate the concerns of constructing objects and using them, leading to
 loosely coupled programs.
