@@ -25,22 +25,19 @@ final class Container implements ContainerInterface, ItemContainerInterface, Res
     ];
 
     /**
-     * @psalm-var TContents
+     * @psalm-param TContents $contents
      */
-    private array $contents;
-
-    /**
-     * @psalm-readonly
-     */
-    private readonly ResolverFactoryInterface $resolverFactory;
+    public static function create(array $contents = [], ResolverFactoryInterface $resolverFactory = null): self
+    {
+        return new self($contents, $resolverFactory ?? new ResolverFactory());
+    }
 
     /**
      * @psalm-param TContents $contents
      */
-    public function __construct(array $contents = [], ResolverFactoryInterface $resolverFactory = null)
+    public function __construct(private array $contents, private readonly ResolverFactoryInterface $resolverFactory)
     {
-        $this->contents = $contents;
-        $this->resolverFactory = $resolverFactory ?? new ResolverFactory();
+        // empty
     }
 
     /**
@@ -180,6 +177,11 @@ final class Container implements ContainerInterface, ItemContainerInterface, Res
         $this->unsetItemExceptFor('instances', $id);
     }
 
+    /**
+     * Register an object constructor under key $id.
+     *
+     * @psalm-param \Closure(ResolverInterface):mixed $callback
+     */
     public function factory(string $id, \Closure $callback): void
     {
         $this->contents['factories'][$id] = $callback;

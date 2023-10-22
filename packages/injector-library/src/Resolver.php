@@ -10,19 +10,10 @@ namespace Tailors\Lib\Injector;
 final class Resolver implements ResolverInterface
 {
     /**
-     * @psalm-readonly
+     * @psalm-param array<string,mixed> $backtrace
      */
-    private readonly ItemContainerInterface $container;
-
-    /**
-     * @psalm-var array<string,mixed>
-     */
-    private array $backtrace;
-
-    public function __construct(ItemContainerInterface $container)
+    public function __construct(private readonly ItemContainerInterface $container, private array $backtrace = [])
     {
-        $this->container = $container;
-        $this->backtrace = [];
     }
 
     public function getContainer(): ItemContainerInterface
@@ -82,4 +73,66 @@ final class Resolver implements ResolverInterface
         // For non-object instace the return statement will throw TypeError.
         return $instance;
     }
+
+//    /**
+//     * Invoke *$callback* with a ResolverInterface configured to work in
+//     * context of a *$class*. Suitable for *$callback*s that set properties on
+//     * objects.
+//     *
+//     * @psalm-template T
+//     *
+//     * @psalm-param class-string<T> $class
+//     * @psalm-param \Closure(ResolverInterface):T $callback
+//     *
+//     * @psalm-return T
+//     */
+//    public function class(string $class, \Closure $callback): mixed
+//    {
+//    }
+//
+//    /**
+//     * Invoke *$callback* with a ResolverInterface configured to work in
+//     * context of a *$class* constructor. Suitable for *$callbacks* that create
+//     * instances with the **new** operator.
+//     *
+//     * @psalm-template T
+//     *
+//     * @psalm-param class-string<T> $class
+//     * @psalm-param \Closure(ResolverInterface):T $callback
+//     *
+//     * @psalm-return T
+//     */
+//    public function new(string $class, \Closure $callback): object
+//    {
+//    }
+//
+//    /**
+//     * Invoke *$callback* with a ResolverInterface configured to work in
+//     * context of a *$class::$method*. Suitable for *$callbacks* that create
+//     * instances with a static factory methods.
+//     *
+//     * @psalm-template T
+//     *
+//     * @psalm-param \Closure(ResolverInterface):T $callback
+//     *
+//     * @psalm-return T
+//     */
+//    public function method(string $class, string $method, \Closure $callback): mixed
+//    {
+//    }
+//
+//    /**
+//     * Invoke *$callback* with a ResolverInterface configured to work in
+//     * context of a *$function*. Suitable for callbacks that create instances
+//     * using plain functions.
+//     *
+//     * @psalm-template T
+//     *
+//     * @psalm-param \Closure(ResolverInterface):T $callback
+//     *
+//     * @psalm-return T
+//     */
+//    public function function(string $function, \Closure $callback): mixed
+//    {
+//    }
 }

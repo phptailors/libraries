@@ -55,7 +55,7 @@ final class ContainerTest extends TestCase
      *      array{contents: TContents, resolverFactory?: mixed}
      * }>
      */
-    public function provConstructor(): iterable
+    public function provCreate(): iterable
     {
         $bar = new \stdClass();
 
@@ -107,16 +107,16 @@ final class ContainerTest extends TestCase
     }
 
     /**
-     * @dataProvider provConstructor
+     * @dataProvider provCreate
      *
      * @psalm-param list{0?: TContents, 1?: ResolverFactoryInterface} $args
      * @psalm-param array{contents: mixed, resolverFactory?: mixed} $expected
      *
      * @psalm-suppress MissingThrowsDocblock
      */
-    public function testConstructor(array $args, array $expected): void
+    public function testCreate(array $args, array $expected): void
     {
-        $container = new Container(...$args);
+        $container = Container::create(...$args);
 
         $this->assertSame($expected['contents'], $container->getContents());
 
@@ -142,7 +142,7 @@ final class ContainerTest extends TestCase
             ->getMock()
         ;
 
-        $container = new Container([], $resolverFactory);
+        $container = Container::create([], $resolverFactory);
 
         $resolverFactory->expects($this->once())
             ->method('getResolver')
@@ -172,7 +172,7 @@ final class ContainerTest extends TestCase
             ->getMock()
         ;
 
-        $container = new Container([], $resolverFactory);
+        $container = Container::create([], $resolverFactory);
 
         $resolverFactory->expects($this->once())
             ->method('getResolver')
@@ -194,7 +194,7 @@ final class ContainerTest extends TestCase
      */
     public function testHas(): void
     {
-        $container = new Container();
+        $container = Container::create();
 
         $container->alias('foo', 'bar');
 
@@ -207,7 +207,7 @@ final class ContainerTest extends TestCase
      */
     public function testGetItemReturnsItem(): void
     {
-        $container = new Container();
+        $container = Container::create();
 
         $container->alias('foo', 'bar');
 
@@ -219,7 +219,7 @@ final class ContainerTest extends TestCase
      */
     public function testGetItemThrowsNotFoundException(): void
     {
-        $container = new Container();
+        $container = Container::create();
 
         $this->expectException(NotFoundException::class);
         $this->expectExceptionMessage('\'foo\' not found');
@@ -276,7 +276,7 @@ final class ContainerTest extends TestCase
      */
     public function testUnsetItemUnsetsAllContentsWithGivenId(array $args, mixed $expected): void
     {
-        $container = new Container(...$args);
+        $container = Container::create(...$args);
 
         $container->unsetItem('foo');
 
@@ -288,7 +288,7 @@ final class ContainerTest extends TestCase
      */
     public function testAlias(): void
     {
-        $container = new Container([
+        $container = Container::create([
             'instances'  => ['foo' => null],
             'factories'  => ['foo' => fn (): mixed => null],
             'singletons' => ['foo' => fn (): mixed => null],
@@ -340,7 +340,7 @@ final class ContainerTest extends TestCase
     public function testInstance(array $args, mixed $instance): void
     {
         $id = $args[0];
-        $container = new Container([
+        $container = Container::create([
             'aliases'    => [$id => $id.'-target'],
             'factories'  => [$id => fn (): mixed => null],
             'singletons' => [$id => fn (): mixed => null],
@@ -365,7 +365,7 @@ final class ContainerTest extends TestCase
      */
     public function testFactory(): void
     {
-        $container = new Container([
+        $container = Container::create([
             'aliases'    => ['foo' => 'bar'],
             'instances'  => ['foo' => null],
             'singletons' => ['foo' => fn (): mixed => null],
@@ -393,7 +393,7 @@ final class ContainerTest extends TestCase
      */
     public function testSingleton(): void
     {
-        $container = new Container([
+        $container = Container::create([
             'aliases'   => ['foo' => 'bar'],
             'instances' => ['foo' => null],
             'factories' => ['foo' => fn (): mixed => null],
