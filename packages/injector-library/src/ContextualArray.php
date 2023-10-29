@@ -7,7 +7,7 @@ use Tailors\Lib\Collections\NestedArray;
 /**
  * @author Paweł Tomulik <pawel@tomulik.pl>
  *
- * @internal this interface is not covered by backward compatibility promise
+ * @internal this class is not covered by backward compatibility promise
  *
  * @psalm-internal Tailors\Lib\Injector
  *
