@@ -29,8 +29,7 @@ final class AbstractManagedContextFactoryTest extends TestCase
      */
     public function testImplementsContextManagerInterface(): void
     {
-        $interfaces = class_implements(AbstractManagedContextFactory::class);
-        $this->assertContains(ContextManagerInterface::class, $interfaces);
+        $this->assertImplementsInterface(ContextManagerInterface::class, AbstractManagedContextFactory::class);
     }
 
     /**

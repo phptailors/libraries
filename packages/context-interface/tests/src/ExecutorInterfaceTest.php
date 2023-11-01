@@ -43,8 +43,7 @@ final class ExecutorInterfaceTest extends TestCase
         $dummy = $this->createDummyInstance();
 
         $dummy->invoke = '';
-        $this->assertSame($dummy->invoke, $dummy(function () {
-        }));
+        $this->assertSame($dummy->invoke, $dummy(function () {}));
     }
 
     /**

@@ -36,8 +36,7 @@ final class ResourceContextManagerTest extends TestCase
      */
     public function testConstruct(): void
     {
-        $destructor = function (): void {
-        };
+        $destructor = function (): void {};
 
         /** @psalm-suppress InvalidArgument */
         $manager = new ResourceContextManager('foo', $destructor);
@@ -268,8 +267,7 @@ final class ResourceContextManagerTest extends TestCase
     public function testEnterContext(): void
     {
         /** @psalm-suppress InvalidArgument */
-        $manager = new ResourceContextManager('foo', function () {
-        });
+        $manager = new ResourceContextManager('foo', function () {});
 
         /** @psalm-suppress DocblockTypeContradiction */
         $this->assertSame('foo', $manager->enterContext());

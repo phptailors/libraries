@@ -43,9 +43,13 @@ trait CallerErrorHandlerTrait
         return $this->callerLine;
     }
 
+    /**
+     * @psalm-param int<0,max> $distance
+     */
     protected function initCallerErrorHandler(int $distance): void
     {
-        $trace = debug_backtrace(DEBUG_BACKTRACE_PROVIDE_OBJECT, 1 + $distance);
+        /** @psalm-var non-empty-array<array{file: string, line: int}> */
+        $trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 1 + $distance);
         $caller = end($trace);
 
         $this->callerFile = $caller['file'];

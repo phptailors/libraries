@@ -11,9 +11,7 @@ trait ContextFactoryStackInterfaceTrait
     public mixed $pop;
     public mixed $size;
 
-    public function clean(): void
-    {
-    }
+    public function clean(): void {}
 
     /** @psalm-suppress MixedInferredReturnType */
     public function top(): ?ContextFactoryInterface
@@ -21,9 +19,7 @@ trait ContextFactoryStackInterfaceTrait
         return $this->top;
     }
 
-    public function push(ContextFactoryInterface $factory): void
-    {
-    }
+    public function push(ContextFactoryInterface $factory): void {}
 
     /** @psalm-suppress MixedInferredReturnType */
     public function pop(): ?ContextFactoryInterface

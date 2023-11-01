@@ -69,7 +69,7 @@ final class CallerExceptionErrorHandlerTest extends TestCase
             return new \Exception();
         };
         $caller_line = __LINE__ + 1;
-        $handler = $this->createHandler($generator, 1);
+        $handler = $this->createHandler($generator, [1]);
         $this->assertSame($generator, $handler->getExceptionGenerator());
         $this->assertEquals($caller_line, $handler->getCallerLine());
         $this->assertEquals(__FILE__, $handler->getCallerFile());
@@ -101,7 +101,7 @@ final class CallerExceptionErrorHandlerTest extends TestCase
             return new \Exception();
         };
         $caller_line = __LINE__ + 1;
-        $handler = $this->createRecursive(1, $generator, 1, 456);
+        $handler = $this->createRecursive(1, $generator, [1, 456]);
         $this->assertSame($generator, $handler->getExceptionGenerator());
         $this->assertEquals($caller_line, $handler->getCallerLine());
         $this->assertEquals(__FILE__, $handler->getCallerFile());
@@ -117,7 +117,7 @@ final class CallerExceptionErrorHandlerTest extends TestCase
             return new \Exception();
         };
         $caller_line = __LINE__ + 1;
-        $handler = $this->createRecursive(2, $generator, 2, 456);
+        $handler = $this->createRecursive(2, $generator, [2, 456]);
         $this->assertSame($generator, $handler->getExceptionGenerator());
         $this->assertEquals($caller_line, $handler->getCallerLine());
         $this->assertEquals(__FILE__, $handler->getCallerFile());
@@ -162,7 +162,7 @@ final class CallerExceptionErrorHandlerTest extends TestCase
 
         try {
             $caller_line = __LINE__ + 1;
-            $this->invokeRecursive(1, $generator, 1);
+            $this->invokeRecursive(1, $generator, [1]);
         } catch (ExceptionA98DB973 $e) {
             $this->assertEquals(__FILE__, $e->getFile());
 
@@ -187,7 +187,7 @@ final class CallerExceptionErrorHandlerTest extends TestCase
 
         try {
             $caller_line = __LINE__ + 1;
-            $this->invokeRecursive(2, $generator, 2);
+            $this->invokeRecursive(2, $generator, [2]);
         } catch (ExceptionA98DB973 $e) {
             $this->assertEquals(__FILE__, $e->getFile());
 
@@ -206,7 +206,7 @@ final class CallerExceptionErrorHandlerTest extends TestCase
     {
         $generator = ExceptionErrorHandler::makeExceptionGenerator(ExceptionA98DB973::class);
         $caller_line = __LINE__ + 1;
-        $handler = $this->createRecursive(2, $generator, 2);
+        $handler = $this->createRecursive(2, $generator, [2]);
 
         // The following two lines MUST be tied together!
         $this->expectException(ExceptionA98DB973::class);
@@ -236,7 +236,7 @@ final class CallerExceptionErrorHandlerTest extends TestCase
 
         try {
             $caller_line = __LINE__ + 1;
-            $this->triggerRecursive(1, $generator, 1);
+            $this->triggerRecursive(1, $generator, [1]);
         } catch (ExceptionA98DB973 $e) {
             $this->assertEquals(__FILE__, $e->getFile());
 
@@ -261,7 +261,7 @@ final class CallerExceptionErrorHandlerTest extends TestCase
 
         try {
             $caller_line = __LINE__ + 1;
-            $this->triggerRecursive(2, $generator, 2);
+            $this->triggerRecursive(2, $generator, [2]);
         } catch (ExceptionA98DB973 $e) {
             $this->assertEquals(__FILE__, $e->getFile());
 
@@ -280,7 +280,7 @@ final class CallerExceptionErrorHandlerTest extends TestCase
     {
         $generator = ExceptionErrorHandler::makeExceptionGenerator(ExceptionA98DB973::class);
         $caller_line = __LINE__ + 1;
-        $handler = $this->createRecursive(2, $generator, 2);
+        $handler = $this->createRecursive(2, $generator, [2]);
 
         // The following two lines MUST be tied together!
         $this->expectException(ExceptionA98DB973::class);
@@ -302,21 +302,21 @@ final class CallerExceptionErrorHandlerTest extends TestCase
 
     /**
      * @psalm-param ExceptionGenerator $func
-     * @psalm-param array{0?:int,1?:int} $args
+     * @psalm-param array{0?:int<0,max>,1?:int} $args
      */
-    protected function createHandler(callable $func, ...$args): CallerExceptionErrorHandler
+    protected function createHandler(callable $func, array $args = []): CallerExceptionErrorHandler
     {
         return new CallerExceptionErrorHandler($func, ...$args);
     }
 
     /**
      * @psalm-param ExceptionGenerator $func
-     * @psalm-param array{0?:int,1?:int} $args
+     * @psalm-param array{0?:int<0,max>,1?:int} $args
      */
-    protected function createRecursive(int $depth, callable $func, ...$args): CallerExceptionErrorHandler
+    protected function createRecursive(int $depth, callable $func, array $args = []): CallerExceptionErrorHandler
     {
         if ($depth > 1) {
-            return $this->createRecursive($depth - 1, $func, ...$args);
+            return $this->createRecursive($depth - 1, $func, $args);
         }
 
         return new CallerExceptionErrorHandler($func, ...$args);
@@ -326,14 +326,14 @@ final class CallerExceptionErrorHandlerTest extends TestCase
      * @throws \Exception
      *
      * @psalm-param ExceptionGenerator $func
-     * @psalm-param array{0?:int,1?:int} $args
+     * @psalm-param array{0?:int<0,max>,1?:int} $args
      *
      * @psalm-suppress PossiblyUnusedReturnValue
      */
-    protected function invokeRecursive(int $depth, callable $func, ...$args): bool
+    protected function invokeRecursive(int $depth, callable $func, array $args = []): bool
     {
         if ($depth > 1) {
-            return $this->invokeRecursive($depth - 1, $func, ...$args);
+            return $this->invokeRecursive($depth - 1, $func, $args);
         }
         $handler = new CallerExceptionErrorHandler($func, ...$args);
 
@@ -342,19 +342,20 @@ final class CallerExceptionErrorHandlerTest extends TestCase
 
     /**
      * @psalm-param ExceptionGenerator $func
-     * @psalm-param array{0?:int,1?:int} $args
+     * @psalm-param array{0?:int<0,max>,1?:int} $args
      *
      * @psalm-suppress PossiblyUnusedReturnValue
      */
-    protected function triggerRecursive(int $depth, callable $func, ...$args): string
+    protected function triggerRecursive(int $depth, callable $func, array $args = []): string
     {
         if ($depth > 1) {
-            return $this->triggerRecursive($depth - 1, $func, ...$args);
+            return $this->triggerRecursive($depth - 1, $func, $args);
         }
 
         /** @psalm-suppress UnusedClosureParam */
         return with(new CallerExceptionErrorHandler($func, ...$args))(function (CallerExceptionErrorHandler $eh): string {
             @trigger_error('test error message', E_USER_ERROR);
+
             /** @psalm-suppress UnevaluatedCode */
             return 'test return value';
         });

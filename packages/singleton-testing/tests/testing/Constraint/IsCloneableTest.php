@@ -5,15 +5,11 @@ namespace Tailors\Tests\Testing\Lib\Singletoni\Constraint;
 use PHPUnit\Framework\TestCase;
 use Tailors\Testing\Lib\Singleton\Constraint\IsCloneable;
 
-final class CloneableClass52U81
-{
-}
+final class CloneableClass52U81 {}
 
 final class NonCloneableClass52U81
 {
-    private function __clone()
-    {
-    }
+    private function __clone() {}
 }
 
 /**

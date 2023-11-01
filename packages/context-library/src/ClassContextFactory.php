@@ -47,7 +47,7 @@ final class ClassContextFactory extends AbstractManagedContextFactory
      *
      * @throws \InvalidArgumentException
      */
-    public function register(string $class, string|callable $contextManager): ClassContextFactory
+    public function register(string $class, callable|string $contextManager): ClassContextFactory
     {
         if (is_callable($contextManager)) {
             $wrapper = $contextManager;

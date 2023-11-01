@@ -14,6 +14,7 @@ final class CallerExceptionErrorHandler extends ExceptionErrorHandler
     /**
      * Initializes the object.
      *
+     * @psalm-param int<0,max> $distance
      * @psalm-param ExceptionGenerator $exceptionGenerator
      */
     public function __construct(callable $exceptionGenerator, int $distance = 1, int $errorTypes = E_ALL | E_STRICT)

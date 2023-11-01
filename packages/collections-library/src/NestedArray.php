@@ -245,6 +245,7 @@ final class NestedArray
         if (!is_array($head)) {
             return null;
         }
+
         // Psalm does not support recursive array types
         // (https://github.com/vimeo/psalm/issues/1892),
         // so we lie to it here (without costly runtime checks).

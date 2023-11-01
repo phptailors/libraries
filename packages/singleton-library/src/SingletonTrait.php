@@ -29,9 +29,7 @@ trait SingletonTrait
      *
      * @codeCoverageIgnore
      */
-    private function __clone()
-    {
-    }
+    private function __clone() {}
 
     /**
      * Singleton's __wakeup() always throws {@link Tailors\Lib\Singleton\SingletonException}.
@@ -62,9 +60,7 @@ trait SingletonTrait
      *
      * This method may be overwriten in the target class.
      */
-    private function initializeSingleton(): void
-    {
-    }
+    private function initializeSingleton(): void {}
 }
 
 // vim: syntax=php sw=4 ts=4 et:

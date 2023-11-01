@@ -13,17 +13,13 @@ use Tailors\Testing\Lib\Singleton\AssertIsSingletonTrait;
 // 1/4: Private constructor.
 trait PrivateConstructorTrait
 {
-    private function __construct()
-    {
-    }
+    private function __construct() {}
 }
 
 // 2/4: Private constructor.
 trait PrivateCloneTrait
 {
-    private function __clone()
-    {
-    }
+    private function __clone() {}
 }
 
 // 3/4: Public __wakeup() method that always throws SingletonException
@@ -70,9 +66,7 @@ final class ClassWithPublicConstructor
     use PublicStaticGetInstanceTrait;
     use PublicWakeupThrowingSingletonExceptionTrait;
 
-    public function __construct()
-    {
-    }
+    public function __construct() {}
 }
 
 final class ClassWithMissingClone
@@ -88,9 +82,7 @@ final class ClassWithPublicClone
     use PublicStaticGetInstanceTrait;
     use PublicWakeupThrowingSingletonExceptionTrait;
 
-    public function __clone()
-    {
-    }
+    public function __clone() {}
 }
 
 final class ClassWithMissingWakeup
@@ -106,9 +98,7 @@ final class ClassWithNonThrowingWakeup
     use PrivateCloneTrait;
     use PublicStaticGetInstanceTrait;
 
-    public function __wakeup()
-    {
-    }
+    public function __wakeup() {}
 }
 
 final class ClassWithMissingGetInstance

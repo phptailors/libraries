@@ -45,7 +45,7 @@ function error_handler(callable $errorHandler, int $errorTypes = E_ALL | E_STRIC
  *
  * @psalm-param string|callable(int,string,string,int):\Exception $arg
  */
-function exception_error_handler(string|callable $arg = null, int $errorTypes = E_ALL | E_STRICT): ExceptionErrorHandler
+function exception_error_handler(callable|string $arg = null, int $errorTypes = E_ALL | E_STRICT): ExceptionErrorHandler
 {
     $exceptionGenerator = ExceptionErrorHandler::makeExceptionGenerator($arg);
 
@@ -55,9 +55,9 @@ function exception_error_handler(string|callable $arg = null, int $errorTypes = 
 /**
  * A shortcut to new CallerErrorHandler(...).
  *
- * @param callable $errorHandler user-provided error handler function
- * @param int      $distance     the distance from our caller to his caller
- * @param int      $errorTypes   error types handled by the new handler
+ * @param callable   $errorHandler user-provided error handler function
+ * @param int<0,max> $distance     the distance from our caller to his caller
+ * @param int        $errorTypes   error types handled by the new handler
  *
  * @psalm-param callable(int,string,string,int):bool $errorHandler
  */
@@ -84,7 +84,7 @@ function caller_error_handler(
  * having interface compatible with PHP's \ErrorException class.
  *
  * @param callable|string $arg        either a callable or an exception's class name
- * @param int             $distance   the distance from our caller to his caller
+ * @param int<0,max>      $distance   the distance from our caller to his caller
  * @param int             $errorTypes error types handled by the new handler
  *
  * @throws \InvalidArgumentException
@@ -92,7 +92,7 @@ function caller_error_handler(
  * @psalm-param string|callable(int,string,string,int):\Exception $arg
  */
 function caller_exception_error_handler(
-    string|callable $arg = null,
+    callable|string $arg = null,
     int $distance = 1,
     int $errorTypes = E_ALL | E_STRICT
 ): CallerExceptionErrorHandler {

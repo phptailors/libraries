@@ -5,9 +5,7 @@ namespace Tailors\Lib\Context;
 use PHPUnit\Framework\TestCase;
 use Tailors\PHPUnit\ImplementsInterfaceTrait;
 
-final class ExceptionEB3IB4EL extends \Exception
-{
-}
+final class ExceptionEB3IB4EL extends \Exception {}
 
 /**
  * @author Paweł Tomulik <pawel@tomulik.pl>

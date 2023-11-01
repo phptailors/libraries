@@ -7,8 +7,6 @@ namespace Tailors\Lib\Singleton;
  *
  * @author Paweł Tomulik <pawel@tomulik.pl>
  */
-class SingletonException extends \RuntimeException
-{
-}
+class SingletonException extends \RuntimeException {}
 
 // vim: syntax=php sw=4 ts=4 et:

@@ -201,7 +201,7 @@ final class ResourceContextManager implements ContextManagerInterface
      *
      * @psalm-param resource $resource
      */
-    private static function getDefaultDestructor(mixed $resource): callable|string|null
+    private static function getDefaultDestructor(mixed $resource): null|callable|string
     {
         $type = get_resource_type($resource);
         $func = self::DEFAULT_RESOURCE_DESTRUCTORS[$type] ?? null;

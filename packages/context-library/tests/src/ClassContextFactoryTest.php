@@ -5,13 +5,9 @@ namespace Tailors\Lib\Context;
 use PHPUnit\Framework\TestCase;
 use Tailors\PHPUnit\ExtendsClassTrait;
 
-final class ClassYVO2VPY5
-{
-}
+final class ClassYVO2VPY5 {}
 
-final class ClassJG8MG9JQ
-{
-}
+final class ClassJG8MG9JQ {}
 
 abstract class BaseContextOLESLFOV implements ContextManagerInterface
 {
@@ -33,13 +29,9 @@ abstract class BaseContextOLESLFOV implements ContextManagerInterface
     }
 }
 
-final class ContextYVO2VPY5 extends BaseContextOLESLFOV
-{
-}
+final class ContextYVO2VPY5 extends BaseContextOLESLFOV {}
 
-final class ContextJG8MG9JQ extends BaseContextOLESLFOV
-{
-}
+final class ContextJG8MG9JQ extends BaseContextOLESLFOV {}
 
 /**
  * @author Paweł Tomulik <pawel@tomulik.pl>
