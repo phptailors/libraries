@@ -136,7 +136,7 @@ the reverse order when exiting the context
 <span class="linenos">21</span><span class="p">}</span>
 </pre></div>
 </div>
-<p>The order or argument processing may be then illustrated by the following test</p>
+<p>The order of argument processing may be illustrated by the following test</p>
 <div class="highlight-php notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="nx">with</span><span class="p">(</span><span class="k">new</span> <span class="nx">MyInt</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="k">new</span> <span class="nx">MyInt</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="k">new</span> <span class="nx">MyInt</span><span class="p">(</span><span class="mi">3</span><span class="p">))(</span><span class="k">function</span> <span class="p">(</span><span class="nx">int</span> <span class="o">...</span><span class="nv">$args</span><span class="p">)</span> <span class="p">{</span>
 <span class="linenos">2</span>    <span class="k">echo</span> <span class="s1">&#39;$args: &#39;</span> <span class="o">.</span> <span class="nb">implode</span><span class="p">(</span><span class="s1">&#39;, &#39;</span><span class="p">,</span> <span class="nv">$args</span><span class="p">)</span> <span class="o">.</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">;</span>
 <span class="linenos">3</span><span class="p">});</span>
@@ -165,7 +165,7 @@ the reverse order when exiting the context
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2022, Paweł Tomulik.</p>
+    <p>&#169; Copyright 2022-2023, Paweł Tomulik.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a

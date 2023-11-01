@@ -38,7 +38,7 @@ Let's use the following simple context manager to illustrate this
    :start-after: [MyInt]
    :end-before: [/MyInt]
 
-The order or argument processing may be then illustrated by the following test
+The order of argument processing may be illustrated by the following test
 
 .. literalinclude:: ../../examples/context-library/multiple_args.php
    :linenos:

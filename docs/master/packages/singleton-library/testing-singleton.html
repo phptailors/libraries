@@ -84,17 +84,17 @@
              
   <section id="testing-singleton">
 <span id="singleton-library-testing-singleton"></span><span id="index-0"></span><h1><span class="section-number">2.4. </span>Testing Singleton<a class="headerlink" href="#testing-singleton" title="Permalink to this heading"></a></h1>
-<p>To easily ensure that your class looks like and behaves like a singleton, you
-may use facilities provided by <code class="docutils literal notranslate"><span class="pre">phptailors/singleton-testing</span></code> package:</p>
+<p>To ensure that your class looks like and behaves like a singleton, you may use
+facilities provided by <code class="docutils literal notranslate"><span class="pre">phptailors/singleton-testing</span></code> package:</p>
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span>composer<span class="w"> </span>require<span class="w"> </span>--dev<span class="w"> </span><span class="s2">&quot;phptailors/singleton-testing:dev-master&quot;</span>
 </pre></div>
 </div>
 <p>Singleton testing is facilitated by
 <code class="docutils literal notranslate"><a class="reference external" href="/api/Tailors/Testing/Lib/Singleton/AssertIsSingletonTrait.html" title="Tailors\Testing\Lib\Singleton\AssertIsSingletonTrait"><span class="pre">AssertIsSingletonTrait</span></a></code>.
-Its basic usage is as simple, as calling the
+Testing is as simple, as calling the
 <code class="docutils literal notranslate"><a class="reference external" href="/api/Tailors/Testing/Lib/Singleton/AssertIsSingletonTrait.html#method_assertIsSingleton" title="Tailors\Testing\Lib\Singleton\AssertIsSingletonTrait::assertIsSingleton()"><span class="pre">assertIsSingleton()</span></a></code>
-method. The following example demonstrates how one the <code class="docutils literal notranslate"><span class="pre">TrivialSingleton</span></code>
-developed in <a href="#id1"><span class="problematic" id="id2">`lib.singleton.trivial_singleton.example`_</span></a> can be tested:</p>
+method. The following example demonstrates how one test the <code class="docutils literal notranslate"><span class="pre">TrivialSingleton</span></code>
+developed in <a class="reference internal" href="using-singleton.html#lib-singleton-trivial-singleton-example"><span class="std std-ref">Trivial Singleton example</span></a> can be tested:</p>
 <div class="highlight-php notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="o">&lt;?</span><span class="nx">php</span>
 <span class="linenos"> 2</span>
 <span class="linenos"> 3</span><span class="k">use</span> <span class="nx">Tailors\Lib\Singleton\SingletonTrait</span><span class="p">;</span>
@@ -320,7 +320,7 @@ method</p>
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2022, Paweł Tomulik.</p>
+    <p>&#169; Copyright 2022-2023, Paweł Tomulik.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a

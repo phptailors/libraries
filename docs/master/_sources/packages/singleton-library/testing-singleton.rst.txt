@@ -7,8 +7,8 @@
 Testing Singleton
 =================
 
-To easily ensure that your class looks like and behaves like a singleton, you
-may use facilities provided by ``phptailors/singleton-testing`` package:
+To ensure that your class looks like and behaves like a singleton, you may use
+facilities provided by ``phptailors/singleton-testing`` package:
 
 .. code-block:: shell
 
@@ -16,10 +16,10 @@ may use facilities provided by ``phptailors/singleton-testing`` package:
 
 Singleton testing is facilitated by
 :class:`Tailors\\Testing\\Lib\\Singleton\\AssertIsSingletonTrait`.
-Its basic usage is as simple, as calling the
+Testing is as simple, as calling the
 :method:`Tailors\\Testing\\Lib\\Singleton\\AssertIsSingletonTrait::assertIsSingleton`
-method. The following example demonstrates how one the ``TrivialSingleton``
-developed in `lib.singleton.trivial_singleton.example`_ can be tested:
+method. The following example demonstrates how one test the ``TrivialSingleton``
+developed in :ref:`lib.singleton.trivial_singleton.example` can be tested:
 
 .. literalinclude:: ../../examples/singleton-testing/TrivialSingletonTest.php
   :linenos:

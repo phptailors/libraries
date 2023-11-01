@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="robots" content="index, follow, all" />
-    <title>Tailors\Lib\Error\CallerErrorHandlerTrait | API Documentation</title>
+    <title>Tailors\Lib\Collections\NestedArray | API Documentation</title>
 
             <link rel="stylesheet" type="text/css" href="../../../css/bootstrap.min.css">
         <link rel="stylesheet" type="text/css" href="../../../css/bootstrap-theme.min.css">
@@ -19,7 +19,7 @@
 
     </head>
 
-    <body id="class" data-name="class:Tailors_Lib_Error_CallerErrorHandlerTrait" data-root-path="../../../" data-search-index-url="../../../doctum-search.json">
+    <body id="class" data-name="class:Tailors_Lib_Collections_NestedArray" data-root-path="../../../" data-search-index-url="../../../doctum-search.json">
             <div id="content">
         <div id="left-column">
                 <div id="control-panel">
@@ -74,19 +74,19 @@
 
                         <div class="namespace-breadcrumbs">
             <ol class="breadcrumb">
-                <li><span class="label label-default">trait</span></li>
-                        <li><a href="../../../Tailors.html">Tailors</a></li><li class="backslash">\</li><li><a href="../../../Tailors/Lib.html">Lib</a></li><li class="backslash">\</li><li><a href="../../../Tailors/Lib/Error.html">Error</a></li><li class="backslash">\</li><li>CallerErrorHandlerTrait</li>
+                <li><span class="label label-default">class</span></li>
+                        <li><a href="../../../Tailors.html">Tailors</a></li><li class="backslash">\</li><li><a href="../../../Tailors/Lib.html">Lib</a></li><li class="backslash">\</li><li><a href="../../../Tailors/Lib/Collections.html">Collections</a></li><li class="backslash">\</li><li>NestedArray</li>
             </ol>
         </div>
                 <div id="page-content">
     <div class="page-header">
-        <h1>CallerErrorHandlerTrait    
+        <h1>NestedArray    
             </h1>
     </div>
 
     
-    <p>        trait
-    <strong>CallerErrorHandlerTrait</strong>
+    <p>final         class
+    <strong>NestedArray</strong>
 </p>
 
         
@@ -94,76 +94,73 @@
         
 
             <div class="description">
-            <p><p>Provides methods for CallerXxxHandler classes.</p></p>                    </div>
+            <p><p>Provides static methods for accessing inner elements of nested arrays.</p></p>            <p><p>A <em>nested array</em> is simply an array of arrays. For example:</p>
+<pre><code> $array = [
+     'foo' =&gt; [ 'baz' =&gt; 'FOO.BAZ' ],
+     'bar' =&gt; [ 'baz' =&gt; 'BAR.BAZ' ],
+ ];</code></pre>
+<p>The inner elements can normally be accessed with multi-level indexing, for example:</p>
+<pre><code> $baz = $array['foo']['baz']</code></pre>
+<p>The <code>NestedArray</code> allows accessing nested array elements using list of
+keys. For example:</p>
+<pre><code> NestedArray::get($array, ['foo', 'bar'], $baz);</code></pre>
+<p>retrieves the <code>$array['foo']['bar']</code> and assigns it to <code>$baz</code>.</p></p>        </div>
             
         
     
-            <h2>Properties</h2>
-
-            <table class="table table-condensed">
-                    <tr>
-                <td class="type" id="property_callerFile">
-                                        protected                                        string
-                                                                                
-                                    </td>
-                <td>$callerFile</td>
-                <td class="last"></td>
-                <td></td>
-            </tr>
-                    <tr>
-                <td class="type" id="property_callerLine">
-                                        protected                                        int
-                                                                                
-                                    </td>
-                <td>$callerLine</td>
-                <td class="last"></td>
-                <td></td>
-            </tr>
-            </table>
-
     
             <h2>Methods</h2>
 
             <div class="container-fluid underlined">
                     <div class="row">
                 <div class="col-md-2 type">
-                    bool
+                    static&nbsp;bool
                 </div>
                 <div class="col-md-8">
-                    <a href="#method___invoke">__invoke</a>(int $severity, string $message, string $file, int $line)
+                    <a href="#method_get">get</a>(array $array, array $path, mixed $retval = null)
         
-                                            <p>{@inheritdoc}</p>                </div>
+                                            <p><p>Retrieve element of <em>$array</em> specified by <em>$path</em>.</p></p>                </div>
                 <div class="col-md-2"></div>
             </div>
                     <div class="row">
                 <div class="col-md-2 type">
-                    string
+                    static&nbsp;void
                 </div>
                 <div class="col-md-8">
-                    <a href="#method_getCallerFile">getCallerFile</a>()
+                    <a href="#method_set">set</a>(array $array, array $path, mixed $value)
         
-                                            <p><p>Returns the caller's file name as determined by the constructor.</p></p>                </div>
+                                            <p><p>Assigns <em>$value</em> to <em>$array</em> element specified by <em>$path</em>.</p></p>                </div>
                 <div class="col-md-2"></div>
             </div>
                     <div class="row">
                 <div class="col-md-2 type">
-                    int
+                    static&nbsp;void
                 </div>
                 <div class="col-md-8">
-                    <a href="#method_getCallerLine">getCallerLine</a>()
+                    <a href="#method_del">del</a>(array $array, array $path)
         
-                                            <p><p>Returns the caller's line number as determined by the constructor.</p></p>                </div>
+                                            <p><p>Unset <em>$array</em> element under <em>$path</em>.</p></p>                </div>
                 <div class="col-md-2"></div>
             </div>
                     <div class="row">
                 <div class="col-md-2 type">
-                    void
+                    static&nbsp;void
                 </div>
                 <div class="col-md-8">
-                    <a href="#method_initCallerErrorHandler">initCallerErrorHandler</a>(int $distance)
+                    <a href="#method_del2">del2</a>(array $array, array $path, mixed $key)
         
                                             <p class="no-description">No description</p>
                                     </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    static&nbsp;array|null
+                </div>
+                <div class="col-md-8">
+                    <a href="#method_lookup">lookup</a>(array $array, array $lookup, mixed $retval = null)
+        
+                                            <p><p>Simple lookup algorithm, that searches for elements of nested array.</p></p>                </div>
                 <div class="col-md-2"></div>
             </div>
             </div>
@@ -173,10 +170,10 @@
 
             <div id="method-details">
                     <div class="method-item">
-                    <h3 id="method___invoke">
-        <div class="location">at line 25</div>
-        <code>                    bool
-    <strong>__invoke</strong>(int $severity, string $message, string $file, int $line)
+                    <h3 id="method_get">
+        <div class="location">at line 43</div>
+        <code>        static            bool
+    <strong>get</strong>(array $array, array $path, mixed $retval = null)
         </code>
     </h3>
     <div class="details">    
@@ -184,30 +181,26 @@
             
 
         <div class="method-description">
-                            <p>{@inheritdoc}</p>                        
+                            <p><p>Retrieve element of <em>$array</em> specified by <em>$path</em>.</p></p>                <p><p>If <em>$array</em> has an element under <em>$path</em>, the method assigns its value
+to <em>$retval</em> and returns <code>true</code>. If not, it returns <code>false</code>.</p></p>        
         </div>
         <div class="tags">
                             <h4>Parameters</h4>
 
                     <table class="table table-condensed">
                     <tr>
-                <td>int</td>
-                <td>$severity</td>
+                <td>array</td>
+                <td>$array</td>
                 <td></td>
             </tr>
                     <tr>
-                <td>string</td>
-                <td>$message</td>
+                <td>array</td>
+                <td>$path</td>
                 <td></td>
             </tr>
                     <tr>
-                <td>string</td>
-                <td>$file</td>
-                <td></td>
-            </tr>
-                    <tr>
-                <td>int</td>
-                <td>$line</td>
+                <td>mixed</td>
+                <td>$retval</td>
                 <td></td>
             </tr>
             </table>
@@ -218,47 +211,59 @@
                     <table class="table table-condensed">
         <tr>
             <td>bool</td>
-            <td></td>
+            <td><p><code>true</code> if <em>$array</em> has element specified by <em>$path</em>,
+<code>false</code> otherwise</p></td>
         </tr>
     </table>
 
             
-                            <h4>Exceptions</h4>
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_set">
+        <div class="location">at line 77</div>
+        <code>        static            void
+    <strong>set</strong>(array $array, array $path, mixed $value)
+        </code>
+    </h3>
+    <div class="details">    
+    
+            
+
+        <div class="method-description">
+                            <p><p>Assigns <em>$value</em> to <em>$array</em> element specified by <em>$path</em>.</p></p>                <p><p>Inner arrays are created if necessary.</p></p>        
+        </div>
+        <div class="tags">
+                            <h4>Parameters</h4>
 
                     <table class="table table-condensed">
                     <tr>
-                <td><a target="_blank" rel="noopener" href="https://www.php.net/Exception">Exception</a></td>
+                <td>array</td>
+                <td>$array</td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td>array</td>
+                <td>$path</td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td>mixed</td>
+                <td>$value</td>
                 <td></td>
             </tr>
             </table>
 
             
-            
-                    </div>
-    </div>
-
-            </div>
-                    <div class="method-item">
-                    <h3 id="method_getCallerFile">
-        <div class="location">at line 33</div>
-        <code>                    string
-    <strong>getCallerFile</strong>()
-        </code>
-    </h3>
-    <div class="details">    
-    
-            
-
-        <div class="method-description">
-                            <p><p>Returns the caller's file name as determined by the constructor.</p></p>                        
-        </div>
-        <div class="tags">
-            
                             <h4>Return Value</h4>
 
                     <table class="table table-condensed">
         <tr>
-            <td>string</td>
+            <td>void</td>
             <td></td>
         </tr>
     </table>
@@ -271,10 +276,10 @@
 
             </div>
                     <div class="method-item">
-                    <h3 id="method_getCallerLine">
-        <div class="location">at line 41</div>
-        <code>                    int
-    <strong>getCallerLine</strong>()
+                    <h3 id="method_del">
+        <div class="location">at line 103</div>
+        <code>        static            void
+    <strong>del</strong>(array $array, array $path)
         </code>
     </h3>
     <div class="details">    
@@ -282,15 +287,32 @@
             
 
         <div class="method-description">
-                            <p><p>Returns the caller's line number as determined by the constructor.</p></p>                        
+                            <p><p>Unset <em>$array</em> element under <em>$path</em>.</p></p>                <p><p>The (inner) array containing <em>$path</em> element may become empty due to
+deletion. Such an emptied array is left as is, i.e it's not
+automatically removed from the <em>$array</em>.</p></p>        
         </div>
         <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table class="table table-condensed">
+                    <tr>
+                <td>array</td>
+                <td>$array</td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td>array</td>
+                <td>$path</td>
+                <td></td>
+            </tr>
+            </table>
+
             
                             <h4>Return Value</h4>
 
                     <table class="table table-condensed">
         <tr>
-            <td>int</td>
+            <td>void</td>
             <td></td>
         </tr>
     </table>
@@ -303,10 +325,10 @@
 
             </div>
                     <div class="method-item">
-                    <h3 id="method_initCallerErrorHandler">
-        <div class="location">at line 49</div>
-        <code>            protected        void
-    <strong>initCallerErrorHandler</strong>(int $distance)
+                    <h3 id="method_del2">
+        <div class="location">at line 116</div>
+        <code>        static            void
+    <strong>del2</strong>(array $array, array $path, mixed $key)
         </code>
     </h3>
     <div class="details">    
@@ -322,8 +344,18 @@
 
                     <table class="table table-condensed">
                     <tr>
-                <td>int</td>
-                <td>$distance</td>
+                <td>array</td>
+                <td>$array</td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td>array</td>
+                <td>$path</td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td>mixed</td>
+                <td>$key</td>
                 <td></td>
             </tr>
             </table>
@@ -335,6 +367,59 @@
         <tr>
             <td>void</td>
             <td></td>
+        </tr>
+    </table>
+
+            
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_lookup">
+        <div class="location">at line 142</div>
+        <code>        static            array|null
+    <strong>lookup</strong>(array $array, array $lookup, mixed $retval = null)
+        </code>
+    </h3>
+    <div class="details">    
+    
+            
+
+        <div class="method-description">
+                            <p><p>Simple lookup algorithm, that searches for elements of nested array.</p></p>                        
+        </div>
+        <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table class="table table-condensed">
+                    <tr>
+                <td>array</td>
+                <td>$array</td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td>array</td>
+                <td>$lookup</td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td>mixed</td>
+                <td>$retval</td>
+                <td></td>
+            </tr>
+            </table>
+
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td>array|null</td>
+            <td><p>returns the path to element found, or <code>null</code> if nothing
+was found</p></td>
         </tr>
     </table>
 
