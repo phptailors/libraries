@@ -16,20 +16,13 @@
     },
     "autoload": {
         "exclude-from-classmap": [
-            "packages/collections-interface/tests/",
             "packages/collections-library/tests/",
-            "packages/context-interface/tests/",
             "packages/context-library/testing/",
             "packages/context-library/tests/",
-            "packages/error-interface/testing/",
-            "packages/error-interface/tests/",
             "packages/error-library/testing/",
             "packages/error-library/tests/",
-            "packages/singleton-interface/tests/",
             "packages/singleton-library/testing/",
-            "packages/singleton-library/tests/",
-            "packages/singleton-testing/testing/",
-            "packages/singleton-testing/tests/"
+            "packages/singleton-library/tests/"
         ],
         "files": [
             "packages/context-library/src/functions.php",
@@ -37,45 +30,35 @@
         ],
         "psr-4": {
             "Tailors\\Lib\\Collections\\": [
-                "packages/collections-interface/src/",
                 "packages/collections-library/src/"
             ],
             "Tailors\\Lib\\Context\\": [
-                "packages/context-interface/src/",
                 "packages/context-library/src/"
             ],
             "Tailors\\Lib\\Error\\": [
-                "packages/error-interface/src/",
                 "packages/error-library/src/"
             ],
             "Tailors\\Lib\\Singleton\\": [
-                "packages/singleton-interface/src/",
                 "packages/singleton-library/src/"
-            ],
-            "Tailors\\Testing\\Lib\\Singleton\\": "packages/singleton-testing/testing/"
+            ]
         }
     },
     "autoload-dev": {
         "psr-4": {
             "Tailors\\Docs\\Behat\\": "docs/sphinx/behat/",
             "Tailors\\Lib\\Collections\\": [
-                "packages/collections-interface/tests/src/",
                 "packages/collections-library/tests/src/"
             ],
             "Tailors\\Lib\\Context\\": [
-                "packages/context-interface/tests/src/",
                 "packages/context-library/tests/src/"
             ],
             "Tailors\\Lib\\Error\\": [
-                "packages/error-interface/tests/src/",
                 "packages/error-library/tests/src/"
             ],
             "Tailors\\Lib\\Singleton\\": [
-                "packages/singleton-interface/tests/src/",
                 "packages/singleton-library/tests/src/"
             ],
-            "Tailors\\Testing\\Lib\\Context\\": "packages/context-library/testing/",
-            "Tailors\\Tests\\Testing\\Lib\\Singleton\\": "packages/singleton-testing/tests/testing/"
+            "Tailors\\Testing\\Lib\\Context\\": "packages/context-library/testing/"
         }
     },
     "require-dev": {
@@ -86,15 +69,10 @@
         "phpunit/phpunit": "^9.5.10 || ^10"
     },
     "replace": {
-        "phptailors/collections-interface": "self.version",
         "phptailors/collections-library": "self.version",
-        "phptailors/context-interface": "self.version",
         "phptailors/context-library": "self.version",
-        "phptailors/error-interface": "self.version",
         "phptailors/error-library": "self.version",
-        "phptailors/singleton-interface": "self.version",
-        "phptailors/singleton-library": "self.version",
-        "phptailors/singleton-testing": "self.version"
+        "phptailors/singleton-library": "self.version"
     },
     "provide": {
         "phptailors/collections-implementation": "*",
